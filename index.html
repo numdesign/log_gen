@@ -1,304 +1,1401 @@
-<div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #1a1a1a; color: #eee; border-radius: 12px;">
-  <h1 style="font-size: 24px; margin-bottom: 20px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px;">다크모드 채팅 로그 변환기</h1>
-  
-  <div style="margin-bottom: 20px;">
-    <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #ddd;">캐릭터 정보</label>
-    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-      <input type="text" id="characterName" placeholder="캐릭터 이름" style="flex: 1; padding: 8px; border: 1px solid #444; border-radius: 4px; background-color: #252525; color: #ddd;">
-      <input type="text" id="modelName" placeholder="AI 모델명" style="flex: 1; padding: 8px; border: 1px solid #3498db; border-radius: 4px; background-color: #252525; color: #ddd;">
-    </div>
-    <div style="display: flex; gap: 10px;">
-      <input type="text" id="promptName" placeholder="프롬프트명" style="flex: 1; padding: 8px; border: 1px solid #2980b9; border-radius: 4px; background-color: #252525; color: #ddd;">
-      <input type="text" id="assistModelName" placeholder="보조 모델명" style="flex: 1; padding: 8px; border: 1px solid #444; border-radius: 4px; background-color: #252525; color: #ddd;">
-    </div>
-  </div>
-  
-  <div style="margin-bottom: 20px;">
-    <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #ddd;">채팅 입력 (형식 안내)</label>
-    <p style="margin-bottom: 10px; font-size: 14px; color: #bbb;">
-      - 나레이션은 * 또는 - 로 시작하세요<br>
-      - 대화는 "USER: 내용" 또는 "AI: 내용" 형식으로 작성하세요<br>
-      - 빈 줄은 무시됩니다<br>
-      - <strong style="color: #fff;">강조 방법:</strong> <br>
-      &nbsp;&nbsp;&nbsp;**굵게** - <strong>굵은 글씨</strong><br>
-      &nbsp;&nbsp;&nbsp;##강조## - <span style="background-color: #3498db; color: #fff; padding: 0 4px; border-radius: 3px;">파란색 강조</span><br>
-      &nbsp;&nbsp;&nbsp;__기울임__ - <span style="font-style: italic;">이탤릭체</span><br>
-      &nbsp;&nbsp;&nbsp;!!중요!! - <span style="background-color: #1f618d; color: #fff; padding: 0 4px; border-radius: 3px;">진한 파란색 강조</span>
-    </p>
-    <textarea id="chatInput" style="width: 100%; height: 200px; padding: 10px; border: 1px solid #444; border-radius: 4px; background-color: #252525; color: #ddd; font-family: monospace;" placeholder="* 화창한 봄날, 공원에서 우연히 만난 두 사람은 날씨에 관한 대화를 나누기 시작했다.
-
-USER: 안녕하세요? 오늘 날씨가 어때요?
-
-* AI는 잠시 생각에 잠기더니 환하게 웃으며 대답했다.
-
-AI: 안녕하세요! 오늘 날씨는 맑고 화창합니다. 최고 기온은 23도로 예상됩니다. 야외 활동하기 좋은 날씨네요!"></textarea>
-  </div>
-  
-  <button id="generateButton" style="background-color: #3498db; color: #ffffff; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">HTML 생성하기</button>
-  
-  <div style="margin-top: 20px;">
-    <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #ddd;">HTML 결과</label>
-    <textarea id="htmlOutput" style="width: 100%; height: 200px; padding: 10px; border: 1px solid #444; border-radius: 4px; background-color: #252525; color: #ddd; font-family: monospace;" readonly></textarea>
-    <button id="copyButton" style="margin-top: 10px; background-color: #333; color: #fff; padding: 8px 15px; border: 1px solid #444; border-radius: 4px; cursor: pointer;">HTML 복사하기</button>
-  </div>
-  
-  <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">
-    <h2 style="font-size: 18px; margin-bottom: 15px; color: #ddd;">미리보기</h2>
-    <div id="previewArea" style="border: 1px solid #333; padding: 20px; min-height: 200px; border-radius: 8px; background-color: #0f0f0f;"></div>
-  </div>
-</div>
-
-<script>
-// 다크모드 전용 채팅 로그 HTML 생성 함수
-function formatDarkChatToHTML(chatText, characterName, modelName, promptName, assistModelName) {
-  // 기본값 설정
-  characterName = characterName || '캐릭터 이름';
-  modelName = modelName || 'AI 모델명';
-  promptName = promptName || '프롬프트명';
-  assistModelName = assistModelName || '보조 모델명';
-  
-  // 대화 라인을 배열로 분리
-  const lines = chatText.trim().split('\n');
-  
-  // 대화 파트를 저장할 배열
-  const chatParts = [];
-  
-  // 현재 화자와 내용을 저장할 변수
-  let currentSpeaker = null;
-  let currentContent = [];
-  
-  // 각 라인 처리
-  for (let line of lines) {
-    line = line.trim();
-    if (!line) continue; // 빈 줄 무시
-    
-    // 화자 패턴 확인 (USER: 또는 AI:로 시작하는지)
-    const speakerMatch = line.match(/^(USER|AI):\s*(.*)/i);
-    
-    // 나레이션 패턴 확인 (* 또는 -로 시작하는지)
-    const narrationMatch = line.match(/^[\*\-]\s*(.*)/);
-    
-    if (speakerMatch) {
-      // 이전 대화 내용이 있으면 저장
-      if (currentSpeaker && currentContent.length > 0) {
-        chatParts.push({
-          type: currentSpeaker.toLowerCase(),
-          content: currentContent.join(' ')
-        });
-        currentContent = [];
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>채팅 로그 변환기 (v22)</title>
+    <style>
+      /* UI 스타일 (V21과 동일) */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        color: #212529;
+        margin: 0;
+        padding: 20px;
+        transition:
+          background-color 0.3s,
+          color 0.3s;
       }
-      
-      // 새 화자 설정
-      currentSpeaker = speakerMatch[1].toUpperCase();
-      
-      // 내용이 있으면 추가
-      if (speakerMatch[2]) {
-        currentContent.push(speakerMatch[2]);
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition:
+          background-color 0.3s,
+          border-color 0.3s;
       }
-    } else if (narrationMatch) {
-      // 이전 대화 내용이 있으면 저장
-      if (currentSpeaker && currentContent.length > 0) {
-        chatParts.push({
-          type: currentSpeaker.toLowerCase(),
-          content: currentContent.join(' ')
-        });
-        currentContent = [];
-        currentSpeaker = null;
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #212529;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 10px;
+        transition:
+          color 0.3s,
+          border-color 0.3s;
       }
-      
-      // 나레이션 추가
-      chatParts.push({
-        type: 'narration',
-        content: narrationMatch[1]
-      });
-    } else {
-      // 현재 화자가 있으면 내용에 추가
-      if (currentSpeaker) {
-        currentContent.push(line);
-      } else {
-        // 화자가 없으면 나레이션으로 처리
-        chatParts.push({
-          type: 'narration',
-          content: line
-        });
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #495057;
+        transition: color 0.3s;
       }
-    }
-  }
-  
-  // 마지막 대화 내용 저장
-  if (currentSpeaker && currentContent.length > 0) {
-    chatParts.push({
-      type: currentSpeaker.toLowerCase(),
-      content: currentContent.join(' ')
-    });
-  }
-  
-  // 텍스트에서 강조 부분 처리 함수
-  function processEmphasis(text) {
-    // **텍스트** 형식의 강조를 <span> 태그로 변환 (굵은 텍스트)
-    text = text.replace(/\*\*(.*?)\*\*/g, '<span style="font-weight: 700;">$1</span>');
-    
-    // ##텍스트## 형식의 강조를 색상 있는 <span>으로 변환 (밝은 파란색 배경)
-    text = text.replace(/##(.*?)##/g, '<span style="background-color: #3498db; color: #ffffff; padding: 0 2px; border-radius: 3px;">$1</span>');
-    
-    // __텍스트__ 형식의 강조를 이탤릭체로 변환
-    text = text.replace(/__(.*?)__/g, '<span style="font-style: italic;">$1</span>');
-    
-    // !!텍스트!! 형식의 강조를 진한 배경색으로 변환
-    text = text.replace(/!!(.*?)!!/g, '<span style="background-color: #1f618d; color: #ffffff; padding: 0 2px; border-radius: 3px;">$1</span>');
-    
-    return text;
-  }
-  
-  // HTML 생성
-  let html = `<div style="width: 100%; max-width: 650px; margin: 0 auto; background-color: #1a1a1a; border-radius: 0; overflow: hidden; font-family: 'Pretendard', Arial, sans-serif; letter-spacing: -0.03em; color: #eee;">
+      input[type="text"],
+      input[type="number"],
+      textarea {
+        background-color: #ffffff;
+        border: 1px solid #ced4da;
+        color: #495057;
+        border-radius: 4px;
+        padding: 8px;
+        box-sizing: border-box;
+        transition:
+          background-color 0.3s,
+          border-color 0.3s,
+          color 0.3s;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+      }
+      input[type="number"] {
+        width: 70px;
+        padding: 4px 8px;
+        font-size: 14px;
+        text-align: right;
+      }
+      input[type="color"] {
+        background-color: #ffffff;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        width: 40px;
+        height: 30px;
+        padding: 0;
+        cursor: pointer;
+        vertical-align: middle;
+        transition:
+          background-color 0.3s,
+          border-color 0.3s;
+      }
+      .input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+      }
+      .input-group > div {
+        flex: 1 1 200px;
+        min-width: 200px;
+      }
+      .full-width {
+        width: 100%;
+      }
+      button {
+        cursor: pointer;
+        border-radius: 4px;
+        font-weight: bold;
+        padding: 8px 15px;
+        transition:
+          background-color 0.3s,
+          color 0.3s,
+          border-color 0.3s;
+      }
+      .primary-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+      }
+      .primary-button:hover {
+        background-color: #0056b3;
+      }
+      .secondary-button {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+      }
+      .secondary-button:hover {
+        background-color: #5a6268;
+      }
+      .danger-button {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        font-size: 12px;
+        margin-left: 10px;
+      }
+      .danger-button:hover {
+        background-color: #c82333;
+      }
+      .theme-btn {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-weight: bold;
+      }
+      .theme-toggle-section {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #dee2e6;
+      }
+      body.dark-mode .theme-toggle-section {
+        border-bottom-color: #333;
+      }
+      .toggle-switch-label {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        font-weight: bold;
+      }
+      .toggle-switch-label input[type="checkbox"] {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .toggle-switch-slider {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 26px;
+        background-color: #ccc;
+        border-radius: 13px;
+        transition: background-color 0.3s;
+        margin-right: 10px;
+      }
+      .toggle-switch-slider::before {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: white;
+        top: 3px;
+        left: 3px;
+        transition: transform 0.3s;
+      }
+      .toggle-switch-label
+        input[type="checkbox"]:checked
+        + .toggle-switch-slider {
+        background-color: #3498db;
+      }
+      .toggle-switch-label
+        input[type="checkbox"]:checked
+        + .toggle-switch-slider::before {
+        transform: translateX(24px);
+      }
+      .toggle-switch-text {
+        font-weight: bold;
+      }
+      body.dark-mode .toggle-switch-text {
+        color: #eee;
+      }
+      .section {
+        margin-bottom: 20px;
+        position: relative;
+      }
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .section-header label {
+        margin-bottom: 0;
+      }
+      .preview-area {
+        border: 1px solid #dee2e6;
+        padding: 20px;
+        min-height: 200px;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        margin-top: 20px;
+        transition:
+          background-color 0.3s,
+          border-color 0.3s;
+        overflow-x: auto;
+      }
+      textarea {
+        resize: vertical;
+      }
+      body.dark-mode {
+        background-color: #121212;
+        color: #eee;
+      }
+      body.dark-mode .container {
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+      }
+      body.dark-mode h1 {
+        color: #fff;
+        border-bottom: 1px solid #333;
+      }
+      body.dark-mode label {
+        color: #ddd;
+      }
+      body.dark-mode input[type="text"],
+      body.dark-mode input[type="number"],
+      body.dark-mode textarea {
+        background-color: #252525;
+        border: 1px solid #444;
+        color: #ddd;
+      }
+      body.dark-mode input[type="color"] {
+        background-color: #252525;
+        border: 1px solid #444;
+      }
+      body.dark-mode .primary-button {
+        background-color: #3498db;
+      }
+      body.dark-mode .primary-button:hover {
+        background-color: #2980b9;
+      }
+      body.dark-mode .secondary-button {
+        background-color: #333;
+        border: 1px solid #444;
+        color: white;
+      }
+      body.dark-mode .secondary-button:hover {
+        background-color: #444;
+      }
+      body.dark-mode .danger-button {
+        background-color: #bd2130;
+      }
+      body.dark-mode .danger-button:hover {
+        background-color: #a71d2a;
+      }
+      body.dark-mode .preview-area {
+        border: 1px solid #333;
+        background-color: #0f0f0f;
+      }
+      body.dark-mode .input-group label {
+        color: #bbb;
+      }
+      body.dark-mode span[id$="Value"] {
+        color: #ddd;
+      }
+      .style-config-label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 14px;
+        color: #6c757d;
+        transition: color 0.3s;
+      }
+      body.dark-mode .style-config-label {
+        color: #bbb;
+      }
 
-  <!-- Header Section -->
-  <div style="background-color: #202020; padding: 32px 40px; border-bottom: 1px solid #333;">
-    <div style="display: block; margin-bottom: 8px;">
-      <span style="font-size: 14px; color: #aaaaaa; font-weight: 500;">#${Math.floor(Math.random() * 900) + 100}</span>
-    </div>
-    <h1 style="font-size: 38px; margin: 0; font-weight: 700; color: #ffffff; line-height: 1.2;">CHAT LOG</h1>
-  </div>
-
-  <!-- Character Info Box -->
-  <div style="display: block; background-color: #202020; margin: 16px 20px; border-radius: 12px; overflow: hidden;">
-    <div style="padding: 32px;">
-      <!-- Character Info Row -->
-      <div style="width: 100%; margin-bottom: 15px; display: block;">
-        <!-- Character Section -->
-        <div style="margin-bottom: 32px; display: flex; flex-wrap: wrap; align-items: flex-start;">
-          <!-- Character Image Container -->
-          <div style="flex: 0 0 auto; max-width: 50%; margin-right: 20px; border-radius: 16px; overflow: hidden; background-color: #333; display: flex; margin:0 auto; justify-content: center; align-items: center;">
-            <div style="text-align: center; font-size: 18px; color: #aaa;">
-              캐릭터
+      /* --- Styles for V19/V20/V21/V22 --- */
+      summary {
+        font-weight: bold;
+        cursor: pointer;
+        padding: 10px 0;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        list-style: revert;
+      }
+      details[open] > summary {
+        margin-bottom: 15px;
+      }
+      body.dark-mode summary {
+        border-bottom-color: #333;
+      }
+      .markdown-toolbar {
+        margin-bottom: 5px;
+      }
+      .markdown-toolbar button {
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        padding: 3px 8px;
+        font-size: 12px;
+        cursor: pointer;
+        margin-right: 3px;
+        border-radius: 3px;
+        font-weight: normal;
+      }
+      body.dark-mode .markdown-toolbar button {
+        background-color: #333;
+        border-color: #555;
+        color: #eee;
+      }
+      details.section {
+        padding: 0 10px 10px 10px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+      .markdown-toolbar button.format-btn {
+        /* Specific style for format buttons */
+        /* Example: font-weight: bold; */
+      }
+      body.dark-mode .markdown-toolbar button.format-btn {
+        /* Dark mode specific */
+      }
+    </style>
+  </head>
+  <body class="light-mode">
+    <div class="container">
+      <h1>채팅 로그 변환기 (v22)</h1>
+      <details
+        class="section"
+        open
+        title="기본적인 캐릭터, 모델, 사용자 정보를 입력하는 곳입니다."
+      >
+        <summary>캐릭터 정보 설정</summary>
+        <div class="input-group">
+          <input
+            type="text"
+            id="characterName"
+            placeholder="캐릭터 이름"
+            title="AI 캐릭터 이름 (로그에 표시됨)"
+          />
+          <input
+            type="text"
+            id="modelName"
+            placeholder="AI 모델명"
+            title="사용한 AI 모델 이름 (로그에 표시됨)"
+          />
+        </div>
+        <div class="input-group">
+          <input
+            type="text"
+            id="promptName"
+            placeholder="프롬프트명"
+            title="사용한 프롬프트 이름 (로그에 표시됨)"
+          />
+          <input
+            type="text"
+            id="assistModelName"
+            placeholder="보조 모델명"
+            title="사용한 보조 모델 이름 (로그에 표시됨)"
+          />
+        </div>
+        <div class="input-group">
+          <input
+            type="text"
+            id="userName"
+            placeholder="유저 이름 (기본값: USER)"
+            title="사용자 이름 (기본값: USER, 로그에 표시됨)"
+          />
+          <input
+            type="text"
+            id="chatNumber"
+            placeholder="채팅 번호 (기본값: 랜덤)"
+            title="채팅 번호 (비워두면 랜덤 숫자 생성, 로그에 표시됨)"
+          />
+        </div>
+      </details>
+      <div class="section theme-toggle-section">
+        <label
+          for="themeToggleCheckbox"
+          class="toggle-switch-label"
+          title="화면 전체의 라이트/다크 모드를 전환합니다."
+        >
+          <input type="checkbox" id="themeToggleCheckbox" />
+          <span class="toggle-switch-slider"></span>
+          <span class="toggle-switch-text" id="themeToggleText"
+            >라이트 모드</span
+          >
+        </label>
+      </div>
+      <details
+        class="section"
+        title="채팅 로그의 디자인(색상, 글자 크기 등)을 설정합니다."
+      >
+        <summary>디자인 및 스타일 설정</summary>
+        <div class="section">
+          <label title="미리 정의된 색상 조합으로 빠르게 스타일을 변경합니다."
+            >색상 테마 (하이라이트/강조)</label
+          >
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              gap: 10px;
+              margin-bottom: 15px;
+            "
+          >
+            <button
+              class="theme-btn"
+              data-theme="default"
+              style="background-color: #3498db"
+              title="기본 파란색 테마"
+            >
+              기본
+            </button>
+            <button
+              class="theme-btn"
+              data-theme="olive"
+              style="background-color: #328e6e"
+              title="올리브색 테마"
+            >
+              올리브
+            </button>
+            <button
+              class="theme-btn"
+              data-theme="sky"
+              style="background-color: #9fb3df"
+              title="하늘색 테마"
+            >
+              스카이
+            </button>
+            <button
+              class="theme-btn"
+              data-theme="sunflower"
+              style="background-color: #fcb454"
+              title="해바라기색 테마"
+            >
+              해바라기
+            </button>
+            <button
+              class="theme-btn"
+              data-theme="sunset"
+              style="background-color: #f7374f"
+              title="노을색 테마"
+            >
+              선셋
+            </button>
+            <button
+              class="theme-btn"
+              data-theme="beach"
+              style="background-color: #48a6a7"
+              title="바다색 테마"
+            >
+              비치
+            </button>
+            <button
+              class="theme-btn"
+              data-theme="violet"
+              style="background-color: #6a1e55"
+              title="보라색 테마"
+            >
+              바이올렛
+            </button>
+          </div>
+        </div>
+        <div class="section">
+          <label>스타일 상세 설정 (로그 미리보기)</label>
+          <div class="input-group">
+            <div style="flex: 1">
+              <label class="style-config-label">배경 색상</label>
+              <div style="display: flex; gap: 5px">
+                <input
+                  type="color"
+                  id="backgroundColor"
+                  value="#1a1a1a"
+                  title="로그 배경 색상 선택 (Color Picker)"
+                />
+                <input
+                  type="text"
+                  id="backgroundColorText"
+                  value="#1a1a1a"
+                  style="flex: 1; padding: 4px 8px; font-size: 14px"
+                  title="로그 배경 색상 입력 (#1a1a1a 형식)"
+                />
+              </div>
+            </div>
+            <div style="flex: 1">
+              <label class="style-config-label">글자 색상</label>
+              <div style="display: flex; gap: 5px">
+                <input
+                  type="color"
+                  id="textColor"
+                  value="#eeeeee"
+                  title="로그 기본 글자 색상 선택 (Color Picker)"
+                />
+                <input
+                  type="text"
+                  id="textColorText"
+                  value="#eeeeee"
+                  style="flex: 1; padding: 4px 8px; font-size: 14px"
+                  title="로그 기본 글자 색상 입력 (#eeeeee 형식)"
+                />
+              </div>
             </div>
           </div>
-          
-          <!-- Character Details -->
-          <div style="margin-left: 20px; width: 100%;">
-            <h2 style="font-size: 28px; color: #ffffff; margin: 0 0 16px 0; font-weight: 700;">${characterName}</h2>
-            <div style="margin: 8px 0; font-size: 15px; color: #cccccc; display: flex; flex-direction: column;">
-              <span style="display: block; background-color: #3498db; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; margin-bottom: 15px; border: 1px solid #4fa8eb;">${modelName}</span>
-              <span style="display: block; background-color: #2980b9; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; margin-bottom: 15px; border: 1px solid #3590c9;">${promptName}</span>
-              <span style="display: block; background-color: #1f618d; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid #2671a3;">${assistModelName}</span>
+          <div class="input-group">
+            <div style="flex: 1">
+              <label class="style-config-label">하이라이트 색상</label>
+              <div style="display: flex; gap: 5px">
+                <input
+                  type="color"
+                  id="highlightColor"
+                  value="#3498db"
+                  title="##텍스트## 강조 배경색 선택 (Color Picker)"
+                />
+                <input
+                  type="text"
+                  id="highlightColorText"
+                  value="#3498db"
+                  style="flex: 1; padding: 4px 8px; font-size: 14px"
+                  title="##텍스트## 강조 배경색 입력 (#3498db 형식)"
+                />
+              </div>
+            </div>
+            <div style="flex: 1">
+              <label class="style-config-label">강조 색상</label>
+              <div style="display: flex; gap: 5px">
+                <input
+                  type="color"
+                  id="emphasisColor"
+                  value="#1f618d"
+                  title="!!텍스트!! 강조 배경색 선택 (Color Picker)"
+                />
+                <input
+                  type="text"
+                  id="emphasisColorText"
+                  value="#1f618d"
+                  style="flex: 1; padding: 4px 8px; font-size: 14px"
+                  title="!!텍스트!! 강조 배경색 입력 (#1f618d 형식)"
+                />
+              </div>
             </div>
           </div>
+          <div class="input-group">
+            <div style="flex: 1">
+              <label class="style-config-label" for="baseFontSize"
+                >글자 크기 (기본값, px)</label
+              >
+              <input
+                type="number"
+                id="baseFontSize"
+                min="10"
+                max="30"
+                value="15"
+                step="1"
+                title="로그 본문 기본 글자 크기 (10~30px)"
+              />
+            </div>
+            <div style="flex: 1">
+              <label class="style-config-label" for="titleFontSize"
+                >제목 글자 크기 (px)</label
+              >
+              <input
+                type="number"
+                id="titleFontSize"
+                min="20"
+                max="60"
+                value="38"
+                step="1"
+                title="로그 상단 'CHAT LOG' 제목 글자 크기 (20~60px)"
+              />
+            </div>
+          </div>
+          <div class="input-group" style="margin-top: 10px">
+            <div style="flex: 1">
+              <label class="style-config-label" for="containerWidth"
+                >컨테이너 최대 너비 (px)</label
+              >
+              <input
+                type="number"
+                id="containerWidth"
+                min="300"
+                max="1500"
+                value="650"
+                step="10"
+                title="생성될 로그의 최대 가로 너비 (300~1500px)"
+              />
+            </div>
+            <div style="flex: 1"></div>
+          </div>
         </div>
-        
-        <!-- Divider -->
-        <div style="height: 1px; background-color: #333; margin: 24px 0;"></div>
-        
-        <!-- QR Code Section -->
-        <div style="display: block; margin-top: 24px;">
-          <div style="font-size: 12px; text-transform: uppercase; font-weight: 600; color: #aaaaaa; margin-bottom: 8px;">MONO</div>
-          <div style="font-size: 20px; font-weight: 700; color: #ffffff;">CONVERSATION</div>
+      </details>
+
+      <div id="chatSectionsContainer">
+        <div class="section chat-section">
+          <div class="section-header">
+            <label for="chatInput_1">채팅 입력 1 (형식 안내)</label>
+          </div>
+          <p
+            style="margin-bottom: 10px; font-size: 14px"
+            class="style-config-label"
+            title="채팅 내용을 입력하는 방법 안내입니다. 아래 툴바를 사용하면 편리합니다."
+          >
+            - 나레이션은 * 또는 - 로 시작하세요<br />
+            - 대화는 "USER: 내용" 또는 "AI: 내용" 형식으로 작성하세요<br />
+            - 빈 줄은 무시됩니다<br />
+            - <strong>강조 방법:</strong> <br />
+            &nbsp;&nbsp;&nbsp;**굵게** - <strong>굵은 글씨</strong><br />
+            &nbsp;&nbsp;&nbsp;##강조## -
+            <span
+              style="
+                background-color: #3498db;
+                color: #fff;
+                padding: 0 4px;
+                border-radius: 3px;
+              "
+              >하이라이트</span
+            ><br />
+            &nbsp;&nbsp;&nbsp;__기울임__ -
+            <span style="font-style: italic">이탤릭체</span><br />
+            &nbsp;&nbsp;&nbsp;!!중요!! -
+            <span
+              style="
+                background-color: #1f618d;
+                color: #fff;
+                padding: 0 4px;
+                border-radius: 3px;
+              "
+              >강조</span
+            >
+          </p>
+
+          <div class="markdown-toolbar">
+            <button
+              type="button"
+              class="format-btn"
+              onclick="applySpeakerPrefix('chatInput_1', 'USER')"
+              title="현재 줄 또는 선택 영역 앞에 'USER: ' 추가/변경"
+            >
+              USER 대사
+            </button>
+            <button
+              type="button"
+              class="format-btn"
+              onclick="applySpeakerPrefix('chatInput_1', 'AI')"
+              title="현재 줄 또는 선택 영역 앞에 'AI: ' 추가/변경"
+            >
+              AI 대사
+            </button>
+            <button
+              type="button"
+              class="format-btn"
+              onclick="applyNarrationPrefix('chatInput_1')"
+              title="현재 줄 또는 선택 영역 앞에 나레이션 표시('- ') 추가/변경"
+            >
+              나레이션
+            </button>
+            <span style="margin: 0 5px; color: #ccc">|</span>
+            <button
+              type="button"
+              onclick="applyMarkdown('chatInput_1', 'bold')"
+              title="선택된 텍스트 또는 커서 위치에 굵게(**) 적용"
+            >
+              <b>B</b>
+            </button>
+            <button
+              type="button"
+              onclick="applyMarkdown('chatInput_1', 'italic')"
+              title="선택된 텍스트 또는 커서 위치에 기울임(__) 적용"
+            >
+              <i>I</i>
+            </button>
+            <button
+              type="button"
+              onclick="applyMarkdown('chatInput_1', 'highlight')"
+              title="선택된 텍스트 또는 커서 위치에 하이라이트(##) 적용"
+            >
+              하이라이트
+            </button>
+            <button
+              type="button"
+              onclick="applyMarkdown('chatInput_1', 'emphasis')"
+              title="선택된 텍스트 또는 커서 위치에 강조(!!) 적용"
+            >
+              강조
+            </button>
+          </div>
+
+          <textarea
+            id="chatInput_1"
+            class="full-width chat-input-area"
+            style="height: 200px; font-family: monospace"
+            placeholder="* 화창한 봄날, ..."
+            title="여기에 채팅 내용을 입력하세요. 나레이션은 * 또는 -, 대화는 USER:/AI: 형식입니다. 입력 내용은 자동으로 저장됩니다."
+          ></textarea>
         </div>
+      </div>
+      <button
+        id="addChatSectionBtn"
+        class="secondary-button"
+        title="채팅 입력 영역을 추가합니다. 여러 대화 턴을 분리해서 입력할 때 사용하세요."
+        style="margin-top: -10px; margin-bottom: 20px"
+      >
+        채팅 섹션 추가
+      </button>
+
+      <button
+        id="generateButton"
+        class="primary-button"
+        title="입력된 내용으로 HTML 코드 생성 및 미리보기 업데이트"
+      >
+        HTML 생성하기
+      </button>
+      <button
+        id="loadExampleBtn"
+        class="secondary-button"
+        style="margin-left: 10px"
+        title="채팅 입력 1에 예시 텍스트를 불러옵니다. 기존 내용은 덮어쓰여집니다."
+      >
+        예제 불러오기
+      </button>
+
+      <div class="section" style="margin-top: 20px">
+        <label for="htmlOutput">HTML 결과 (아카라이브 호환)</label>
+        <textarea
+          id="htmlOutput"
+          class="full-width"
+          style="height: 200px; font-family: monospace"
+          title="생성된 HTML 코드입니다."
+          readonly
+        ></textarea>
+        <button
+          id="copyButton"
+          class="secondary-button"
+          style="margin-top: 10px"
+          title="생성된 HTML 코드를 클립보드에 복사합니다."
+        >
+          HTML 복사하기
+        </button>
+      </div>
+      <div
+        style="
+          border-top: 1px solid #dee2e6;
+          padding-top: 20px;
+          margin-top: 30px;
+        "
+      >
+        <h2 style="font-size: 18px; margin-bottom: 15px">미리보기</h2>
+        <div
+          id="previewArea"
+          class="preview-area"
+          title="생성된 HTML이 어떻게 보일지 미리 보여주는 영역입니다."
+        ></div>
       </div>
     </div>
-  </div>
 
-  <!-- Chat Log Section with Summary/Details for expandable content -->
-  <!-- Chat Log Section with Summary/Details for expandable content -->
-  <div style="margin: 16px 20px 20px; background-color: #202020; border-radius: 12px; padding: 5px;">
-    <details>
-      <summary style="padding: 16px 20px; cursor: pointer; outline: none; list-style: none; border-radius: 10px;">
-        <div style="font-size: 22px; font-weight: 700; color: #ffffff; display: block;">
-          CHAT LOG
-        </div>
-      </summary>
-      
-      <div style="padding: 20px 20px 20px 20px;">
-      
-      <div style="padding: 5px;">`;
-  
-  // 각 대화 파트 HTML 추가
-  chatParts.forEach(part => {
-    if (part.type === 'narration') {
-      html += `
-        <!-- Narration -->
-        <div style="margin: 24px 0; display: block; border-left: 3px solid #3498db; padding-left: 16px;">
-          <div style="font-size: 15px; color: #aaaaaa; line-height: 1.5; font-style: italic;">
-            ${processEmphasis(part.content)}
-          </div>
-        </div>`;
-    } else if (part.type === 'user') {
-      html += `
-        <!-- User Message - Right aligned -->
-        <div style="margin: 16px 0; display: block; text-align: right;">
-          <div style="font-weight: 600; color: #ffffff; margin-bottom: 8px; font-size: 14px;">USER</div>
-          <div style="background-color: #353535; border-radius: 12px; padding: 16px; font-size: 15px; color: #dddddd; line-height: 1.5; display: inline-block; max-width: 70%; text-align: left; border: 1px solid #444;">
-            ${processEmphasis(part.content)}
-          </div>
-        </div>`;
-    } else if (part.type === 'ai') {
-      html += `
-        <!-- AI Response -->
-        <div style="margin: 24px 0; display: block;">
-          <div style="font-weight: 600; color: #ffffff; margin-bottom: 8px; font-size: 14px;">${characterName}</div>
-          <div style="background-color: #1a1a1a; border-radius: 12px; padding: 16px; font-size: 15px; color: #dddddd; line-height: 1.5; display: inline-block; max-width: 70%; border: 1px solid #3498db;">
-            ${processEmphasis(part.content)}
-          </div>
-        </div>`;
-    }
-  });
-  
-  // HTML 닫기
-  html += `
-      </div>
-    </details>
-  </div>
+    <script>
+      // 테마 정의, 색상 정의 (V21과 동일)
+      const colorThemes = {
+        default: { highlightColor: "#3498db", emphasisColor: "#1f618d" },
+        olive: { highlightColor: "#328E6E", emphasisColor: "#67AE6E" },
+        sky: { highlightColor: "#9FB3DF", emphasisColor: "#BDDDE4" },
+        sunflower: { highlightColor: "#FCB454", emphasisColor: "#FF9B17" },
+        sunset: { highlightColor: "#F7374F", emphasisColor: "#88304E" },
+        beach: { highlightColor: "#48A6A7", emphasisColor: "#006A71" },
+        violet: { highlightColor: "#6A1E55", emphasisColor: "#A64D79" },
+      }
+      const logBaseColors = {
+        light: { backgroundColor: "#ffffff", textColor: "#212529" },
+        dark: { backgroundColor: "#1a1a1a", textColor: "#eeeeee" },
+      }
 
-        <!-- Footer -->
-  <div style="background-color: #202020; padding: 24px 40px; text-align: right; font-size: 13px; color: #aaaaaa; border-top: 1px solid #333;">
-    <div style="display: inline-block; margin-right: 20px;">CHAT MONO</div>
-    <div style="display: inline-block;">${new Date().toISOString().slice(0, 10).replace(/-/g, '.')}</div>
-  </div>
-</div>
+      // 유틸리티 함수 (V21과 동일)
+      function adjustColor(color, amount) {
+        let usePound = false
+        if (color[0] == "#") {
+          color = color.slice(1)
+          usePound = true
+        }
+        let num = parseInt(color, 16)
+        if (isNaN(num)) return "#000000"
+        let r = (num >> 16) + amount
+        if (r > 255) r = 255
+        else if (r < 0) r = 0
+        let b = ((num >> 8) & 0x00ff) + amount
+        if (b > 255) b = 255
+        else if (b < 0) b = 0
+        let g = (num & 0x0000ff) + amount
+        if (g > 255) g = 255
+        else if (g < 0) g = 0
+        return (
+          (usePound ? "#" : "") +
+          (g | (b << 8) | (r << 16)).toString(16).padStart(6, "0")
+        )
+      }
+      function getCurrentDate() {
+        const now = new Date()
+        const year = now.getFullYear()
+        const month = String(now.getMonth() + 1).padStart(2, "0")
+        const day = String(now.getDate()).padStart(2, "0")
+        return `${year}.${month}.${day}`
+      }
 
-<p style="font-size: 0; margin: 0; padding: 0;">**--Pretendard 폰트 적용, 자간 -0.04em 설정, 다크모드 디자인 적용--**</p>`;
+      // HTML 생성 함수 (V21과 동일 - summary 마커 숨김 포함)
+      function formatChatToHTML(
+        chatTexts,
+        characterName,
+        modelName,
+        promptName,
+        assistModelName,
+        userName,
+        chatNumber,
+        styleOptions,
+      ) {
+        characterName = characterName || "캐릭터 이름"
+        modelName = modelName || "AI 모델명"
+        promptName = promptName || "프롬프트명"
+        assistModelName = assistModelName || "보조 모델명"
+        userName = userName || "USER"
+        const chatNum = chatNumber
+          ? chatNumber
+          : Math.floor(Math.random() * 900) + 100
+        const backgroundColor = styleOptions.backgroundColor || "#ffffff"
+        const textColor = styleOptions.textColor || "#000000"
+        const highlightColor = styleOptions.highlightColor || "#3498db"
+        const emphasisColor = styleOptions.emphasisColor || "#1f618d"
+        const baseFontSize = styleOptions.baseFontSize || 15
+        const titleFontSize = styleOptions.titleFontSize || 38
+        const containerMaxWidth = styleOptions.containerMaxWidth || 650
+        const elementBgColor = adjustColor(backgroundColor, -15)
+        const darkElementBgColor = adjustColor(backgroundColor, -25)
+        const narrationColor = adjustColor(textColor, -30)
+        const messageTextColor = adjustColor(textColor, -10)
+        const borderColor = adjustColor(darkElementBgColor, 20)
+        function processEmphasis(text) {
+          text = text.replace(
+            /\*\*(.*?)\*\*/g,
+            '<span style="font-weight: 700;">$1</span>',
+          )
+          text = text.replace(
+            /##(.*?)##/g,
+            `<span style="background-color: ${highlightColor}; color: #ffffff; padding: 0 2px; border-radius: 3px;">$1</span>`,
+          )
+          text = text.replace(
+            /__(.*?)__/g,
+            '<span style="font-style: italic;">$1</span>',
+          )
+          text = text.replace(
+            /!!(.*?)!!/g,
+            `<span style="background-color: ${emphasisColor}; color: #ffffff; padding: 0 2px; border-radius: 3px;">$1</span>`,
+          )
+          return text
+        }
+        const currentDate = getCurrentDate()
+        let html = `<div style="width: 100%; max-width: ${containerMaxWidth}px; margin: 10px auto; background-color: ${backgroundColor}; border-radius: 0; overflow: hidden; font-family: 'Pretendard', Arial, sans-serif; letter-spacing: -0.03em; color: ${textColor}; border: 1px solid ${borderColor}; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">`
+        html += `<style> summary::-webkit-details-marker, summary::marker { display: none; } summary { display: block; cursor: pointer; outline: none; } </style>` // Style added in V21
+        html += `<div style="background-color: ${elementBgColor}; padding: 32px 40px; border-bottom: 1px solid ${borderColor};"> <div style="display: block; margin-bottom: 8px;"> <span style="font-size: 14px; color: ${narrationColor}; font-weight: 500;">#${chatNum}</span> </div> <h1 style="font-size: ${titleFontSize}px; margin: 0; font-weight: 700; color: ${textColor}; line-height: 1.2;">CHAT LOG</h1> </div>`
+        html += `<div style="display: block; background-color: ${elementBgColor}; margin: 16px 20px; border-radius: 12px; overflow: hidden; border: 1px solid ${borderColor};"> <div style="padding: 32px;"> <div style="width: 100%; margin-bottom: 15px; display: block;"> <div style="margin-bottom: 20px; display: block; text-align: center;"> <table style="margin: 0 auto 15px auto; border-collapse: separate; border-spacing: 0px; display: inline-block; vertical-align: top; text-align: center; border: none; background: none;"> <tr> <td style="padding: 0; vertical-align: middle; border-radius: 16px; overflow: hidden; border: none; background-color: ${backgroundColor};"> <div style="font-size: 12px; color: ${narrationColor}; padding: 20px 10px; line-height: 1.4;">이 문구를 삭제하고 캐릭터 이미지를 삽입해주세요</div> </td> </tr> </table> <div style="width: 100%; text-align: center; margin-top: 10px;"> <h2 style="font-size: 28px; color: ${textColor}; margin: 0 0 16px 0; font-weight: 700;">${characterName}</h2> <div style="margin: 8px 0; font-size: ${baseFontSize}px; color: ${messageTextColor}; display: block; align-items: center;"> <span style="display: block; background-color: ${highlightColor}; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(highlightColor, 10)}; margin-bottom: 10px;">${modelName}</span> <span style="display: block; background-color: ${adjustColor(highlightColor, -10)}; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(highlightColor, 0)}; margin-bottom: 10px;">${promptName}</span> <span style="display: block; background-color: ${emphasisColor}; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(emphasisColor, 10)};">${assistModelName}</span> </div> </div> </div> <div style="height: 1px; background-color: ${borderColor}; margin: 24px 0;"></div> <div style="display: block; margin-top: 24px; text-align:left;"> <div style="font-size: 12px; font-weight: 600; color: ${narrationColor}; margin-bottom: 8px;">MONO</div> <div style="font-size: 20px; font-weight: 700; color: ${textColor};">CONVERSATION</div> </div> </div> </div> </div>`
+        chatTexts.forEach((chatText, index) => {
+          if (!chatText && chatTexts.length > 1 && index > 0) return
+          const lines = chatText.trim().split("\n")
+          const chatParts = []
+          let currentSpeaker = null
+          let currentContent = []
+          for (let line of lines) {
+            line = line.trim()
+            if (!line) continue
+            const speakerMatch = line.match(/^(USER|AI):\s*(.*)/i)
+            const narrationMatch = line.match(/^[\*\-]\s*(.*)/)
+            if (speakerMatch) {
+              if (currentSpeaker && currentContent.length > 0) {
+                chatParts.push({
+                  type: currentSpeaker.toLowerCase(),
+                  content: currentContent.join(" "),
+                })
+                currentContent = []
+              }
+              currentSpeaker = speakerMatch[1].toUpperCase()
+              if (speakerMatch[2]) {
+                currentContent.push(speakerMatch[2])
+              }
+            } else if (narrationMatch) {
+              if (currentSpeaker && currentContent.length > 0) {
+                chatParts.push({
+                  type: currentSpeaker.toLowerCase(),
+                  content: currentContent.join(" "),
+                })
+                currentContent = []
+                currentSpeaker = null
+              }
+              chatParts.push({ type: "narration", content: narrationMatch[1] })
+            } else {
+              if (currentSpeaker) {
+                currentContent.push(line)
+              } else {
+                if (
+                  chatParts.length > 0 &&
+                  chatParts[chatParts.length - 1].type === "narration"
+                ) {
+                  chatParts[chatParts.length - 1].content += " " + line
+                } else {
+                  chatParts.push({ type: "narration", content: line })
+                }
+              }
+            }
+          }
+          if (currentSpeaker && currentContent.length > 0) {
+            chatParts.push({
+              type: currentSpeaker.toLowerCase(),
+              content: currentContent.join(" "),
+            })
+          }
+          html += `<div style="margin: 16px 20px 20px; background-color: ${elementBgColor}; border-radius: 12px; padding: 5px; border: 1px solid ${borderColor};"> <details open> <summary style="padding: 16px 20px; list-style:none; outline: none; border-radius: 10px;"> <div style="font-size: 22px; font-weight: 700; color: ${textColor}; display: block;">CHAT LOG ${index + 1}</div> </summary> <div style="padding: 15px 20px;">` // Summary style updated in V21
+          chatParts.forEach((part) => {
+            if (part.type === "narration") {
+              html += `<div style="margin: 24px 0; display: block; border-left: 3px solid ${highlightColor}; padding-left: 16px;"> <div style="font-size: ${baseFontSize}px; color: ${narrationColor}; line-height: 1.5; font-style: italic;"> ${processEmphasis(part.content)} </div> </div>`
+            } else if (part.type === "user") {
+              html += `<div style="margin: 16px 0; text-align: right;"> <div style="max-width: 75%; display: inline-block; text-align: left;"> <div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px; text-align: right;">${userName}</div> <div style="background-color: ${darkElementBgColor}; border-radius: 12px; padding: 16px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.5; border: 1px solid ${borderColor};"> ${processEmphasis(part.content)} </div> </div> </div>`
+            } else if (part.type === "ai") {
+              html += `<div style="margin: 16px 0; text-align: left;"> <div style="max-width: 75%; display: inline-block;"> <div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px;">${characterName}</div> <div style="background-color: ${backgroundColor}; border-radius: 12px; padding: 16px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.5; border: 1px solid ${highlightColor};"> ${processEmphasis(part.content)} </div> </div> </div>`
+            }
+          })
+          html += `    </div> </details> </div>`
+        })
+        html += `<div style="background-color: ${elementBgColor}; padding: 24px 40px; text-align: right; font-size: 13px; color: ${narrationColor}; border-top: 1px solid ${borderColor};"> <div style="display: inline-block; margin-right: 20px;">CHAT LOG | ${characterName}</div> <div style="display: inline-block;">${currentDate}</div> </div>`
+        html += `</div>`
+        return html
+      }
 
-  return html;
-}
+      // Markdown Helper Function (V21과 동일)
+      function applyMarkdown(textareaId, markdownType) {
+        const textarea = document.getElementById(textareaId)
+        if (!textarea) return
+        const start = textarea.selectionStart
+        const end = textarea.selectionEnd
+        const selectedText = textarea.value.substring(start, end)
+        let prefix = "",
+          suffix = ""
+        switch (markdownType) {
+          case "bold":
+            prefix = "**"
+            suffix = "**"
+            break
+          case "italic":
+            prefix = "__"
+            suffix = "__"
+            break
+          case "highlight":
+            prefix = "##"
+            suffix = "##"
+            break
+          case "emphasis":
+            prefix = "!!"
+            suffix = "!!"
+            break
+        }
+        const replacement = selectedText
+          ? `${prefix}${selectedText}${suffix}`
+          : `${prefix}${suffix}`
+        const cursorPosition = start + prefix.length
+        textarea.setRangeText(
+          replacement,
+          start,
+          end,
+          selectedText ? "select" : "end",
+        )
+        if (!selectedText) {
+          textarea.setSelectionRange(cursorPosition, cursorPosition)
+        }
+        textarea.focus()
+        textarea.dispatchEvent(new Event("input", { bubbles: true }))
+      }
 
-// 이벤트 핸들러 설정
-document.getElementById('generateButton').addEventListener('click', function() {
-  const chatInput = document.getElementById('chatInput').value;
-  const characterName = document.getElementById('characterName').value;
-  const modelName = document.getElementById('modelName').value;
-  const promptName = document.getElementById('promptName').value;
-  const assistModelName = document.getElementById('assistModelName').value;
-  
-  const html = formatDarkChatToHTML(chatInput, characterName, modelName, promptName, assistModelName);
-  
-  document.getElementById('htmlOutput').value = html;
-  document.getElementById('previewArea').innerHTML = html;
-});
+      // Speaker Prefix Helper Function (V21과 동일)
+      function applySpeakerPrefix(textareaId, speaker) {
+        const textarea = document.getElementById(textareaId)
+        if (!textarea) return
+        const start = textarea.selectionStart
+        const end = textarea.selectionEnd
+        const value = textarea.value
+        const prefix = speaker + ": "
+        if (start !== end) {
+          const selectedText = value.substring(start, end)
+          const replacement = prefix + selectedText
+          textarea.setRangeText(replacement, start, end, "select")
+        } else {
+          let lineStart = value.lastIndexOf("\n", start - 1) + 1
+          let lineEnd = value.indexOf("\n", start)
+          if (lineEnd === -1) lineEnd = value.length
+          const currentLine = value.substring(lineStart, lineEnd)
+          let lineContentWithoutPrefix = currentLine
+          if (currentLine.startsWith("USER: ")) {
+            lineContentWithoutPrefix = currentLine.substring("USER: ".length)
+          } else if (currentLine.startsWith("AI: ")) {
+            lineContentWithoutPrefix = currentLine.substring("AI: ".length)
+          }
+          const newLine = prefix + lineContentWithoutPrefix
+          const cursorPosition = lineStart + prefix.length
+          textarea.setRangeText(newLine, lineStart, lineEnd, "end")
+          textarea.setSelectionRange(cursorPosition, cursorPosition)
+        }
+        textarea.focus()
+        textarea.dispatchEvent(new Event("input", { bubbles: true }))
+      }
 
-document.getElementById('copyButton').addEventListener('click', function() {
-  const htmlOutput = document.getElementById('htmlOutput');
-  htmlOutput.select();
-  document.execCommand('copy');
-  this.textContent = '복사 완료!';
-  
-  setTimeout(() => {
-    this.textContent = 'HTML 복사하기';
-  }, 2000);
-});
+      // --- *** NEW: Narration Prefix Helper Function *** ---
+      function applyNarrationPrefix(textareaId) {
+        const textarea = document.getElementById(textareaId)
+        if (!textarea) return
+        const start = textarea.selectionStart
+        const end = textarea.selectionEnd
+        const value = textarea.value
+        const prefix = "- " // Use hyphen as requested
 
-// 초기 예시 텍스트 설정
-const exampleText = `* 화창한 봄날, 공원에서 우연히 만난 두 사람은 날씨에 관한 대화를 **나누기 시작**했다.
+        if (start !== end) {
+          // Text is selected
+          const selectedText = value.substring(start, end)
+          const replacement = prefix + selectedText
+          textarea.setRangeText(replacement, start, end, "select")
+        } else {
+          // No text selected
+          let lineStart = value.lastIndexOf("\n", start - 1) + 1
+          let lineEnd = value.indexOf("\n", start)
+          if (lineEnd === -1) lineEnd = value.length
 
-USER: 안녕하세요? 오늘 ##날씨##가 어때요?
+          const currentLine = value.substring(lineStart, lineEnd)
+          let lineContentWithoutPrefix = currentLine
 
-* AI는 잠시 생각에 잠기더니 __환하게 웃으며__ 대답했다.
+          // Check and remove existing prefixes (speaker or narration)
+          if (currentLine.startsWith("USER: ")) {
+            lineContentWithoutPrefix = currentLine.substring("USER: ".length)
+          } else if (currentLine.startsWith("AI: ")) {
+            lineContentWithoutPrefix = currentLine.substring("AI: ".length)
+          } else if (currentLine.startsWith("- ")) {
+            lineContentWithoutPrefix = currentLine.substring("- ".length)
+          } else if (currentLine.startsWith("* ")) {
+            // Also handle the other narration marker
+            lineContentWithoutPrefix = currentLine.substring("* ".length)
+          }
 
-AI: 안녕하세요! 오늘 날씨는 맑고 화창합니다. 최고 기온은 !!23도!!로 예상됩니다. 야외 활동하기 좋은 날씨네요!`;
+          const newLine = prefix + lineContentWithoutPrefix
+          const cursorPosition = lineStart + prefix.length
 
-document.getElementById('chatInput').value = exampleText;
+          textarea.setRangeText(newLine, lineStart, lineEnd, "end")
+          textarea.setSelectionRange(cursorPosition, cursorPosition)
+        }
 
-// 페이지 로드 시 예제 미리보기 생성
-window.onload = function() {
-  document.getElementById('generateButton').click();
-};
-</script>
+        textarea.focus()
+        textarea.dispatchEvent(new Event("input", { bubbles: true }))
+      }
+
+      // --- 페이지 로드 시 실행 및 이벤트 리스너 설정 ---
+      document.addEventListener("DOMContentLoaded", function () {
+        // 변수 선언 (V21과 동일)
+        const body = document.body
+        const themeToggleCheckbox = document.getElementById(
+          "themeToggleCheckbox",
+        )
+        const themeToggleText = document.getElementById("themeToggleText")
+        const logBgColorInput = document.getElementById("backgroundColor")
+        const logBgColorText = document.getElementById("backgroundColorText")
+        const logTextColorInput = document.getElementById("textColor")
+        const logTextColorText = document.getElementById("textColorText")
+        const highlightColorInput = document.getElementById("highlightColor")
+        const highlightColorText = document.getElementById("highlightColorText")
+        const emphasisColorInput = document.getElementById("emphasisColor")
+        const emphasisColorText = document.getElementById("emphasisColorText")
+        const baseFontSizeInput = document.getElementById("baseFontSize")
+        const titleFontSizeInput = document.getElementById("titleFontSize")
+        const containerWidthInput = document.getElementById("containerWidth")
+        const chatSectionsContainer = document.getElementById(
+          "chatSectionsContainer",
+        )
+        const addChatSectionBtn = document.getElementById("addChatSectionBtn")
+        const generateButton = document.getElementById("generateButton")
+        const htmlOutput = document.getElementById("htmlOutput")
+        const previewArea = document.getElementById("previewArea")
+        const copyButton = document.getElementById("copyButton")
+        const loadExampleBtn = document.getElementById("loadExampleBtn")
+
+        // UI 관련 함수들 (테마 전환 등) (V21과 동일)
+        function applySavedTheme() {
+          const savedTheme = localStorage.getItem("theme") || "light"
+          const isDarkMode = savedTheme === "dark"
+          themeToggleCheckbox.checked = isDarkMode
+          setTheme(isDarkMode)
+        }
+        function setTheme(isDarkMode) {
+          if (isDarkMode) {
+            body.classList.replace("light-mode", "dark-mode")
+            themeToggleText.textContent = "다크 모드"
+            updateLogBaseColors("dark")
+          } else {
+            body.classList.replace("dark-mode", "light-mode")
+            themeToggleText.textContent = "라이트 모드"
+            updateLogBaseColors("light")
+          }
+        }
+        function toggleTheme() {
+          const isDarkMode = themeToggleCheckbox.checked
+          localStorage.setItem("theme", isDarkMode ? "dark" : "light")
+          setTheme(isDarkMode)
+        }
+        themeToggleCheckbox.addEventListener("change", toggleTheme)
+        function updateLogBaseColors(mode) {
+          const colors = logBaseColors[mode]
+          logBgColorInput.value = colors.backgroundColor
+          logBgColorText.value = colors.backgroundColor
+          logTextColorInput.value = colors.textColor
+          logTextColorText.value = colors.textColor
+        }
+        function syncColorInputs() {
+          logBgColorInput.addEventListener(
+            "input",
+            () => (logBgColorText.value = logBgColorInput.value),
+          )
+          logBgColorText.addEventListener("input", () => {
+            try {
+              logBgColorInput.value = logBgColorText.value
+            } catch (e) {}
+          })
+          logTextColorInput.addEventListener(
+            "input",
+            () => (logTextColorText.value = logTextColorInput.value),
+          )
+          logTextColorText.addEventListener("input", () => {
+            try {
+              logTextColorInput.value = logTextColorText.value
+            } catch (e) {}
+          })
+          highlightColorInput.addEventListener(
+            "input",
+            () => (highlightColorText.value = highlightColorInput.value),
+          )
+          highlightColorText.addEventListener("input", () => {
+            try {
+              highlightColorInput.value = highlightColorText.value
+            } catch (e) {}
+          })
+          emphasisColorInput.addEventListener(
+            "input",
+            () => (emphasisColorText.value = emphasisColorInput.value),
+          )
+          emphasisColorText.addEventListener("input", () => {
+            try {
+              emphasisColorInput.value = emphasisColorText.value
+            } catch (e) {}
+          })
+        }
+
+        // 색상 테마 버튼 로직 (V21과 동일)
+        document.querySelectorAll(".theme-btn").forEach((button) => {
+          button.addEventListener("click", function () {
+            const themeName = this.getAttribute("data-theme")
+            const theme = colorThemes[themeName]
+            if (!theme) return
+            highlightColorInput.value = theme.highlightColor
+            highlightColorText.value = theme.highlightColor
+            emphasisColorInput.value = theme.emphasisColor
+            emphasisColorText.value = theme.emphasisColor
+            const characterName = document.getElementById("characterName").value
+            const modelName = document.getElementById("modelName").value
+            const promptName = document.getElementById("promptName").value
+            const assistModelName =
+              document.getElementById("assistModelName").value
+            const userName = document.getElementById("userName").value
+            const chatNumber = document.getElementById("chatNumber").value
+            const chatTextareas =
+              chatSectionsContainer.querySelectorAll(".chat-input-area")
+            const chatTexts = Array.from(chatTextareas).map(
+              (textarea) => textarea.value,
+            )
+            const styleOptions = {
+              backgroundColor: logBgColorInput.value,
+              textColor: logTextColorInput.value,
+              highlightColor: highlightColorInput.value,
+              emphasisColor: emphasisColorInput.value,
+              baseFontSize: baseFontSizeInput.value,
+              titleFontSize: titleFontSizeInput.value,
+              containerMaxWidth: containerWidthInput.value,
+            }
+            try {
+              const previewHtml = formatChatToHTML(
+                chatTexts,
+                characterName,
+                modelName,
+                promptName,
+                assistModelName,
+                userName,
+                chatNumber,
+                styleOptions,
+              )
+              previewArea.innerHTML = previewHtml
+            } catch (error) {
+              console.error("미리보기 업데이트 중 오류 발생:", error)
+              previewArea.innerHTML =
+                "<p style='color: red;'>미리보기를 생성하는 중 오류가 발생했습니다.</p>"
+            }
+          })
+        })
+
+        // Auto-Save Logic (V21과 동일)
+        function setupAutoSave(textarea) {
+          if (!textarea || !textarea.id) return
+          const textareaId = textarea.id
+          const storageKey = `autoSavedChat_${textareaId}`
+          try {
+            const savedContent = localStorage.getItem(storageKey)
+            if (savedContent !== null) {
+              textarea.value = savedContent
+            }
+          } catch (e) {
+            console.error("자동 저장된 내용 복원 실패:", e)
+          }
+          textarea.addEventListener("input", () => {
+            try {
+              localStorage.setItem(storageKey, textarea.value)
+            } catch (e) {
+              console.error("자동 저장 실패 (용량 초과 등):", e)
+            }
+          })
+        }
+        chatSectionsContainer
+          .querySelectorAll(".chat-input-area")
+          .forEach((textarea) => {
+            setupAutoSave(textarea)
+          })
+
+        // --- Chat Section Add/Remove Logic (UPDATED for V22 Toolbar) ---
+        let chatSectionCounter =
+          chatSectionsContainer.querySelectorAll(".chat-section").length
+        function addChatSection() {
+          chatSectionCounter++
+          const newSection = document.createElement("div")
+          newSection.classList.add("section", "chat-section")
+          newSection.dataset.sectionId = chatSectionCounter
+          const headerDiv = document.createElement("div")
+          headerDiv.classList.add("section-header")
+          const newLabel = document.createElement("label")
+          const newTextareaId = `chatInput_${chatSectionCounter}`
+          newLabel.htmlFor = newTextareaId
+          newLabel.textContent = `채팅 입력 ${chatSectionCounter}`
+          const removeBtn = document.createElement("button")
+          removeBtn.classList.add("danger-button")
+          removeBtn.textContent = "X"
+          removeBtn.type = "button"
+          removeBtn.title = `채팅 입력 ${chatSectionCounter} 섹션 삭제`
+          removeBtn.addEventListener("click", () => {
+            const storageKey = `autoSavedChat_${newTextareaId}`
+            try {
+              localStorage.removeItem(storageKey)
+            } catch (e) {
+              console.error("자동 저장 삭제 실패:", e)
+            }
+            newSection.remove()
+          })
+          headerDiv.appendChild(newLabel)
+          headerDiv.appendChild(removeBtn)
+
+          // --- Add UPDATED Toolbar for new sections ---
+          const newToolbar = document.createElement("div")
+          newToolbar.classList.add("markdown-toolbar")
+          newToolbar.innerHTML = `
+                    <button type="button" class="format-btn" onclick="applySpeakerPrefix('${newTextareaId}', 'USER')" title="현재 줄 또는 선택 영역 앞에 'USER: ' 추가/변경">USER 대사</button>
+                    <button type="button" class="format-btn" onclick="applySpeakerPrefix('${newTextareaId}', 'AI')" title="현재 줄 또는 선택 영역 앞에 'AI: ' 추가/변경">AI 대사</button>
+                    <button type="button" class="format-btn" onclick="applyNarrationPrefix('${newTextareaId}')" title="현재 줄 또는 선택 영역 앞에 나레이션 표시('- ') 추가/변경">나레이션</button>
+                    <span style="margin: 0 5px; color: #ccc">|</span>
+                    <button type="button" onclick="applyMarkdown('${newTextareaId}', 'bold')" title="굵게 적용"><b>B</b></button>
+                    <button type="button" onclick="applyMarkdown('${newTextareaId}', 'italic')" title="기울임 적용"><i>I</i></button>
+                    <button type="button" onclick="applyMarkdown('${newTextareaId}', 'highlight')" title="하이라이트 적용">하이라이트</button>
+                    <button type="button" onclick="applyMarkdown('${newTextareaId}', 'emphasis')" title="강조 적용">강조</button>
+                `
+
+          const newTextarea = document.createElement("textarea")
+          newTextarea.id = newTextareaId
+          newTextarea.classList.add("full-width", "chat-input-area")
+          newTextarea.style.height = "150px"
+          newTextarea.style.fontFamily = "monospace"
+          newTextarea.placeholder = "여기에 추가 채팅 내용을 입력하세요..."
+          newTextarea.title = `채팅 입력 ${chatSectionCounter} 내용 (자동 저장됨)`
+          newSection.appendChild(headerDiv)
+          newSection.appendChild(newToolbar)
+          newSection.appendChild(newTextarea)
+          chatSectionsContainer.appendChild(newSection)
+          setupAutoSave(newTextarea)
+        }
+        addChatSectionBtn.addEventListener("click", addChatSection)
+
+        // HTML 생성 버튼 이벤트 (V21과 동일)
+        generateButton.addEventListener("click", function () {
+          const characterName = document.getElementById("characterName").value
+          const modelName = document.getElementById("modelName").value
+          const promptName = document.getElementById("promptName").value
+          const assistModelName =
+            document.getElementById("assistModelName").value
+          const userName = document.getElementById("userName").value
+          const chatNumber = document.getElementById("chatNumber").value
+          const chatTextareas =
+            chatSectionsContainer.querySelectorAll(".chat-input-area")
+          const chatTexts = Array.from(chatTextareas).map(
+            (textarea) => textarea.value,
+          )
+          const styleOptions = {
+            backgroundColor: logBgColorInput.value,
+            textColor: logTextColorInput.value,
+            highlightColor: highlightColorInput.value,
+            emphasisColor: emphasisColorInput.value,
+            baseFontSize: baseFontSizeInput.value,
+            titleFontSize: titleFontSizeInput.value,
+            containerMaxWidth: containerWidthInput.value,
+          }
+          const html = formatChatToHTML(
+            chatTexts,
+            characterName,
+            modelName,
+            promptName,
+            assistModelName,
+            userName,
+            chatNumber,
+            styleOptions,
+          )
+          htmlOutput.value = html
+          previewArea.innerHTML = html
+        })
+
+        // 복사 버튼 이벤트 (V21과 동일)
+        copyButton.addEventListener("click", function () {
+          if (!htmlOutput.value) {
+            alert("먼저 HTML을 생성해주세요.")
+            return
+          }
+          htmlOutput.select()
+          try {
+            document.execCommand("copy")
+            this.textContent = "복사 완료!"
+          } catch (err) {
+            navigator.clipboard
+              .writeText(htmlOutput.value)
+              .then(() => {
+                this.textContent = "복사 완료!"
+              })
+              .catch((e) => {
+                console.error("복사 실패:", e)
+                this.textContent = "복사 실패"
+              })
+          }
+          setTimeout(() => {
+            this.textContent = "HTML 복사하기"
+          }, 2000)
+        })
+
+        // Load Example Button Event (V21과 동일)
+        if (loadExampleBtn) {
+          loadExampleBtn.addEventListener("click", function () {
+            const firstChatInput = document.getElementById("chatInput_1")
+            if (firstChatInput) {
+              const exampleText = `* 화창한 봄날, 공원에서 우연히 만난 두 사람은 날씨에 관한 대화를 **나누기 시작**했다.\n\nUSER: 안녕하세요? 오늘 ##날씨##가 어때요?\n\n* AI는 잠시 생각에 잠기더니 __환하게 웃으며__ 대답했다.\n\nAI: 안녕하세요! 오늘 날씨는 맑고 화창합니다. 최고 기온은 !!23도!!로 예상됩니다. 야외 활동하기 좋은 날씨네요!`
+              if (
+                firstChatInput.value &&
+                !confirm(
+                  "입력된 내용이 있습니다. 예제 텍스트로 덮어쓰시겠습니까?",
+                )
+              ) {
+                return
+              }
+              firstChatInput.value = exampleText
+              generateButton.click()
+              alert("예제 텍스트를 불러왔습니다.")
+              firstChatInput.dispatchEvent(
+                new Event("input", { bubbles: true }),
+              )
+            } else {
+              alert("첫 번째 채팅 입력 영역을 찾을 수 없습니다.")
+            }
+          })
+        }
+
+        // Initialization (V21과 동일)
+        applySavedTheme()
+        syncColorInputs()
+      })
+    </script>
+  </body>
+</html>

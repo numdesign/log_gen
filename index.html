@@ -1,0 +1,304 @@
+<div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #1a1a1a; color: #eee; border-radius: 12px;">
+  <h1 style="font-size: 24px; margin-bottom: 20px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px;">다크모드 채팅 로그 변환기</h1>
+  
+  <div style="margin-bottom: 20px;">
+    <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #ddd;">캐릭터 정보</label>
+    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+      <input type="text" id="characterName" placeholder="캐릭터 이름" style="flex: 1; padding: 8px; border: 1px solid #444; border-radius: 4px; background-color: #252525; color: #ddd;">
+      <input type="text" id="modelName" placeholder="AI 모델명" style="flex: 1; padding: 8px; border: 1px solid #3498db; border-radius: 4px; background-color: #252525; color: #ddd;">
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <input type="text" id="promptName" placeholder="프롬프트명" style="flex: 1; padding: 8px; border: 1px solid #2980b9; border-radius: 4px; background-color: #252525; color: #ddd;">
+      <input type="text" id="assistModelName" placeholder="보조 모델명" style="flex: 1; padding: 8px; border: 1px solid #444; border-radius: 4px; background-color: #252525; color: #ddd;">
+    </div>
+  </div>
+  
+  <div style="margin-bottom: 20px;">
+    <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #ddd;">채팅 입력 (형식 안내)</label>
+    <p style="margin-bottom: 10px; font-size: 14px; color: #bbb;">
+      - 나레이션은 * 또는 - 로 시작하세요<br>
+      - 대화는 "USER: 내용" 또는 "AI: 내용" 형식으로 작성하세요<br>
+      - 빈 줄은 무시됩니다<br>
+      - <strong style="color: #fff;">강조 방법:</strong> <br>
+      &nbsp;&nbsp;&nbsp;**굵게** - <strong>굵은 글씨</strong><br>
+      &nbsp;&nbsp;&nbsp;##강조## - <span style="background-color: #3498db; color: #fff; padding: 0 4px; border-radius: 3px;">파란색 강조</span><br>
+      &nbsp;&nbsp;&nbsp;__기울임__ - <span style="font-style: italic;">이탤릭체</span><br>
+      &nbsp;&nbsp;&nbsp;!!중요!! - <span style="background-color: #1f618d; color: #fff; padding: 0 4px; border-radius: 3px;">진한 파란색 강조</span>
+    </p>
+    <textarea id="chatInput" style="width: 100%; height: 200px; padding: 10px; border: 1px solid #444; border-radius: 4px; background-color: #252525; color: #ddd; font-family: monospace;" placeholder="* 화창한 봄날, 공원에서 우연히 만난 두 사람은 날씨에 관한 대화를 나누기 시작했다.
+
+USER: 안녕하세요? 오늘 날씨가 어때요?
+
+* AI는 잠시 생각에 잠기더니 환하게 웃으며 대답했다.
+
+AI: 안녕하세요! 오늘 날씨는 맑고 화창합니다. 최고 기온은 23도로 예상됩니다. 야외 활동하기 좋은 날씨네요!"></textarea>
+  </div>
+  
+  <button id="generateButton" style="background-color: #3498db; color: #ffffff; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">HTML 생성하기</button>
+  
+  <div style="margin-top: 20px;">
+    <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #ddd;">HTML 결과</label>
+    <textarea id="htmlOutput" style="width: 100%; height: 200px; padding: 10px; border: 1px solid #444; border-radius: 4px; background-color: #252525; color: #ddd; font-family: monospace;" readonly></textarea>
+    <button id="copyButton" style="margin-top: 10px; background-color: #333; color: #fff; padding: 8px 15px; border: 1px solid #444; border-radius: 4px; cursor: pointer;">HTML 복사하기</button>
+  </div>
+  
+  <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">
+    <h2 style="font-size: 18px; margin-bottom: 15px; color: #ddd;">미리보기</h2>
+    <div id="previewArea" style="border: 1px solid #333; padding: 20px; min-height: 200px; border-radius: 8px; background-color: #0f0f0f;"></div>
+  </div>
+</div>
+
+<script>
+// 다크모드 전용 채팅 로그 HTML 생성 함수
+function formatDarkChatToHTML(chatText, characterName, modelName, promptName, assistModelName) {
+  // 기본값 설정
+  characterName = characterName || '캐릭터 이름';
+  modelName = modelName || 'AI 모델명';
+  promptName = promptName || '프롬프트명';
+  assistModelName = assistModelName || '보조 모델명';
+  
+  // 대화 라인을 배열로 분리
+  const lines = chatText.trim().split('\n');
+  
+  // 대화 파트를 저장할 배열
+  const chatParts = [];
+  
+  // 현재 화자와 내용을 저장할 변수
+  let currentSpeaker = null;
+  let currentContent = [];
+  
+  // 각 라인 처리
+  for (let line of lines) {
+    line = line.trim();
+    if (!line) continue; // 빈 줄 무시
+    
+    // 화자 패턴 확인 (USER: 또는 AI:로 시작하는지)
+    const speakerMatch = line.match(/^(USER|AI):\s*(.*)/i);
+    
+    // 나레이션 패턴 확인 (* 또는 -로 시작하는지)
+    const narrationMatch = line.match(/^[\*\-]\s*(.*)/);
+    
+    if (speakerMatch) {
+      // 이전 대화 내용이 있으면 저장
+      if (currentSpeaker && currentContent.length > 0) {
+        chatParts.push({
+          type: currentSpeaker.toLowerCase(),
+          content: currentContent.join(' ')
+        });
+        currentContent = [];
+      }
+      
+      // 새 화자 설정
+      currentSpeaker = speakerMatch[1].toUpperCase();
+      
+      // 내용이 있으면 추가
+      if (speakerMatch[2]) {
+        currentContent.push(speakerMatch[2]);
+      }
+    } else if (narrationMatch) {
+      // 이전 대화 내용이 있으면 저장
+      if (currentSpeaker && currentContent.length > 0) {
+        chatParts.push({
+          type: currentSpeaker.toLowerCase(),
+          content: currentContent.join(' ')
+        });
+        currentContent = [];
+        currentSpeaker = null;
+      }
+      
+      // 나레이션 추가
+      chatParts.push({
+        type: 'narration',
+        content: narrationMatch[1]
+      });
+    } else {
+      // 현재 화자가 있으면 내용에 추가
+      if (currentSpeaker) {
+        currentContent.push(line);
+      } else {
+        // 화자가 없으면 나레이션으로 처리
+        chatParts.push({
+          type: 'narration',
+          content: line
+        });
+      }
+    }
+  }
+  
+  // 마지막 대화 내용 저장
+  if (currentSpeaker && currentContent.length > 0) {
+    chatParts.push({
+      type: currentSpeaker.toLowerCase(),
+      content: currentContent.join(' ')
+    });
+  }
+  
+  // 텍스트에서 강조 부분 처리 함수
+  function processEmphasis(text) {
+    // **텍스트** 형식의 강조를 <span> 태그로 변환 (굵은 텍스트)
+    text = text.replace(/\*\*(.*?)\*\*/g, '<span style="font-weight: 700;">$1</span>');
+    
+    // ##텍스트## 형식의 강조를 색상 있는 <span>으로 변환 (밝은 파란색 배경)
+    text = text.replace(/##(.*?)##/g, '<span style="background-color: #3498db; color: #ffffff; padding: 0 2px; border-radius: 3px;">$1</span>');
+    
+    // __텍스트__ 형식의 강조를 이탤릭체로 변환
+    text = text.replace(/__(.*?)__/g, '<span style="font-style: italic;">$1</span>');
+    
+    // !!텍스트!! 형식의 강조를 진한 배경색으로 변환
+    text = text.replace(/!!(.*?)!!/g, '<span style="background-color: #1f618d; color: #ffffff; padding: 0 2px; border-radius: 3px;">$1</span>');
+    
+    return text;
+  }
+  
+  // HTML 생성
+  let html = `<div style="width: 100%; max-width: 650px; margin: 0 auto; background-color: #1a1a1a; border-radius: 0; overflow: hidden; font-family: 'Pretendard', Arial, sans-serif; letter-spacing: -0.03em; color: #eee;">
+
+  <!-- Header Section -->
+  <div style="background-color: #202020; padding: 32px 40px; border-bottom: 1px solid #333;">
+    <div style="display: block; margin-bottom: 8px;">
+      <span style="font-size: 14px; color: #aaaaaa; font-weight: 500;">#${Math.floor(Math.random() * 900) + 100}</span>
+    </div>
+    <h1 style="font-size: 38px; margin: 0; font-weight: 700; color: #ffffff; line-height: 1.2;">CHAT LOG</h1>
+  </div>
+
+  <!-- Character Info Box -->
+  <div style="display: block; background-color: #202020; margin: 16px 20px; border-radius: 12px; overflow: hidden;">
+    <div style="padding: 32px;">
+      <!-- Character Info Row -->
+      <div style="width: 100%; margin-bottom: 15px; display: block;">
+        <!-- Character Section -->
+        <div style="margin-bottom: 32px; display: flex; flex-wrap: wrap; align-items: flex-start;">
+          <!-- Character Image Container -->
+          <div style="flex: 0 0 auto; max-width: 50%; margin-right: 20px; border-radius: 16px; overflow: hidden; background-color: #333; display: flex; margin:0 auto; justify-content: center; align-items: center;">
+            <div style="text-align: center; font-size: 18px; color: #aaa;">
+              캐릭터
+            </div>
+          </div>
+          
+          <!-- Character Details -->
+          <div style="margin-left: 20px; width: 100%;">
+            <h2 style="font-size: 28px; color: #ffffff; margin: 0 0 16px 0; font-weight: 700;">${characterName}</h2>
+            <div style="margin: 8px 0; font-size: 15px; color: #cccccc; display: flex; flex-direction: column;">
+              <span style="display: block; background-color: #3498db; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; margin-bottom: 15px; border: 1px solid #4fa8eb;">${modelName}</span>
+              <span style="display: block; background-color: #2980b9; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; margin-bottom: 15px; border: 1px solid #3590c9;">${promptName}</span>
+              <span style="display: block; background-color: #1f618d; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid #2671a3;">${assistModelName}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Divider -->
+        <div style="height: 1px; background-color: #333; margin: 24px 0;"></div>
+        
+        <!-- QR Code Section -->
+        <div style="display: block; margin-top: 24px;">
+          <div style="font-size: 12px; text-transform: uppercase; font-weight: 600; color: #aaaaaa; margin-bottom: 8px;">MONO</div>
+          <div style="font-size: 20px; font-weight: 700; color: #ffffff;">CONVERSATION</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Log Section with Summary/Details for expandable content -->
+  <!-- Chat Log Section with Summary/Details for expandable content -->
+  <div style="margin: 16px 20px 20px; background-color: #202020; border-radius: 12px; padding: 5px;">
+    <details>
+      <summary style="padding: 16px 20px; cursor: pointer; outline: none; list-style: none; border-radius: 10px;">
+        <div style="font-size: 22px; font-weight: 700; color: #ffffff; display: block;">
+          CHAT LOG
+        </div>
+      </summary>
+      
+      <div style="padding: 20px 20px 20px 20px;">
+      
+      <div style="padding: 5px;">`;
+  
+  // 각 대화 파트 HTML 추가
+  chatParts.forEach(part => {
+    if (part.type === 'narration') {
+      html += `
+        <!-- Narration -->
+        <div style="margin: 24px 0; display: block; border-left: 3px solid #3498db; padding-left: 16px;">
+          <div style="font-size: 15px; color: #aaaaaa; line-height: 1.5; font-style: italic;">
+            ${processEmphasis(part.content)}
+          </div>
+        </div>`;
+    } else if (part.type === 'user') {
+      html += `
+        <!-- User Message - Right aligned -->
+        <div style="margin: 16px 0; display: block; text-align: right;">
+          <div style="font-weight: 600; color: #ffffff; margin-bottom: 8px; font-size: 14px;">USER</div>
+          <div style="background-color: #353535; border-radius: 12px; padding: 16px; font-size: 15px; color: #dddddd; line-height: 1.5; display: inline-block; max-width: 70%; text-align: left; border: 1px solid #444;">
+            ${processEmphasis(part.content)}
+          </div>
+        </div>`;
+    } else if (part.type === 'ai') {
+      html += `
+        <!-- AI Response -->
+        <div style="margin: 24px 0; display: block;">
+          <div style="font-weight: 600; color: #ffffff; margin-bottom: 8px; font-size: 14px;">${characterName}</div>
+          <div style="background-color: #1a1a1a; border-radius: 12px; padding: 16px; font-size: 15px; color: #dddddd; line-height: 1.5; display: inline-block; max-width: 70%; border: 1px solid #3498db;">
+            ${processEmphasis(part.content)}
+          </div>
+        </div>`;
+    }
+  });
+  
+  // HTML 닫기
+  html += `
+      </div>
+    </details>
+  </div>
+
+        <!-- Footer -->
+  <div style="background-color: #202020; padding: 24px 40px; text-align: right; font-size: 13px; color: #aaaaaa; border-top: 1px solid #333;">
+    <div style="display: inline-block; margin-right: 20px;">CHAT MONO</div>
+    <div style="display: inline-block;">${new Date().toISOString().slice(0, 10).replace(/-/g, '.')}</div>
+  </div>
+</div>
+
+<p style="font-size: 0; margin: 0; padding: 0;">**--Pretendard 폰트 적용, 자간 -0.04em 설정, 다크모드 디자인 적용--**</p>`;
+
+  return html;
+}
+
+// 이벤트 핸들러 설정
+document.getElementById('generateButton').addEventListener('click', function() {
+  const chatInput = document.getElementById('chatInput').value;
+  const characterName = document.getElementById('characterName').value;
+  const modelName = document.getElementById('modelName').value;
+  const promptName = document.getElementById('promptName').value;
+  const assistModelName = document.getElementById('assistModelName').value;
+  
+  const html = formatDarkChatToHTML(chatInput, characterName, modelName, promptName, assistModelName);
+  
+  document.getElementById('htmlOutput').value = html;
+  document.getElementById('previewArea').innerHTML = html;
+});
+
+document.getElementById('copyButton').addEventListener('click', function() {
+  const htmlOutput = document.getElementById('htmlOutput');
+  htmlOutput.select();
+  document.execCommand('copy');
+  this.textContent = '복사 완료!';
+  
+  setTimeout(() => {
+    this.textContent = 'HTML 복사하기';
+  }, 2000);
+});
+
+// 초기 예시 텍스트 설정
+const exampleText = `* 화창한 봄날, 공원에서 우연히 만난 두 사람은 날씨에 관한 대화를 **나누기 시작**했다.
+
+USER: 안녕하세요? 오늘 ##날씨##가 어때요?
+
+* AI는 잠시 생각에 잠기더니 __환하게 웃으며__ 대답했다.
+
+AI: 안녕하세요! 오늘 날씨는 맑고 화창합니다. 최고 기온은 !!23도!!로 예상됩니다. 야외 활동하기 좋은 날씨네요!`;
+
+document.getElementById('chatInput').value = exampleText;
+
+// 페이지 로드 시 예제 미리보기 생성
+window.onload = function() {
+  document.getElementById('generateButton').click();
+};
+</script>

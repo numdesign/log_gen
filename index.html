@@ -3,163 +3,333 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>채팅 로그 변환기 (test ver.)</title>
+    <title>챗챈 로그 제조기 (V.01)</title>
     <style>
-      /* UI 스타일 (V21과 동일) */
+      /* --- CSS --- */
+      :root {
+        /* Light Mode Colors */
+        --bg-color: #f0f2f5;
+        --text-color: #1d2129;
+        --container-bg: #ffffff;
+        --input-bg: #ffffff;
+        --input-border-color: #ccd0d5;
+        --input-text-color: #1d2129;
+        --label-color: #4b4f56;
+        --secondary-label-color: #606770;
+        --border-color: #e4e6eb;
+        --divider-color: #e4e6eb;
+        --primary-color: #007bff;
+        --primary-hover-color: #0056b3;
+        --secondary-color: #6c757d;
+        --secondary-hover-color: #5a6268;
+        --danger-color: #dc3545;
+        --danger-hover-color: #c82333;
+        --info-color: #17a2b8;
+        --info-hover-color: #117a8b;
+        --toolbar-bg: #f0f2f5;
+        --toolbar-border: #ccd0d5;
+        --toolbar-text: #4b4f56;
+        --preview-bg: #f0f2f5;
+        --highlight-color: #3498db;
+        --prompt-color: #6c757d;
+        --emphasis-color: #1f618d;
+        --body-font: "Pretendard", Arial, sans-serif;
+        --code-font: "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
+          Courier, monospace;
+        --base-font-size: 15px;
+        --title-font-size: 38px;
+        --container-max-width: 650px;
+        --box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
+        --border-radius-sm: 4px;
+        --border-radius-md: 8px;
+        --border-radius-lg: 12px;
+        --transition-speed: 0.2s;
+        /* 로그 기본 색상 (테마별) */
+        --log-bg-light: #ffffff;
+        --log-text-light: #1d2129;
+        --log-bg-dark: #242526;
+        --log-text-dark: #e4e6eb;
+      }
+      body.dark-mode {
+        /* Dark Mode Colors */
+        --bg-color: #18191a;
+        --text-color: #e4e6eb;
+        --container-bg: #242526;
+        --input-bg: #3a3b3c;
+        --input-border-color: #4e4f50;
+        --input-text-color: #e4e6eb;
+        --label-color: #e4e6eb;
+        --secondary-label-color: #b0b3b8;
+        --border-color: #3e4042;
+        --divider-color: #3e4042;
+        --primary-color: #2374e1;
+        --primary-hover-color: #3982e4;
+        --secondary-color: #4e4f50;
+        --secondary-hover-color: #5a5b5c;
+        --danger-color: #e74c3c;
+        --danger-hover-color: #ec7063;
+        --info-color: #17a2b8;
+        --info-hover-color: #1dc1da;
+        --toolbar-bg: #3a3b3c;
+        --toolbar-border: #4e4f50;
+        --toolbar-text: #e4e6eb;
+        --preview-bg: #18191a;
+      }
+      /* --- 기본 스타일 --- */
       body {
-        font-family: Arial, sans-serif;
-        background-color: #f8f9fa;
-        color: #212529;
+        font-family: var(--body-font);
+        background-color: var(--bg-color);
+        color: var(--text-color);
         margin: 0;
         padding: 20px;
         transition:
-          background-color 0.3s,
-          color 0.3s;
+          background-color var(--transition-speed),
+          color var(--transition-speed);
+        font-size: 14px;
+        line-height: 1.5;
       }
       .container {
         max-width: 800px;
-        margin: 0 auto;
-        background-color: #ffffff;
-        border: 1px solid #dee2e6;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin: 20px auto;
+        background-color: var(--container-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        padding: 25px;
+        box-shadow: var(--box-shadow);
         transition:
-          background-color 0.3s,
-          border-color 0.3s;
+          background-color var(--transition-speed),
+          border-color var(--transition-speed),
+          box-shadow var(--transition-speed);
       }
       h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-        color: #212529;
-        border-bottom: 1px solid #dee2e6;
-        padding-bottom: 10px;
+        font-size: 22px;
+        margin-top: 0;
+        margin-bottom: 25px;
+        color: var(--text-color);
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 15px;
+        font-weight: 600;
         transition:
-          color 0.3s,
-          border-color 0.3s;
+          color var(--transition-speed),
+          border-color var(--transition-speed);
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+        margin-top: 30px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--divider-color);
+        font-weight: 600;
+        color: var(--text-color);
       }
       label {
         display: block;
         margin-bottom: 8px;
-        font-weight: bold;
-        color: #495057;
-        transition: color 0.3s;
+        font-weight: 600;
+        color: var(--label-color);
+        transition: color var(--transition-speed);
+        font-size: 14px;
+      }
+      .style-config-label {
+        font-size: 13px;
+        color: var(--secondary-label-color);
+        margin-bottom: 4px;
+        font-weight: normal;
       }
       input[type="text"],
       input[type="number"],
-      textarea {
-        background-color: #ffffff;
-        border: 1px solid #ced4da;
-        color: #495057;
-        border-radius: 4px;
-        padding: 8px;
+      textarea,
+      select {
+        background-color: var(--input-bg);
+        border: 1px solid var(--input-border-color);
+        color: var(--input-text-color);
+        border-radius: var(--border-radius-sm);
+        padding: 9px 12px;
         box-sizing: border-box;
         transition:
-          background-color 0.3s,
-          border-color 0.3s,
-          color 0.3s;
-      }
-      input[type="text"],
-      textarea {
+          background-color var(--transition-speed),
+          border-color var(--transition-speed),
+          color var(--transition-speed),
+          box-shadow var(--transition-speed);
         width: 100%;
+        font-size: 14px;
+        font-family: inherit;
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        outline: none;
       }
       input[type="number"] {
-        width: 70px;
-        padding: 4px 8px;
-        font-size: 14px;
+        width: 80px;
+        padding: 9px;
         text-align: right;
       }
       input[type="color"] {
-        background-color: #ffffff;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
+        background-color: var(--input-bg);
+        border: 1px solid var(--input-border-color);
+        border-radius: var(--border-radius-sm);
         width: 40px;
-        height: 30px;
-        padding: 0;
+        height: 38px;
+        padding: 2px;
         cursor: pointer;
         vertical-align: middle;
         transition:
-          background-color 0.3s,
-          border-color 0.3s;
+          background-color var(--transition-speed),
+          border-color var(--transition-speed);
+      }
+      textarea {
+        resize: vertical;
+        min-height: 150px;
+        font-family: var(--code-font);
       }
       .input-group {
         display: flex;
-        gap: 10px;
-        margin-bottom: 10px;
+        gap: 15px;
+        margin-bottom: 15px;
         flex-wrap: wrap;
         align-items: flex-end;
       }
       .input-group > div {
         flex: 1 1 200px;
-        min-width: 200px;
+        min-width: 150px;
       }
-      .full-width {
-        width: 100%;
+      .input-group.align-center {
+        align-items: center;
       }
+      /* --- 버튼 스타일 --- */
       button {
         cursor: pointer;
-        border-radius: 4px;
-        font-weight: bold;
-        padding: 8px 15px;
+        border-radius: var(--border-radius-sm);
+        font-weight: 600;
+        padding: 10px 15px; /* 세로 패딩 10px */
         transition:
-          background-color 0.3s,
-          color 0.3s,
-          border-color 0.3s;
+          background-color var(--transition-speed),
+          color var(--transition-speed),
+          border-color var(--transition-speed),
+          opacity var(--transition-speed),
+          transform var(--transition-speed);
+        border: none;
+        font-size: 14px;
+        line-height: 1.4;
+        background-color: var(--secondary-color);
+        color: white;
+        box-sizing: border-box; /* *** box-sizing 추가 *** */
+      }
+      button:hover {
+        opacity: 0.9;
+      }
+      button:active {
+        transform: scale(0.98);
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
       }
       .primary-button {
-        background-color: #007bff;
+        background-color: var(--primary-color);
         color: white;
-        border: none;
-        padding: 10px 15px;
-      }
+        padding: 10px 18px;
+      } /* 가로 패딩만 다름 */
       .primary-button:hover {
-        background-color: #0056b3;
+        background-color: var(--primary-hover-color);
+        opacity: 1;
       }
       .secondary-button {
-        background-color: #6c757d;
+        background-color: var(--secondary-color);
         color: white;
-        border: none;
-        padding: 8px 15px;
       }
       .secondary-button:hover {
-        background-color: #5a6268;
+        background-color: var(--secondary-hover-color);
+        opacity: 1;
       }
+      body.dark-mode .secondary-button {
+        background-color: var(--secondary-color);
+        border: 1px solid var(--input-border-color);
+      } /* 다크모드 테두리 */
       .danger-button {
-        background-color: #dc3545;
+        background-color: var(--danger-color);
         color: white;
-        border: none;
-        padding: 4px 8px;
+        padding: 5px 10px;
         font-size: 12px;
-        margin-left: 10px;
-      }
+      } /* 작은 버튼 */
       .danger-button:hover {
-        background-color: #c82333;
+        background-color: var(--danger-hover-color);
+        opacity: 1;
       }
-      .theme-btn {
-        padding: 8px 12px;
-        border: none;
-        border-radius: 4px;
+      .info-button {
+        background-color: var(--info-color);
         color: white;
-        font-weight: bold;
+      }
+      .info-button:hover {
+        background-color: var(--info-hover-color);
+        opacity: 1;
+      }
+      /* --- *** Action Buttons 정렬/크기 조정 *** --- */
+      .action-buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: stretch; /* stretch로 변경하여 높이 강제 맞춤 */
+      }
+      .action-buttons button {
+        /* 필요시 flex-grow 추가 가능 */
+      }
+      /* --- 섹션 & 컴포넌트 --- */
+      details.section {
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        margin-bottom: 20px;
+        background-color: var(--container-bg);
+        transition:
+          background-color var(--transition-speed),
+          border-color var(--transition-speed);
+        overflow: hidden;
+      }
+      details.section[open] > summary {
+        border-bottom: 1px solid var(--border-color);
+      }
+      summary {
+        font-weight: 600;
+        cursor: pointer;
+        padding: 15px 20px;
+        list-style: revert;
+        color: var(--text-color);
+        transition:
+          background-color var(--transition-speed),
+          color var(--transition-speed);
+      }
+      summary:hover {
+        background-color: rgba(0, 0, 0, 0.03);
+      }
+      body.dark-mode summary:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+      .section-content {
+        padding: 20px;
       }
       .theme-toggle-section {
-        padding-bottom: 15px;
-        margin-bottom: 15px;
-        border-bottom: 1px solid #dee2e6;
-      }
-      body.dark-mode .theme-toggle-section {
-        border-bottom-color: #333;
-      }
-      .toggle-switch-label {
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
         display: flex;
         align-items: center;
-        list-style: none;
-        font-weight: bold;
+        justify-content: space-between;
+      }
+      .toggle-switch-label {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        margin-bottom: 0;
       }
       .toggle-switch-label input[type="checkbox"] {
         opacity: 0;
         width: 0;
         height: 0;
+        position: absolute;
       }
       .toggle-switch-slider {
         position: relative;
@@ -168,7 +338,7 @@
         height: 26px;
         background-color: #ccc;
         border-radius: 13px;
-        transition: background-color 0.3s;
+        transition: background-color var(--transition-speed);
         margin-right: 10px;
       }
       .toggle-switch-slider::before {
@@ -180,12 +350,12 @@
         background-color: white;
         top: 3px;
         left: 3px;
-        transition: transform 0.3s;
+        transition: transform var(--transition-speed);
       }
       .toggle-switch-label
         input[type="checkbox"]:checked
         + .toggle-switch-slider {
-        background-color: #3498db;
+        background-color: var(--primary-color);
       }
       .toggle-switch-label
         input[type="checkbox"]:checked
@@ -193,206 +363,247 @@
         transform: translateX(24px);
       }
       .toggle-switch-text {
-        font-weight: bold;
+        font-weight: 600;
+        color: var(--label-color);
       }
-      body.dark-mode .toggle-switch-text {
-        color: #eee;
-      }
-      .section {
+      .color-theme-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
         margin-bottom: 20px;
+      }
+      .theme-btn {
+        padding: 8px 12px;
+        border: none;
+        border-radius: var(--border-radius-sm);
+        color: white;
+        font-weight: 600;
+        min-width: 70px;
+        text-align: center;
+      }
+      .theme-btn:hover {
+        opacity: 0.85;
+      }
+      .color-settings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+      .color-input-group {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+      .color-input-group input[type="text"] {
+        flex: 1;
+      }
+      .markdown-toolbar {
+        margin-bottom: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        padding: 8px;
+        background-color: var(--toolbar-bg);
+        border: 1px solid var(--toolbar-border);
+        border-radius: var(--border-radius-sm);
+        transition:
+          background-color var(--transition-speed),
+          border-color var(--transition-speed);
+      }
+      .markdown-toolbar button {
+        background-color: var(--input-bg);
+        border: 1px solid var(--input-border-color);
+        padding: 4px 10px;
+        font-size: 13px;
+        cursor: pointer;
+        border-radius: var(--border-radius-sm);
+        font-weight: normal;
+        color: var(--input-text-color);
+      }
+      .markdown-toolbar button:hover {
+        background-color: var(--bg-color);
+      }
+      .toolbar-divider {
+        border-left: 1px solid var(--input-border-color);
+        margin: 0 5px;
+      }
+      .markdown-toolbar kbd {
+        font-size: 10px;
+        background-color: var(--bg-color);
+        border: 1px solid var(--input-border-color);
+        padding: 1px 3px;
+        border-radius: 2px;
+        margin-left: 4px;
+        vertical-align: middle;
+        color: var(--secondary-label-color);
+      }
+      .chat-section {
         position: relative;
+        border: 1px solid var(--divider-color);
+        border-radius: var(--border-radius-md);
+        margin-bottom: 15px;
+        padding: 15px;
+        background-color: var(--input-bg);
       }
       .section-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
+        padding: 0 5px;
       }
       .section-header label {
         margin-bottom: 0;
+        font-weight: normal;
+        color: var(--secondary-label-color);
       }
-      .preview-area {
-        border: 1px solid #dee2e6;
-        padding: 20px;
-        min-height: 200px;
-        border-radius: 8px;
-        background-color: #f8f9fa;
-        margin-top: 20px;
-        transition:
-          background-color 0.3s,
-          border-color 0.3s;
-        overflow-x: auto;
+      .section-controls {
+        display: flex;
+        gap: 5px;
       }
-      textarea {
-        resize: vertical;
-      }
-      body.dark-mode {
-        background-color: #121212;
-        color: #eee;
-      }
-      body.dark-mode .container {
-        background-color: #1a1a1a;
-        border: 1px solid #333;
-      }
-      body.dark-mode h1 {
-        color: #fff;
-        border-bottom: 1px solid #333;
-      }
-      body.dark-mode label {
-        color: #ddd;
-      }
-      body.dark-mode input[type="text"],
-      body.dark-mode input[type="number"],
-      body.dark-mode textarea {
-        background-color: #252525;
-        border: 1px solid #444;
-        color: #ddd;
-      }
-      body.dark-mode input[type="color"] {
-        background-color: #252525;
-        border: 1px solid #444;
-      }
-      body.dark-mode .primary-button {
-        background-color: #3498db;
-      }
-      body.dark-mode .primary-button:hover {
-        background-color: #2980b9;
-      }
-      body.dark-mode .secondary-button {
-        background-color: #333;
-        border: 1px solid #444;
-        color: white;
-      }
-      body.dark-mode .secondary-button:hover {
-        background-color: #444;
-      }
-      body.dark-mode .danger-button {
-        background-color: #bd2130;
-      }
-      body.dark-mode .danger-button:hover {
-        background-color: #a71d2a;
-      }
-      body.dark-mode .preview-area {
-        border: 1px solid #333;
-        background-color: #0f0f0f;
-      }
-      body.dark-mode .input-group label {
-        color: #bbb;
-      }
-      body.dark-mode span[id$="Value"] {
-        color: #ddd;
-      }
-      .style-config-label {
-        display: block;
-        margin-bottom: 4px;
-        font-size: 14px;
-        color: #6c757d;
-        transition: color 0.3s;
-      }
-      body.dark-mode .style-config-label {
-        color: #bbb;
-      }
-
-      /* --- Styles for V19/V20/V21/V22 --- */
-      summary {
-        font-weight: bold;
-        cursor: pointer;
-        padding: 10px 0;
-        margin-bottom: 10px;
-        border-bottom: 1px solid #eee;
-        list-style: revert;
-      }
-      details[open] > summary {
-        margin-bottom: 15px;
-      }
-      body.dark-mode summary {
-        border-bottom-color: #333;
-      }
-      .markdown-toolbar {
-        margin-bottom: 5px;
-      }
-      .markdown-toolbar button {
-        background-color: #e9ecef;
-        border: 1px solid #ced4da;
-        padding: 3px 8px;
+      .move-btn {
+        background-color: transparent;
+        border: 1px solid var(--input-border-color);
+        color: var(--secondary-label-color);
+        padding: 3px 6px;
         font-size: 12px;
-        cursor: pointer;
-        margin-right: 3px;
+        line-height: 1;
+      }
+      .move-btn:hover {
+        background-color: var(--toolbar-bg);
+        color: var(--text-color);
+      }
+      .remove-section-btn {
+        line-height: 1;
+      }
+      .format-guide-container {
+        margin-bottom: 15px;
+        padding: 15px;
+        background-color: var(--toolbar-bg);
+        border-radius: var(--border-radius-md);
+        border: 1px solid var(--border-color);
+      }
+      .format-guide-container strong {
+        color: var(--text-color);
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .format-guide-container code {
+        background-color: var(--input-bg);
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-family: var(--code-font);
+        font-size: 12px;
+        border: 1px solid var(--input-border-color);
+      }
+      .format-guide-container span {
+        font-size: 13px;
+        color: var(--secondary-label-color);
+        line-height: 1.7;
+      }
+      .format-guide-container .highlight-example,
+      .format-guide-container .emphasis-example {
+        color: #fff;
+        padding: 1px 4px;
         border-radius: 3px;
         font-weight: normal;
+        display: inline-block;
       }
-      body.dark-mode .markdown-toolbar button {
-        background-color: #333;
-        border-color: #555;
-        color: #eee;
+      #htmlOutput {
+        height: 250px;
+        font-family: var(--code-font);
+        font-size: 13px;
+        white-space: pre-wrap;
+        overflow-x: auto;
+        word-wrap: break-word;
       }
-      details.section {
-        padding: 0 10px 10px 10px;
-        border-radius: 8px;
-        margin-bottom: 15px;
+      .preview-area {
+        border: 1px solid var(--border-color);
+        padding: 20px;
+        min-height: 300px;
+        border-radius: var(--border-radius-md);
+        background-color: var(--preview-bg);
+        margin-top: 15px;
+        transition:
+          background-color var(--transition-speed),
+          border-color var(--transition-speed);
+        overflow-x: auto;
       }
-      .markdown-toolbar button.format-btn {
-        /* Specific style for format buttons */
-        /* Example: font-weight: bold; */
+      .preset-manager {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid var(--divider-color);
       }
-      body.dark-mode .markdown-toolbar button.format-btn {
-        /* Dark mode specific */
+      .preset-controls {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      .preset-controls > div {
+        flex: 1;
+      }
+      .preset-controls select {
+        flex: 2;
+      }
+      .preset-controls button {
+        flex-shrink: 0;
+      }
+      #presetName {
+        min-width: 150px;
+      }
+      @media (max-width: 600px) {
+        body {
+          padding: 10px;
+        }
+        .container {
+          padding: 15px;
+          margin: 10px auto;
+        }
+        h1 {
+          font-size: 20px;
+          margin-bottom: 20px;
+        }
+        .input-group {
+          flex-direction: column;
+          gap: 10px;
+          align-items: stretch;
+        }
+        .input-group > div {
+          min-width: 100%;
+        }
+        input[type="number"] {
+          width: 100%;
+        }
+        .action-buttons {
+          flex-direction: column;
+          gap: 8px;
+          align-items: stretch;
+        }
+        .preset-controls {
+          flex-direction: column;
+          gap: 8px;
+          align-items: stretch;
+        }
+        .markdown-toolbar {
+          justify-content: center;
+        }
+        .theme-toggle-section {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+        .color-settings-grid {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body class="light-mode">
     <div class="container">
-      <h1>채팅 로그 변환기 (test ver.)</h1>
-      <details
-        class="section"
-        open
-        title="기본적인 캐릭터, 모델, 사용자 정보를 입력하는 곳입니다."
-      >
-        <summary>캐릭터 정보 설정</summary>
-        <div class="input-group">
-          <input
-            type="text"
-            id="characterName"
-            placeholder="캐릭터 이름"
-            title="AI 캐릭터 이름 (로그에 표시됨)"
-          />
-          <input
-            type="text"
-            id="modelName"
-            placeholder="AI 모델명"
-            title="사용한 AI 모델 이름 (로그에 표시됨)"
-          />
-        </div>
-        <div class="input-group">
-          <input
-            type="text"
-            id="promptName"
-            placeholder="프롬프트명"
-            title="사용한 프롬프트 이름 (로그에 표시됨)"
-          />
-          <input
-            type="text"
-            id="assistModelName"
-            placeholder="보조 모델명"
-            title="사용한 보조 모델 이름 (로그에 표시됨)"
-          />
-        </div>
-        <div class="input-group">
-          <input
-            type="text"
-            id="userName"
-            placeholder="유저 이름 (기본값: USER)"
-            title="사용자 이름 (기본값: USER, 로그에 표시됨)"
-          />
-          <input
-            type="text"
-            id="chatNumber"
-            placeholder="채팅 번호 (기본값: 랜덤)"
-            title="채팅 번호 (비워두면 랜덤 숫자 생성, 로그에 표시됨)"
-          />
-        </div>
-      </details>
-      <div class="section theme-toggle-section">
+      <h1>챗챈 로그 제조기 (V.01)</h1>
+      <div class="theme-toggle-section">
         <label
           for="themeToggleCheckbox"
           class="toggle-switch-label"
@@ -404,410 +615,630 @@
             >라이트 모드</span
           >
         </label>
+        <button
+          id="resetAllButton"
+          class="danger-button"
+          title="모든 입력 내용과 설정을 초기화합니다 (프리셋 제외)"
+        >
+          전체 초기화
+        </button>
       </div>
+
       <details
         class="section"
-        title="채팅 로그의 디자인(색상, 글자 크기 등)을 설정합니다."
+        open
+        title="기본적인 캐릭터, 모델, 사용자 정보를 입력하는 곳입니다."
       >
-        <summary>디자인 및 스타일 설정</summary>
-        <div class="section">
-          <label title="미리 정의된 색상 조합으로 빠르게 스타일을 변경합니다."
-            >색상 테마 (하이라이트/강조)</label
-          >
-          <div
-            style="
-              display: flex;
-              flex-wrap: wrap;
-              gap: 10px;
-              margin-bottom: 15px;
-            "
-          >
-            <button
-              class="theme-btn"
-              data-theme="default"
-              style="background-color: #3498db"
-              title="기본 파란색 테마"
-            >
-              기본
-            </button>
-            <button
-              class="theme-btn"
-              data-theme="olive"
-              style="background-color: #328e6e"
-              title="올리브색 테마"
-            >
-              올리브
-            </button>
-            <button
-              class="theme-btn"
-              data-theme="sky"
-              style="background-color: #9fb3df"
-              title="하늘색 테마"
-            >
-              스카이
-            </button>
-            <button
-              class="theme-btn"
-              data-theme="sunflower"
-              style="background-color: #fcb454"
-              title="해바라기색 테마"
-            >
-              해바라기
-            </button>
-            <button
-              class="theme-btn"
-              data-theme="sunset"
-              style="background-color: #f7374f"
-              title="노을색 테마"
-            >
-              선셋
-            </button>
-            <button
-              class="theme-btn"
-              data-theme="beach"
-              style="background-color: #48a6a7"
-              title="바다색 테마"
-            >
-              비치
-            </button>
-            <button
-              class="theme-btn"
-              data-theme="violet"
-              style="background-color: #6a1e55"
-              title="보라색 테마"
-            >
-              바이올렛
-            </button>
-          </div>
-        </div>
-        <div class="section">
-          <label>스타일 상세 설정 (로그 미리보기)</label>
+        <summary>캐릭터 정보 설정</summary>
+        <div class="section-content">
           <div class="input-group">
-            <div style="flex: 1">
-              <label class="style-config-label">배경 색상</label>
-              <div style="display: flex; gap: 5px">
-                <input
-                  type="color"
-                  id="backgroundColor"
-                  value="#1a1a1a"
-                  title="로그 배경 색상 선택 (Color Picker)"
-                />
-                <input
-                  type="text"
-                  id="backgroundColorText"
-                  value="#1a1a1a"
-                  style="flex: 1; padding: 4px 8px; font-size: 14px"
-                  title="로그 배경 색상 입력 (#1a1a1a 형식)"
-                />
-              </div>
+            <div>
+              <label for="characterName">캐릭터 이름</label
+              ><input
+                type="text"
+                id="characterName"
+                placeholder="캐릭터 이름"
+                title="AI 캐릭터 이름"
+              />
             </div>
-            <div style="flex: 1">
-              <label class="style-config-label">글자 색상</label>
-              <div style="display: flex; gap: 5px">
-                <input
-                  type="color"
-                  id="textColor"
-                  value="#eeeeee"
-                  title="로그 기본 글자 색상 선택 (Color Picker)"
-                />
-                <input
-                  type="text"
-                  id="textColorText"
-                  value="#eeeeee"
-                  style="flex: 1; padding: 4px 8px; font-size: 14px"
-                  title="로그 기본 글자 색상 입력 (#eeeeee 형식)"
-                />
-              </div>
+            <div>
+              <label for="modelName">AI 모델명</label
+              ><input
+                type="text"
+                id="modelName"
+                list="modelNameList"
+                placeholder="모델명 선택 또는 직접 입력"
+                title="사용한 AI 모델 이름"
+              /><datalist id="modelNameList">
+                <option value="GPT-4o ChatGPT"></option>
+                <option value="GPT-4.5"></option>
+                <option value="Claude 3.7 Sonnet"></option>
+                <option value="Gemini Pro 2.5 Exp"></option>
+                <option value="Gemini Flash 2.0 Exp"></option>
+              </datalist>
             </div>
           </div>
           <div class="input-group">
-            <div style="flex: 1">
-              <label class="style-config-label">하이라이트 색상</label>
-              <div style="display: flex; gap: 5px">
-                <input
-                  type="color"
-                  id="highlightColor"
-                  value="#3498db"
-                  title="##텍스트## 강조 배경색 선택 (Color Picker)"
-                />
-                <input
-                  type="text"
-                  id="highlightColorText"
-                  value="#3498db"
-                  style="flex: 1; padding: 4px 8px; font-size: 14px"
-                  title="##텍스트## 강조 배경색 입력 (#3498db 형식)"
-                />
-              </div>
+            <div>
+              <label for="promptName">프롬프트명</label
+              ><input
+                type="text"
+                id="promptName"
+                placeholder="프롬프트명"
+                title="사용한 프롬프트 이름"
+              />
             </div>
-            <div style="flex: 1">
-              <label class="style-config-label">강조 색상</label>
-              <div style="display: flex; gap: 5px">
-                <input
-                  type="color"
-                  id="emphasisColor"
-                  value="#1f618d"
-                  title="!!텍스트!! 강조 배경색 선택 (Color Picker)"
-                />
-                <input
-                  type="text"
-                  id="emphasisColorText"
-                  value="#1f618d"
-                  style="flex: 1; padding: 4px 8px; font-size: 14px"
-                  title="!!텍스트!! 강조 배경색 입력 (#1f618d 형식)"
-                />
-              </div>
+            <div>
+              <label for="assistModelName">보조 모델명</label
+              ><input
+                type="text"
+                id="assistModelName"
+                list="assistModelNameList"
+                placeholder="보조 모델명 선택 또는 직접 입력"
+                title="사용한 보조 모델 이름"
+              /><datalist id="assistModelNameList">
+                <option value="GPT-4o ChatGPT"></option>
+                <option value="GPT-4.5"></option>
+                <option value="Claude 3.7 Sonnet"></option>
+                <option value="Gemini Pro 2.5 Exp"></option>
+                <option value="Gemini Flash 2.0 Exp"></option>
+              </datalist>
             </div>
           </div>
           <div class="input-group">
-            <div style="flex: 1">
-              <label class="style-config-label" for="baseFontSize"
-                >글자 크기 (기본값, px)</label
-              >
-              <input
-                type="number"
-                id="baseFontSize"
-                min="10"
-                max="30"
-                value="15"
-                step="1"
-                title="로그 본문 기본 글자 크기 (10~30px)"
+            <div>
+              <label for="userName">유저 이름</label
+              ><input
+                type="text"
+                id="userName"
+                placeholder="유저 이름 (기본값: USER)"
+                title="사용자 이름"
               />
             </div>
-            <div style="flex: 1">
-              <label class="style-config-label" for="titleFontSize"
-                >제목 글자 크기 (px)</label
-              >
-              <input
-                type="number"
-                id="titleFontSize"
-                min="20"
-                max="60"
-                value="38"
-                step="1"
-                title="로그 상단 'CHAT LOG' 제목 글자 크기 (20~60px)"
+            <div>
+              <label for="chatNumber">채팅 번호</label
+              ><input
+                type="text"
+                id="chatNumber"
+                placeholder="채팅 번호 (기본값: 랜덤)"
+                title="채팅 번호"
               />
             </div>
           </div>
-          <div class="input-group" style="margin-top: 10px">
-            <div style="flex: 1">
-              <label class="style-config-label" for="containerWidth"
-                >컨테이너 최대 너비 (px)</label
-              >
-              <input
-                type="number"
-                id="containerWidth"
-                min="300"
-                max="1500"
-                value="650"
-                step="10"
-                title="생성될 로그의 최대 가로 너비 (300~1500px)"
+          <div class="input-group">
+            <div>
+              <label for="characterImageUrl">캐릭터 이미지 URL (선택)</label
+              ><input
+                type="text"
+                id="characterImageUrl"
+                placeholder="https://example.com/image.png"
+                title="로그 상단 표시 이미지 URL"
               />
             </div>
-            <div style="flex: 1"></div>
           </div>
         </div>
       </details>
 
-      <div id="chatSectionsContainer">
-        <div class="section chat-section">
-          <div class="section-header">
-            <label for="chatInput_1">채팅 입력 1 (형식 안내)</label>
+      <details class="section">
+        <summary>디자인 및 스타일 설정</summary>
+        <div class="section-content">
+          <div>
+            <label title="미리 정의된 색상 조합으로 빠르게 스타일을 변경합니다."
+              >컬러 테마</label
+            >
+            <div class="color-theme-buttons">
+              <button
+                class="theme-btn"
+                data-theme="ocean_blue"
+                style="background-color: #2980b9"
+                title="Ocean Blue 테마"
+              >
+                Ocean
+              </button>
+              <button
+                class="theme-btn"
+                data-theme="forest_green"
+                style="background-color: #27ae60"
+                title="Forest Green 테마"
+              >
+                Forest
+              </button>
+              <button
+                class="theme-btn"
+                data-theme="royal_purple"
+                style="background-color: #8e44ad"
+                title="Royal Purple 테마"
+              >
+                Purple
+              </button>
+              <button
+                class="theme-btn"
+                data-theme="sunset_orange"
+                style="background-color: #e67e22"
+                title="Sunset Orange 테마"
+              >
+                Sunset
+              </button>
+              <button
+                class="theme-btn"
+                data-theme="ruby_red"
+                style="background-color: #c0392b"
+                title="Ruby Red 테마"
+              >
+                Ruby
+              </button>
+              <button
+                class="theme-btn"
+                data-theme="teal_green"
+                style="background-color: #16a085"
+                title="Teal Green 테마"
+              >
+                Teal
+              </button>
+              <button
+                class="theme-btn"
+                data-theme="graphite"
+                style="background-color: #566573"
+                title="Graphite 테마"
+              >
+                Graphite
+              </button>
+              <button
+                class="theme-btn"
+                data-theme="indigo_amber"
+                style="background-color: #34495e"
+                title="Indigo & Amber 테마"
+              >
+                Indigo
+              </button>
+              <button
+                class="theme-btn"
+                data-theme="lavender_mint"
+                style="background-color: #9b59b6"
+                title="Lavender & Mint 테마"
+              >
+                Lavender
+              </button>
+              <button
+                class="theme-btn"
+                data-theme="rose_plum"
+                style="background-color: #d9534f"
+                title="Rose & Plum 테마"
+              >
+                Rose
+              </button>
+            </div>
           </div>
-          <p
-            style="margin-bottom: 10px; font-size: 14px"
-            class="style-config-label"
-            title="채팅 내용을 입력하는 방법 안내입니다. 아래 툴바를 사용하면 편리합니다."
-          >
-            - 나레이션은 * 또는 - 로 시작하세요<br />
-            - 대화는 "USER: 내용" 또는 "AI: 내용" 형식으로 작성하세요<br />
-            - 빈 줄은 무시됩니다<br />
-            - <strong>강조 방법:</strong> <br />
-            &nbsp;&nbsp;&nbsp;**굵게** - <strong>굵은 글씨</strong><br />
-            &nbsp;&nbsp;&nbsp;##강조## -
-            <span
-              style="
-                background-color: #3498db;
-                color: #fff;
-                padding: 0 4px;
-                border-radius: 3px;
-              "
-              >하이라이트</span
-            ><br />
-            &nbsp;&nbsp;&nbsp;__기울임__ -
-            <span style="font-style: italic">이탤릭체</span><br />
-            &nbsp;&nbsp;&nbsp;!!중요!! -
-            <span
-              style="
-                background-color: #1f618d;
-                color: #fff;
-                padding: 0 4px;
-                border-radius: 3px;
-              "
-              >강조</span
-            >
-          </p>
-
-          <div class="markdown-toolbar">
-            <button
-              type="button"
-              class="format-btn"
-              onclick="applySpeakerPrefix('chatInput_1', 'USER')"
-              title="현재 줄 또는 선택 영역 앞에 'USER: ' 추가/변경"
-            >
-              USER 대사
-            </button>
-            <button
-              type="button"
-              class="format-btn"
-              onclick="applySpeakerPrefix('chatInput_1', 'AI')"
-              title="현재 줄 또는 선택 영역 앞에 'AI: ' 추가/변경"
-            >
-              AI 대사
-            </button>
-            <button
-              type="button"
-              class="format-btn"
-              onclick="applyNarrationPrefix('chatInput_1')"
-              title="현재 줄 또는 선택 영역 앞에 나레이션 표시('- ') 추가/변경"
-            >
-              나레이션
-            </button>
-            <span style="margin: 0 5px; color: #ccc">|</span>
-            <button
-              type="button"
-              onclick="applyMarkdown('chatInput_1', 'bold')"
-              title="선택된 텍스트 또는 커서 위치에 굵게(**) 적용"
-            >
-              <b>B</b>
-            </button>
-            <button
-              type="button"
-              onclick="applyMarkdown('chatInput_1', 'italic')"
-              title="선택된 텍스트 또는 커서 위치에 기울임(__) 적용"
-            >
-              <i>I</i>
-            </button>
-            <button
-              type="button"
-              onclick="applyMarkdown('chatInput_1', 'highlight')"
-              title="선택된 텍스트 또는 커서 위치에 하이라이트(##) 적용"
-            >
-              하이라이트
-            </button>
-            <button
-              type="button"
-              onclick="applyMarkdown('chatInput_1', 'emphasis')"
-              title="선택된 텍스트 또는 커서 위치에 강조(!!) 적용"
-            >
-              강조
-            </button>
+          <div>
+            <label>스타일 상세 설정</label>
+            <div class="input-group">
+              <div>
+                <label class="style-config-label">로그 배경 색상</label>
+                <div class="color-input-group">
+                  <input
+                    type="color"
+                    id="backgroundColor"
+                    title="로그 배경 색상 선택"
+                  /><input
+                    type="text"
+                    id="backgroundColorText"
+                    title="로그 배경 색상 입력"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="style-config-label">로그 글자 색상</label>
+                <div class="color-input-group">
+                  <input
+                    type="color"
+                    id="textColor"
+                    title="로그 글자 색상 선택"
+                  /><input
+                    type="text"
+                    id="textColorText"
+                    title="로그 글자 색상 입력"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="color-settings-grid">
+              <div>
+                <label class="style-config-label"
+                  >하이라이트 색상 1</label
+                >
+                <div class="color-input-group">
+                  <input
+                    type="color"
+                    id="highlightColor"
+                    title="^텍스트^, 모델명 배경색 선택"
+                  />
+                  <input
+                    type="text"
+                    id="highlightColorText"
+                    title="하이라이트 배경색 입력"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="style-config-label">하이라이트 색상 2</label>
+                <div class="color-input-group">
+                  <input
+                    type="color"
+                    id="promptColor"
+                    title="프롬프트명 배경색 선택"
+                  />
+                  <input
+                    type="text"
+                    id="promptColorText"
+                    title="프롬프트 배경색 입력"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="style-config-label">하이라이트 색상 3</label>
+                <div class="color-input-group">
+                  <input
+                    type="color"
+                    id="emphasisColor"
+                    title="$텍스트$, 보조 모델명 배경색 선택"
+                  />
+                  <input
+                    type="text"
+                    id="emphasisColorText"
+                    title="강조 배경색 입력"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="input-group" style="margin-top: 15px">
+              <div>
+                <label class="style-config-label" for="baseFontSize"
+                  >글자 크기 (기본, px)</label
+                ><input
+                  type="number"
+                  id="baseFontSize"
+                  min="10"
+                  max="30"
+                  value="15"
+                  step="1"
+                  title="로그 본문 글자 크기"
+                />
+              </div>
+              <div>
+                <label class="style-config-label" for="titleFontSize"
+                  >제목 글자 크기 (px)</label
+                ><input
+                  type="number"
+                  id="titleFontSize"
+                  min="20"
+                  max="60"
+                  value="38"
+                  step="1"
+                  title="로그 제목 글자 크기"
+                />
+              </div>
+              <div>
+                <label class="style-config-label" for="containerWidth"
+                  >컨테이너 너비 (px)</label
+                ><input
+                  type="number"
+                  id="containerWidth"
+                  min="300"
+                  max="1500"
+                  value="650"
+                  step="10"
+                  title="생성 로그 최대 너비"
+                />
+              </div>
+            </div>
           </div>
-
-          <textarea
-            id="chatInput_1"
-            class="full-width chat-input-area"
-            style="height: 200px; font-family: monospace"
-            placeholder="* 화창한 봄날, ..."
-            title="여기에 채팅 내용을 입력하세요. 나레이션은 * 또는 -, 대화는 USER:/AI: 형식입니다. 입력 내용은 자동으로 저장됩니다."
-          ></textarea>
+          <div class="preset-manager">
+            <label>설정 프리셋 관리</label>
+            <div class="preset-controls">
+              <div>
+                <label for="presetName" class="style-config-label"
+                  >프리셋 이름</label
+                ><input
+                  type="text"
+                  id="presetName"
+                  placeholder="저장할 프리셋 이름 입력"
+                />
+              </div>
+              <button id="savePresetBtn" class="info-button">
+                프리셋 저장
+              </button>
+            </div>
+            <div class="preset-controls">
+              <select id="presetList">
+                <option value="">-- 프리셋 선택 --</option>
+              </select>
+              <button id="loadPresetBtn" class="secondary-button">
+                불러오기
+              </button>
+              <button id="deletePresetBtn" class="danger-button">삭제</button>
+            </div>
+          </div>
         </div>
-      </div>
-      <button
-        id="addChatSectionBtn"
-        class="secondary-button"
-        title="채팅 입력 영역을 추가합니다. 여러 대화 턴을 분리해서 입력할 때 사용하세요."
-        style="margin-top: -10px; margin-bottom: 20px"
-      >
-        채팅 섹션 추가
-      </button>
+      </details>
 
-      <button
-        id="generateButton"
-        class="primary-button"
-        title="입력된 내용으로 HTML 코드 생성 및 미리보기 업데이트"
-      >
-        HTML 생성하기
-      </button>
-      <button
-        id="loadExampleBtn"
-        class="secondary-button"
-        style="margin-left: 10px"
-        title="채팅 입력 1에 예시 텍스트를 불러옵니다. 기존 내용은 덮어쓰여집니다."
-      >
-        예제 불러오기
-      </button>
+      <details class="section" open>
+        <summary>채팅 내용 입력</summary>
+        <div class="section-content">
+          <div class="format-guide-container" id="formatGuide">
+            <strong>입력 형식 안내</strong>
+            <span>
+              - 나레이션: <code>-</code> 또는 <code>*</code> 로 시작 (예:
+              <code>- 조용한 밤이었다.</code>)<br />
+              - 대화: <code>USER:</code> 또는 <code>AI:</code> 로 시작 (예:
+              <code>USER: 안녕?</code>)<br />
+              - 빈 줄은 무시됩니다.<br />
+              <strong>마크다운 강조:</strong> (툴바 또는 단축키 사용)<br />
+              &nbsp;&nbsp;<code>**굵게**</code> &rarr;
+              <strong>굵은 글씨</strong> <br />
+              &nbsp;&nbsp;<code>*기울임*</code> &rarr;
+              <em style="font-style: italic">이탤릭체</em> <br />
+              &nbsp;&nbsp;<code>***굵은기울임***</code> &rarr;
+              <strong><em style="font-style: italic">굵은 이탤릭체</em></strong>
+              <br />
+              &nbsp;&nbsp;<code>^하이라이트^</code> &rarr;
+              <span class="highlight-example" id="guideHighlightExample"
+                >하이라이트</span
+              ><br />
+              &nbsp;&nbsp;<code>$강조$</code> &rarr;
+              <span class="emphasis-example" id="guideEmphasisExample"
+                >강 조</span
+              >
+            </span>
+          </div>
+          <div id="chatSectionsContainer">
+            <div class="section chat-section">
+              <div class="section-header">
+                <label>채팅 입력</label>
+                <div class="section-controls">
+                  <button
+                    type="button"
+                    class="move-btn move-up"
+                    title="위로 이동"
+                    disabled
+                  >
+                    ▲
+                  </button>
+                  <button
+                    type="button"
+                    class="move-btn move-down"
+                    title="아래로 이동"
+                  >
+                    ▼
+                  </button>
+                  <button
+                    type="button"
+                    class="danger-button remove-section-btn"
+                    title="채팅 입력 섹션 삭제"
+                    disabled
+                  >
+                    X
+                  </button>
+                </div>
+              </div>
+              <div class="markdown-toolbar">
+                <button
+                  type="button"
+                  class="format-btn"
+                  data-speaker="USER"
+                  title="USER 대사 (Shift+U)"
+                >
+                  USER<kbd>Ctrl+Shift+1</kbd>
+                </button>
+                <button
+                  type="button"
+                  class="format-btn"
+                  data-speaker="AI"
+                  title="AI 대사 (Shift+A)"
+                >
+                  AI<kbd>Ctrl+Shift+2</kbd>
+                </button>
+                <button
+                  type="button"
+                  class="format-btn"
+                  data-narration="true"
+                  title="나레이션 (Shift+N)"
+                >
+                  나레이션<kbd>Ctrl+Shift+3</kbd>
+                </button>
+                <span class="toolbar-divider"></span>
+                <button
+                  type="button"
+                  class="markdown-btn"
+                  data-type="bold"
+                  title="굵게 (Ctrl+B)"
+                >
+                  <b>B</b><kbd>Ctrl+B</kbd>
+                </button>
+                <button
+                  type="button"
+                  class="markdown-btn"
+                  data-type="italic"
+                  title="기울임 (Ctrl+I)"
+                >
+                  <i>I</i><kbd>Ctrl+I</kbd>
+                </button>
+                <button
+                  type="button"
+                  class="markdown-btn"
+                  data-type="boldItalic"
+                  title="굵은 기울임"
+                >
+                  <b><i>BI</i></b>
+                </button>
+                <button
+                  type="button"
+                  class="markdown-btn"
+                  data-type="highlight"
+                  title="하이라이트 적용 (^텍스트^) (Ctrl+H)"
+                >
+                  하이라이트<kbd>Ctrl+H</kbd>
+                </button>
+                <button
+                  type="button"
+                  class="markdown-btn"
+                  data-type="emphasis"
+                  title="강조 적용 ($텍스트$) (Ctrl+E)"
+                >
+                  강조<kbd>Ctrl+E</kbd>
+                </button>
+              </div>
+              <textarea
+                id="chatInput_default"
+                class="full-width chat-input-area"
+                placeholder="- 화창한 봄날, 공원에서 우연히 만난 두 사람은..."
+                title="채팅 내용 입력 (자동 저장됨)"
+              ></textarea>
+            </div>
+          </div>
+          <button
+            id="addChatSectionBtn"
+            class="secondary-button"
+            title="채팅 입력 영역 추가"
+            style="margin-top: 10px"
+          >
+            채팅 섹션 추가
+          </button>
+        </div>
+      </details>
 
-      <div class="section" style="margin-top: 20px">
-        <label for="htmlOutput">HTML 결과 (아카라이브 호환)</label>
-        <textarea
-          id="htmlOutput"
-          class="full-width"
-          style="height: 200px; font-family: monospace"
-          title="생성된 HTML 코드입니다."
-          readonly
-        ></textarea>
+      <div class="action-buttons">
+        <button
+          id="generateButton"
+          class="primary-button"
+          title="HTML 생성 및 미리보기 업데이트"
+        >
+          HTML 생성하기
+        </button>
+        <button
+          id="loadExampleBtn"
+          class="info-button"
+          title="예시 텍스트 불러오기 (기존 내용 덮어씀)"
+        >
+          예제 불러오기
+        </button>
         <button
           id="copyButton"
           class="secondary-button"
-          style="margin-top: 10px"
-          title="생성된 HTML 코드를 클립보드에 복사합니다."
+          title="생성된 HTML 코드 복사"
         >
           HTML 복사하기
         </button>
       </div>
-      <div
-        style="
-          border-top: 1px solid #dee2e6;
-          padding-top: 20px;
-          margin-top: 30px;
-        "
-      >
-        <h2 style="font-size: 18px; margin-bottom: 15px">미리보기</h2>
-        <div
-          id="previewArea"
-          class="preview-area"
-          title="생성된 HTML이 어떻게 보일지 미리 보여주는 영역입니다."
-        ></div>
+      <div class="section" style="margin-top: 20px">
+        <label for="htmlOutput">HTML 결과</label>
+        <textarea
+          id="htmlOutput"
+          class="full-width"
+          title="생성된 HTML 코드입니다."
+          readonly
+        ></textarea>
+      </div>
+      <div>
+        <h2>미리보기</h2>
+        <div id="previewArea" class="preview-area" title="생성된 HTML 미리보기">
+          미리보기 영역입니다. 'HTML 생성하기' 버튼을 눌러주세요.
+        </div>
       </div>
     </div>
 
     <script>
-      // 테마 정의, 색상 정의 (V21과 동일)
-      const colorThemes = {
-        default: { highlightColor: "#3498db", emphasisColor: "#1f618d" },
-        olive: { highlightColor: "#328E6E", emphasisColor: "#67AE6E" },
-        sky: { highlightColor: "#9FB3DF", emphasisColor: "#BDDDE4" },
-        sunflower: { highlightColor: "#FCB454", emphasisColor: "#FF9B17" },
-        sunset: { highlightColor: "#F7374F", emphasisColor: "#88304E" },
-        beach: { highlightColor: "#48A6A7", emphasisColor: "#006A71" },
-        violet: { highlightColor: "#6A1E55", emphasisColor: "#A64D79" },
+      // --- 상수 및 설정 ---
+      const PRESET_STORAGE_KEY = "chatLogPresets_v27"
+      const AUTOSAVE_PREFIX = "autoSavedChat_v27_"
+      const USER_MODIFIED_COLOR_FLAG = "userModifiedLogColors_v27"
+      let DEFAULT_SETTINGS = {
+        characterName: "",
+        modelName: "",
+        promptName: "",
+        assistModelName: "",
+        userName: "USER",
+        chatNumber: "",
+        characterImageUrl: "",
+        backgroundColor: "#ffffff",
+        textColor: "#1d2129",
+        highlightColor: "#3498db",
+        promptColor: "#6c757d",
+        emphasisColor: "#1f618d",
+        baseFontSize: 15,
+        titleFontSize: 38,
+        containerWidth: 650,
       }
-      const logBaseColors = {
-        light: { backgroundColor: "#ffffff", textColor: "#212529" },
-        dark: { backgroundColor: "#1a1a1a", textColor: "#eeeeee" },
+      const colorThemes = {
+        ocean_blue: {
+          highlightColor: "#2980b9",
+          promptColor: "#5dade2",
+          emphasisColor: "#1a5276",
+        },
+        forest_green: {
+          highlightColor: "#27ae60",
+          promptColor: "#58d68d",
+          emphasisColor: "#1e8449",
+        },
+        royal_purple: {
+          highlightColor: "#8e44ad",
+          promptColor: "#bb8fce",
+          emphasisColor: "#6c3483",
+        },
+        sunset_orange: {
+          highlightColor: "#e67e22",
+          promptColor: "#f5b041",
+          emphasisColor: "#a04000",
+        },
+        ruby_red: {
+          highlightColor: "#c0392b",
+          promptColor: "#f1948a",
+          emphasisColor: "#922b21",
+        },
+        teal_green: {
+          highlightColor: "#16a085",
+          promptColor: "#48c9b0",
+          emphasisColor: "#0e6655",
+        },
+        graphite: {
+          highlightColor: "#566573",
+          promptColor: "#aeb6bf",
+          emphasisColor: "#34495e",
+        },
+        indigo_amber: {
+          highlightColor: "#34495e",
+          promptColor: "#7f8c8d",
+          emphasisColor: "#d35400",
+        },
+        lavender_mint: {
+          highlightColor: "#9b59b6",
+          promptColor: "#a569bd",
+          emphasisColor: "#1abc9c",
+        },
+        rose_plum: {
+          highlightColor: "#d9534f",
+          promptColor: "#ec7063",
+          emphasisColor: "#8e44ad",
+        },
       }
 
-      // 유틸리티 함수 (V21과 동일)
+      // --- 유틸리티 함수 ---
       function adjustColor(color, amount) {
         let usePound = false
-        if (color[0] == "#") {
+        if (color.startsWith("#")) {
           color = color.slice(1)
           usePound = true
         }
         let num = parseInt(color, 16)
-        if (isNaN(num)) return "#000000"
+        if (isNaN(num)) return usePound ? "#000000" : "000000"
         let r = (num >> 16) + amount
-        if (r > 255) r = 255
-        else if (r < 0) r = 0
+        r = Math.max(0, Math.min(255, r))
         let b = ((num >> 8) & 0x00ff) + amount
-        if (b > 255) b = 255
-        else if (b < 0) b = 0
+        b = Math.max(0, Math.min(255, b))
         let g = (num & 0x0000ff) + amount
-        if (g > 255) g = 255
-        else if (g < 0) g = 0
+        g = Math.max(0, Math.min(255, g))
         return (
           (usePound ? "#" : "") +
-          (g | (b << 8) | (r << 16)).toString(16).padStart(6, "0")
+          ((r << 16) | (b << 8) | g).toString(16).padStart(6, "0")
         )
       }
       function getCurrentDate() {
@@ -817,62 +1248,90 @@
         const day = String(now.getDate()).padStart(2, "0")
         return `${year}.${month}.${day}`
       }
-
-      // HTML 생성 함수 (V21과 동일 - summary 마커 숨김 포함)
-      function formatChatToHTML(
-        chatTexts,
-        characterName,
-        modelName,
-        promptName,
-        assistModelName,
-        userName,
-        chatNumber,
-        styleOptions,
-      ) {
-        characterName = characterName || "캐릭터 이름"
-        modelName = modelName || "AI 모델명"
-        promptName = promptName || "프롬프트명"
-        assistModelName = assistModelName || "보조 모델명"
-        userName = userName || "USER"
-        const chatNum = chatNumber
-          ? chatNumber
-          : Math.floor(Math.random() * 900) + 100
-        const backgroundColor = styleOptions.backgroundColor || "#ffffff"
-        const textColor = styleOptions.textColor || "#000000"
-        const highlightColor = styleOptions.highlightColor || "#3498db"
-        const emphasisColor = styleOptions.emphasisColor || "#1f618d"
-        const baseFontSize = styleOptions.baseFontSize || 15
-        const titleFontSize = styleOptions.titleFontSize || 38
-        const containerMaxWidth = styleOptions.containerMaxWidth || 650
-        const elementBgColor = adjustColor(backgroundColor, -15)
-        const darkElementBgColor = adjustColor(backgroundColor, -25)
-        const narrationColor = adjustColor(textColor, -30)
-        const messageTextColor = adjustColor(textColor, -10)
-        const borderColor = adjustColor(darkElementBgColor, 20)
+      // --- HTML 생성 함수 ---
+      function formatChatToHTML(chatTexts, settings) {
+        const {
+          characterName = "캐릭터 이름",
+          modelName = "AI 모델명",
+          promptName = "프롬프트명",
+          assistModelName = "보조 모델명",
+          userName = "USER",
+          chatNumber,
+          characterImageUrl = "",
+          backgroundColor = "#ffffff",
+          textColor = "#1d2129",
+          highlightColor = "#3498db",
+          promptColor = "#6c757d",
+          emphasisColor = "#1f618d",
+          baseFontSize = 15,
+          titleFontSize = 38,
+          containerMaxWidth = 650,
+        } = settings
+        const chatNum = chatNumber || Math.floor(Math.random() * 900) + 100
+        const bgColorIsDark =
+          parseInt(backgroundColor.slice(1), 16) < parseInt("888888", 16)
+        const elementBgColor = adjustColor(
+          backgroundColor,
+          bgColorIsDark ? +5 : -5,
+        )
+        const darkElementBgColor = adjustColor(
+          backgroundColor,
+          bgColorIsDark ? +10 : -10,
+        )
+        const narrationColor = adjustColor(textColor, bgColorIsDark ? -30 : +30)
+        const messageTextColor = textColor
+        const borderColor = adjustColor(
+          elementBgColor,
+          bgColorIsDark ? +15 : -15,
+        )
+        const cardBorderRadius = "12px"
         function processEmphasis(text) {
+          if (!text) return ""
+          text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
           text = text.replace(
-            /\*\*(.*?)\*\*/g,
-            '<span style="font-weight: 700;">$1</span>',
+            /\*\*\*(.*?)\*\*\*/g,
+            '<strong style="font-style: italic;">$1</strong>',
+          )
+          text = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+          text = text.replace(
+            /(?<![a-zA-Z0-9*])\*(?![* ])(.*?)(?<![ *])\*(?![a-zA-Z0-9*])/g,
+            '<em style="font-style: italic;">$1</em>',
           )
           text = text.replace(
-            /##(.*?)##/g,
-            `<span style="background-color: ${highlightColor}; color: #ffffff; padding: 0 2px; border-radius: 3px;">$1</span>`,
-          )
-          text = text.replace(
-            /__(.*?)__/g,
-            '<span style="font-style: italic;">$1</span>',
-          )
-          text = text.replace(
-            /!!(.*?)!!/g,
+            /\$(.*?)\$/g,
             `<span style="background-color: ${emphasisColor}; color: #ffffff; padding: 0 2px; border-radius: 3px;">$1</span>`,
           )
+          text = text.replace(
+            /\^(.*?)\^/g,
+            `<span style="background-color: ${highlightColor}; color: #ffffff; padding: 0 2px; border-radius: 3px;">$1</span>`,
+          )
+          text = text.replace(/\n/g, "<br>")
           return text
         }
         const currentDate = getCurrentDate()
         let html = `<div style="width: 100%; max-width: ${containerMaxWidth}px; margin: 10px auto; background-color: ${backgroundColor}; border-radius: 0; overflow: hidden; font-family: 'Pretendard', Arial, sans-serif; letter-spacing: -0.03em; color: ${textColor}; border: 1px solid ${borderColor}; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">`
-        html += `<style> summary::-webkit-details-marker, summary::marker { display: none; } summary { display: block; cursor: pointer; outline: none; } </style>` // Style added in V21
+        html += `<style> summary::-webkit-details-marker, summary::marker { display: none; } summary { display: block; cursor: pointer; outline: none; } </style>`
         html += `<div style="background-color: ${elementBgColor}; padding: 32px 40px; border-bottom: 1px solid ${borderColor};"> <div style="display: block; margin-bottom: 8px;"> <span style="font-size: 14px; color: ${narrationColor}; font-weight: 500;">#${chatNum}</span> </div> <h1 style="font-size: ${titleFontSize}px; margin: 0; font-weight: 700; color: ${textColor}; line-height: 1.2;">CHAT LOG</h1> </div>`
-        html += `<div style="display: block; background-color: ${elementBgColor}; margin: 16px 20px; border-radius: 12px; overflow: hidden; border: 1px solid ${borderColor};"> <div style="padding: 32px;"> <div style="width: 100%; margin-bottom: 15px; display: block;"> <div style="margin-bottom: 20px; display: block; text-align: center;"> <table style="margin: 0 auto 15px auto; border-collapse: separate; border-spacing: 0px; display: inline-block; vertical-align: top; text-align: center; border: none; background: none;"> <tr> <td style="padding: 0; vertical-align: middle; border-radius: 16px; overflow: hidden; border: none; background-color: ${backgroundColor};"> <div style="font-size: 12px; color: ${narrationColor}; padding: 20px 10px; line-height: 1.4;">이 문구를 삭제하고 캐릭터 이미지를 삽입해주세요</div> </td> </tr> </table> <div style="width: 100%; text-align: center; margin-top: 10px;"> <h2 style="font-size: 28px; color: ${textColor}; margin: 0 0 16px 0; font-weight: 700;">${characterName}</h2> <div style="margin: 8px 0; font-size: ${baseFontSize}px; color: ${messageTextColor}; display: block; align-items: center;"> <span style="display: block; background-color: ${highlightColor}; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(highlightColor, 10)}; margin-bottom: 10px;">${modelName}</span> <span style="display: block; background-color: ${adjustColor(highlightColor, -10)}; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(highlightColor, 0)}; margin-bottom: 10px;">${promptName}</span> <span style="display: block; background-color: ${emphasisColor}; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(emphasisColor, 10)};">${assistModelName}</span> </div> </div> </div> <div style="height: 1px; background-color: ${borderColor}; margin: 24px 0;"></div> <div style="display: block; margin-top: 24px; text-align:left;"> <div style="font-size: 12px; font-weight: 600; color: ${narrationColor}; margin-bottom: 8px;">MONO</div> <div style="font-size: 20px; font-weight: 700; color: ${textColor};">CONVERSATION</div> </div> </div> </div> </div>`
+        html += `<div class="log-section character-info" style="background-color: ${elementBgColor}; margin: 16px 20px; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor}; padding: 32px;">`
+        html += `<div style="width: 100%; display: block; text-align: center;">`
+        if (characterImageUrl) {
+          html += `<img src="${characterImageUrl.replace(/"/g, "&quot;")}" alt="${characterName.replace(/"/g, "&quot;")}" style="max-width: 150px; max-height: 150px; border-radius: 50%; margin: 0 auto 15px auto; display: block; border: 3px solid ${borderColor}; object-fit: cover;">`
+        } else {
+          html += `<div style="font-size: 12px; color: ${narrationColor}; padding: 20px 10px; line-height: 1.4; margin: 15px auto; text-align: center;">이 문구를 지우고 이미지를 삽입해주세요</div>`
+        }
+        html += `<h2 style="font-size: 28px; color: ${textColor}; margin: 0 0 16px 0; font-weight: 700; border: none; padding: 0;">${characterName}</h2>`
+        html += `<div style="margin: 8px 0; font-size: ${baseFontSize}px; color: ${messageTextColor}; display: block; align-items: center;">`
+        if (modelName)
+          html += `<span style="display: inline-block; background-color: ${highlightColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(highlightColor, 10)}; margin: 0 5px 10px;">${modelName}</span>`
+        if (promptName)
+          html += `<span style="display: inline-block; background-color: ${promptColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(promptColor, 10)}; margin: 0 5px 10px;">${promptName}</span>`
+        if (assistModelName)
+          html += `<span style="display: inline-block; background-color: ${emphasisColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(emphasisColor, 10)}; margin: 0 5px 10px;">${assistModelName}</span>`
+        html += `</div></div></div>`
+        html += `<div class="log-section conversation-header" style="background-color: ${elementBgColor}; margin: 0 20px 16px; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor}; padding: 20px 32px;">`
+        html += `<div style="font-size: 12px; font-weight: 600; color: ${narrationColor}; margin-bottom: 4px;">MONO</div>`
+        html += `<div style="font-size: 20px; font-weight: 700; color: ${textColor};">CONVERSATION</div>`
+        html += `</div>`
         chatTexts.forEach((chatText, index) => {
           if (!chatText && chatTexts.length > 1 && index > 0) return
           const lines = chatText.trim().split("\n")
@@ -882,71 +1341,76 @@
           for (let line of lines) {
             line = line.trim()
             if (!line) continue
-            const speakerMatch = line.match(/^(USER|AI):\s*(.*)/i)
-            const narrationMatch = line.match(/^[\*\-]\s*(.*)/)
-            if (speakerMatch) {
+            const userMatch = line.match(/^USER:\s*(.*)/i)
+            const aiMatch = line.match(/^AI:\s*(.*)/i)
+            const narrationMatch =
+              line.match(/^([\*\-])\s+(.*)/) || line.match(/^([\*\-])\s*$/)
+            let speakerType = null
+            let content = null
+            if (userMatch) {
+              speakerType = "user"
+              content = userMatch[1]
+            } else if (aiMatch) {
+              speakerType = "ai"
+              content = aiMatch[1]
+            } else if (
+              narrationMatch &&
+              !line.startsWith("**") &&
+              !line.startsWith("***") &&
+              !line.startsWith("$") &&
+              !line.startsWith("^")
+            ) {
+              speakerType = "narration"
+              content = narrationMatch[2] || ""
+            }
+            if (speakerType) {
               if (currentSpeaker && currentContent.length > 0) {
                 chatParts.push({
-                  type: currentSpeaker.toLowerCase(),
-                  content: currentContent.join(" "),
+                  type: currentSpeaker,
+                  content: currentContent.join("\n"),
                 })
-                currentContent = []
               }
-              currentSpeaker = speakerMatch[1].toUpperCase()
-              if (speakerMatch[2]) {
-                currentContent.push(speakerMatch[2])
-              }
-            } else if (narrationMatch) {
-              if (currentSpeaker && currentContent.length > 0) {
-                chatParts.push({
-                  type: currentSpeaker.toLowerCase(),
-                  content: currentContent.join(" "),
-                })
-                currentContent = []
-                currentSpeaker = null
-              }
-              chatParts.push({ type: "narration", content: narrationMatch[1] })
+              currentSpeaker = speakerType
+              currentContent = content ? [content] : []
             } else {
               if (currentSpeaker) {
                 currentContent.push(line)
+              } else if (
+                chatParts.length > 0 &&
+                chatParts[chatParts.length - 1].type === "narration"
+              ) {
+                chatParts[chatParts.length - 1].content += "\n" + line
               } else {
-                if (
-                  chatParts.length > 0 &&
-                  chatParts[chatParts.length - 1].type === "narration"
-                ) {
-                  chatParts[chatParts.length - 1].content += " " + line
-                } else {
-                  chatParts.push({ type: "narration", content: line })
-                }
+                chatParts.push({ type: "narration", content: line })
               }
             }
           }
           if (currentSpeaker && currentContent.length > 0) {
             chatParts.push({
-              type: currentSpeaker.toLowerCase(),
-              content: currentContent.join(" "),
+              type: currentSpeaker,
+              content: currentContent.join("\n"),
             })
           }
-          html += `<div style="margin: 16px 20px 20px; background-color: ${elementBgColor}; border-radius: 12px; padding: 5px; border: 1px solid ${borderColor};"> <details open> <summary style="padding: 16px 20px; list-style:none; outline: none; border-radius: 10px;"> <div style="font-size: 22px; font-weight: 700; color: ${textColor}; display: block;">CHAT LOG ${index + 1}</div> </summary> <div style="padding: 15px 20px;">` // Summary style updated in V21
+          html += `<div class="log-section chat-entry" style="margin: 0 20px 16px; background-color: ${elementBgColor}; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor};">`
+          html += `<details open style="padding: 5px;"> <summary style="padding: 16px 25px; list-style:none; outline: none; border-radius: ${parseInt(cardBorderRadius) - 2}px;"> <div style="font-size: 20px; font-weight: 700; color: ${textColor}; display: block;">CHAT LOG ${index + 1}</div> </summary> <div style="padding: 15px 25px; background-color: ${backgroundColor}; border-radius: 0 0 ${parseInt(cardBorderRadius) - 2}px ${parseInt(cardBorderRadius) - 2}px;">`
           chatParts.forEach((part) => {
+            const processedContent = processEmphasis(part.content)
             if (part.type === "narration") {
-              html += `<div style="margin: 24px 0; display: block; border-left: 3px solid ${highlightColor}; padding-left: 16px;"> <div style="font-size: ${baseFontSize}px; color: ${narrationColor}; line-height: 1.5; font-style: italic;"> ${processEmphasis(part.content)} </div> </div>`
+              html += `<div style="margin: 24px 0; display: block; border-left: 3px solid ${highlightColor}; padding-left: 16px;"> <div style="font-size: ${baseFontSize}px; color: ${narrationColor}; line-height: 1.6; font-style: italic;">${processedContent || "&nbsp;"}</div> </div>`
             } else if (part.type === "user") {
-              html += `<div style="margin: 16px 0; text-align: right;"> <div style="max-width: 75%; display: inline-block; text-align: left;"> <div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px; text-align: right;">${userName}</div> <div style="background-color: ${darkElementBgColor}; border-radius: 12px; padding: 16px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.5; border: 1px solid ${borderColor};"> ${processEmphasis(part.content)} </div> </div> </div>`
+              html += `<div style="margin: 16px 0; text-align: right;"> <div style="max-width: 75%; display: inline-block; text-align: left;"> <div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px; text-align: right;">${userName}</div> <div style="background-color: ${darkElementBgColor}; border-radius: 12px; padding: 16px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border: 1px solid ${borderColor};">${processedContent}</div> </div> </div>`
             } else if (part.type === "ai") {
-              html += `<div style="margin: 16px 0; text-align: left;"> <div style="max-width: 75%; display: inline-block;"> <div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px;">${characterName}</div> <div style="background-color: ${backgroundColor}; border-radius: 12px; padding: 16px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.5; border: 1px solid ${highlightColor};"> ${processEmphasis(part.content)} </div> </div> </div>`
+              html += `<div style="margin: 16px 0; text-align: left;"> <div style="max-width: 75%; display: inline-block;"> <div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px;">${characterName}</div> <div style="background-color: ${backgroundColor}; border-radius: 12px; padding: 16px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border: 1px solid ${highlightColor};">${processedContent}</div> </div> </div>`
             }
           })
-          html += `    </div> </details> </div>`
+          html += `</div> </details> </div>`
         })
         html += `<div style="background-color: ${elementBgColor}; padding: 24px 40px; text-align: right; font-size: 13px; color: ${narrationColor}; border-top: 1px solid ${borderColor};"> <div style="display: inline-block; margin-right: 20px;">CHAT LOG | ${characterName}</div> <div style="display: inline-block;">${currentDate}</div> </div>`
         html += `</div>`
         return html
       }
-
-      // Markdown Helper Function (V21과 동일)
-      function applyMarkdown(textareaId, markdownType) {
-        const textarea = document.getElementById(textareaId)
+      // --- 마크다운 / 접두사 적용 헬퍼 함수 ---
+      function applyMarkdown(textarea, markdownType) {
         if (!textarea) return
         const start = textarea.selectionStart
         const end = textarea.selectionEnd
@@ -959,17 +1423,23 @@
             suffix = "**"
             break
           case "italic":
-            prefix = "__"
-            suffix = "__"
+            prefix = "*"
+            suffix = "*"
+            break
+          case "boldItalic":
+            prefix = "***"
+            suffix = "***"
             break
           case "highlight":
-            prefix = "##"
-            suffix = "##"
+            prefix = "^"
+            suffix = "^"
             break
           case "emphasis":
-            prefix = "!!"
-            suffix = "!!"
+            prefix = "$"
+            suffix = "$"
             break
+          default:
+            return
         }
         const replacement = selectedText
           ? `${prefix}${selectedText}${suffix}`
@@ -987,185 +1457,607 @@
         textarea.focus()
         textarea.dispatchEvent(new Event("input", { bubbles: true }))
       }
-
-      // Speaker Prefix Helper Function (V21과 동일)
-      function applySpeakerPrefix(textareaId, speaker) {
-        const textarea = document.getElementById(textareaId)
+      function applyPrefix(textarea, prefix) {
         if (!textarea) return
         const start = textarea.selectionStart
         const end = textarea.selectionEnd
         const value = textarea.value
-        const prefix = speaker + ": "
-        if (start !== end) {
-          const selectedText = value.substring(start, end)
-          const replacement = prefix + selectedText
-          textarea.setRangeText(replacement, start, end, "select")
-        } else {
-          let lineStart = value.lastIndexOf("\n", start - 1) + 1
-          let lineEnd = value.indexOf("\n", start)
-          if (lineEnd === -1) lineEnd = value.length
-          const currentLine = value.substring(lineStart, lineEnd)
-          let lineContentWithoutPrefix = currentLine
-          if (currentLine.startsWith("USER: ")) {
-            lineContentWithoutPrefix = currentLine.substring("USER: ".length)
-          } else if (currentLine.startsWith("AI: ")) {
-            lineContentWithoutPrefix = currentLine.substring("AI: ".length)
+        let lineStart = value.lastIndexOf("\n", start - 1) + 1
+        let lineEnd = value.indexOf("\n", end)
+        if (lineEnd === -1) lineEnd = value.length
+        const affectedLines = value.substring(lineStart, lineEnd).split("\n")
+        let newLines = []
+        let firstLinePrefixLength = 0
+        affectedLines.forEach((line, index) => {
+          let currentPrefixMatch = line.match(/^([\*\-]\s+|USER:\s+|AI:\s*)/i)
+          let lineContent = currentPrefixMatch
+            ? line.substring(currentPrefixMatch[0].length)
+            : line
+          let newLine = prefix + lineContent
+          newLines.push(newLine)
+          if (index === 0) {
+            firstLinePrefixLength = prefix.length
           }
-          const newLine = prefix + lineContentWithoutPrefix
-          const cursorPosition = lineStart + prefix.length
-          textarea.setRangeText(newLine, lineStart, lineEnd, "end")
-          textarea.setSelectionRange(cursorPosition, cursorPosition)
-        }
-        textarea.focus()
-        textarea.dispatchEvent(new Event("input", { bubbles: true }))
-      }
-
-      // --- *** NEW: Narration Prefix Helper Function *** ---
-      function applyNarrationPrefix(textareaId) {
-        const textarea = document.getElementById(textareaId)
-        if (!textarea) return
-        const start = textarea.selectionStart
-        const end = textarea.selectionEnd
-        const value = textarea.value
-        const prefix = "- " // Use hyphen as requested
-
-        if (start !== end) {
-          // Text is selected
-          const selectedText = value.substring(start, end)
-          const replacement = prefix + selectedText
-          textarea.setRangeText(replacement, start, end, "select")
-        } else {
-          // No text selected
-          let lineStart = value.lastIndexOf("\n", start - 1) + 1
-          let lineEnd = value.indexOf("\n", start)
-          if (lineEnd === -1) lineEnd = value.length
-
-          const currentLine = value.substring(lineStart, lineEnd)
-          let lineContentWithoutPrefix = currentLine
-
-          // Check and remove existing prefixes (speaker or narration)
-          if (currentLine.startsWith("USER: ")) {
-            lineContentWithoutPrefix = currentLine.substring("USER: ".length)
-          } else if (currentLine.startsWith("AI: ")) {
-            lineContentWithoutPrefix = currentLine.substring("AI: ".length)
-          } else if (currentLine.startsWith("- ")) {
-            lineContentWithoutPrefix = currentLine.substring("- ".length)
-          } else if (currentLine.startsWith("* ")) {
-            // Also handle the other narration marker
-            lineContentWithoutPrefix = currentLine.substring("* ".length)
-          }
-
-          const newLine = prefix + lineContentWithoutPrefix
-          const cursorPosition = lineStart + prefix.length
-
-          textarea.setRangeText(newLine, lineStart, lineEnd, "end")
-          textarea.setSelectionRange(cursorPosition, cursorPosition)
-        }
-
+        })
+        const replacement = newLines.join("\n")
+        textarea.setRangeText(replacement, lineStart, lineEnd, "preserve")
+        const newCursorPos = lineStart + firstLinePrefixLength
+        textarea.setSelectionRange(newCursorPos, newCursorPos)
         textarea.focus()
         textarea.dispatchEvent(new Event("input", { bubbles: true }))
       }
 
       // --- 페이지 로드 시 실행 및 이벤트 리스너 설정 ---
       document.addEventListener("DOMContentLoaded", function () {
-        // 변수 선언 (V21과 동일)
+        // --- 요소 가져오기 ---
         const body = document.body
         const themeToggleCheckbox = document.getElementById(
           "themeToggleCheckbox",
         )
         const themeToggleText = document.getElementById("themeToggleText")
-        const logBgColorInput = document.getElementById("backgroundColor")
-        const logBgColorText = document.getElementById("backgroundColorText")
-        const logTextColorInput = document.getElementById("textColor")
-        const logTextColorText = document.getElementById("textColorText")
+        const resetAllButton = document.getElementById("resetAllButton")
+        const bgColorInput = document.getElementById("backgroundColor")
+        const bgColorText = document.getElementById("backgroundColorText")
+        const textColorInput = document.getElementById("textColor")
+        const textColorText = document.getElementById("textColorText")
         const highlightColorInput = document.getElementById("highlightColor")
         const highlightColorText = document.getElementById("highlightColorText")
+        const promptColorInput = document.getElementById("promptColor")
+        const promptColorText = document.getElementById("promptColorText")
         const emphasisColorInput = document.getElementById("emphasisColor")
         const emphasisColorText = document.getElementById("emphasisColorText")
         const baseFontSizeInput = document.getElementById("baseFontSize")
         const titleFontSizeInput = document.getElementById("titleFontSize")
         const containerWidthInput = document.getElementById("containerWidth")
+        const presetNameInput = document.getElementById("presetName")
+        const savePresetBtn = document.getElementById("savePresetBtn")
+        const presetListSelect = document.getElementById("presetList")
+        const loadPresetBtn = document.getElementById("loadPresetBtn")
+        const deletePresetBtn = document.getElementById("deletePresetBtn")
         const chatSectionsContainer = document.getElementById(
           "chatSectionsContainer",
         )
         const addChatSectionBtn = document.getElementById("addChatSectionBtn")
         const generateButton = document.getElementById("generateButton")
+        const loadExampleBtn = document.getElementById("loadExampleBtn")
         const htmlOutput = document.getElementById("htmlOutput")
         const previewArea = document.getElementById("previewArea")
         const copyButton = document.getElementById("copyButton")
-        const loadExampleBtn = document.getElementById("loadExampleBtn")
-
-        // UI 관련 함수들 (테마 전환 등) (V21과 동일)
+        const guideHighlightExample = document.getElementById(
+          "guideHighlightExample",
+        )
+        const guideEmphasisExample = document.getElementById(
+          "guideEmphasisExample",
+        )
+        // --- 함수 정의 ---
+        function updateDefaultSettingsFromCSS() {
+          try {
+            const computedStyle = getComputedStyle(document.documentElement)
+            DEFAULT_SETTINGS.backgroundColor = computedStyle
+              .getPropertyValue("--log-bg-light")
+              .trim()
+            DEFAULT_SETTINGS.textColor = computedStyle
+              .getPropertyValue("--log-text-light")
+              .trim()
+            DEFAULT_SETTINGS.highlightColor = computedStyle
+              .getPropertyValue("--highlight-color")
+              .trim()
+            DEFAULT_SETTINGS.promptColor = computedStyle
+              .getPropertyValue("--secondary-color")
+              .trim()
+            DEFAULT_SETTINGS.emphasisColor = computedStyle
+              .getPropertyValue("--emphasis-color")
+              .trim()
+          } catch (e) {
+            console.error(
+              "CSS 변수에서 기본 설정 값을 가져오는 데 실패했습니다.",
+              e,
+            )
+          }
+        }
+        function getCurrentSettings() {
+          const settings = {}
+          Object.keys(DEFAULT_SETTINGS).forEach((key) => {
+            let valueSourceElement
+            if (key === "backgroundColor") valueSourceElement = bgColorInput
+            else if (key === "textColor") valueSourceElement = textColorInput
+            else if (key === "highlightColor")
+              valueSourceElement = highlightColorInput
+            else if (key === "promptColor")
+              valueSourceElement = promptColorInput
+            else if (key === "emphasisColor")
+              valueSourceElement = emphasisColorInput
+            else if (key === "baseFontSize")
+              valueSourceElement = baseFontSizeInput
+            else if (key === "titleFontSize")
+              valueSourceElement = titleFontSizeInput
+            else if (key === "containerWidth")
+              valueSourceElement = containerWidthInput
+            else valueSourceElement = document.getElementById(key)
+            if (valueSourceElement) {
+              settings[key] = valueSourceElement.value
+            } else {
+              settings[key] = DEFAULT_SETTINGS[key]
+            }
+          })
+          settings.backgroundColor = bgColorInput.value
+          settings.textColor = textColorInput.value
+          settings.highlightColor = highlightColorInput.value
+          settings.promptColor = promptColorInput.value
+          settings.emphasisColor = emphasisColorInput.value
+          return settings
+        }
+        function applySettings(settings, markAsModified = false) {
+          Object.keys(settings).forEach((key) => {
+            let targetElement
+            if (key === "backgroundColor") targetElement = bgColorInput
+            else if (key === "textColor") targetElement = textColorInput
+            else if (key === "highlightColor")
+              targetElement = highlightColorInput
+            else if (key === "promptColor") targetElement = promptColorInput
+            else if (key === "emphasisColor") targetElement = emphasisColorInput
+            else if (key === "baseFontSize") targetElement = baseFontSizeInput
+            else if (key === "titleFontSize") targetElement = titleFontSizeInput
+            else if (key === "containerWidth")
+              targetElement = containerWidthInput
+            else targetElement = document.getElementById(key)
+            if (targetElement) {
+              targetElement.value = settings[key]
+              if (key === "backgroundColor") bgColorText.value = settings[key]
+              else if (key === "textColor") textColorText.value = settings[key]
+              else if (key === "highlightColor")
+                highlightColorText.value = settings[key]
+              else if (key === "promptColor")
+                promptColorText.value = settings[key]
+              else if (key === "emphasisColor")
+                emphasisColorText.value = settings[key]
+            }
+          })
+          if (markAsModified) {
+            localStorage.setItem(USER_MODIFIED_COLOR_FLAG, "true")
+          }
+          updateGuideColors()
+        }
+        function setTheme(isDarkMode) {
+          const currentMode = isDarkMode ? "dark" : "light"
+          const previousMode = isDarkMode ? "light" : "dark"
+          body.classList.replace(`${previousMode}-mode`, `${currentMode}-mode`)
+          themeToggleText.textContent = isDarkMode ? "다크 모드" : "라이트 모드"
+          try {
+            const currentBg = bgColorInput.value.toLowerCase()
+            const currentText = textColorInput.value.toLowerCase()
+            const prevDefaultBg = getComputedStyle(document.documentElement)
+              .getPropertyValue(
+                previousMode === "dark" ? "--log-bg-dark" : "--log-bg-light",
+              )
+              .trim()
+              .toLowerCase()
+            const prevDefaultText = getComputedStyle(document.documentElement)
+              .getPropertyValue(
+                previousMode === "dark"
+                  ? "--log-text-dark"
+                  : "--log-text-light",
+              )
+              .trim()
+              .toLowerCase()
+            const userModifiedColors =
+              localStorage.getItem(USER_MODIFIED_COLOR_FLAG) === "true"
+            if (
+              !userModifiedColors ||
+              (currentBg === prevDefaultBg && currentText === prevDefaultText)
+            ) {
+              const newBgColor = getComputedStyle(document.documentElement)
+                .getPropertyValue(
+                  currentMode === "dark" ? "--log-bg-dark" : "--log-bg-light",
+                )
+                .trim()
+              const newTextColor = getComputedStyle(document.documentElement)
+                .getPropertyValue(
+                  currentMode === "dark"
+                    ? "--log-text-dark"
+                    : "--log-text-light",
+                )
+                .trim()
+              bgColorInput.value = newBgColor
+              bgColorText.value = newBgColor
+              textColorInput.value = newTextColor
+              textColorText.value = newTextColor
+              localStorage.removeItem(USER_MODIFIED_COLOR_FLAG)
+            }
+          } catch (e) {
+            console.error("테마 변경 중 기본 로그 색상 적용 실패:", e)
+          }
+          updateGuideColors()
+        }
+        function toggleTheme() {
+          const isDarkMode = themeToggleCheckbox.checked
+          localStorage.setItem("theme_v25", isDarkMode ? "dark" : "light")
+          setTheme(isDarkMode)
+        }
         function applySavedTheme() {
-          const savedTheme = localStorage.getItem("theme") || "light"
+          const savedTheme =
+            localStorage.getItem("theme_v25") ||
+            (window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light")
           const isDarkMode = savedTheme === "dark"
           themeToggleCheckbox.checked = isDarkMode
           setTheme(isDarkMode)
         }
-        function setTheme(isDarkMode) {
-          if (isDarkMode) {
-            body.classList.replace("light-mode", "dark-mode")
-            themeToggleText.textContent = "다크 모드"
-            updateLogBaseColors("dark")
-          } else {
-            body.classList.replace("dark-mode", "light-mode")
-            themeToggleText.textContent = "라이트 모드"
-            updateLogBaseColors("light")
+        function updateGuideColors() {
+          const highlightColor = highlightColorInput.value
+          const emphasisColor = emphasisColorInput.value
+          if (guideHighlightExample) {
+            guideHighlightExample.style.backgroundColor = highlightColor
+          }
+          if (guideEmphasisExample) {
+            guideEmphasisExample.style.backgroundColor = emphasisColor
           }
         }
-        function toggleTheme() {
-          const isDarkMode = themeToggleCheckbox.checked
-          localStorage.setItem("theme", isDarkMode ? "dark" : "light")
-          setTheme(isDarkMode)
-        }
-        themeToggleCheckbox.addEventListener("change", toggleTheme)
-        function updateLogBaseColors(mode) {
-          const colors = logBaseColors[mode]
-          logBgColorInput.value = colors.backgroundColor
-          logBgColorText.value = colors.backgroundColor
-          logTextColorInput.value = colors.textColor
-          logTextColorText.value = colors.textColor
-        }
         function syncColorInputs() {
-          logBgColorInput.addEventListener(
-            "input",
-            () => (logBgColorText.value = logBgColorInput.value),
-          )
-          logBgColorText.addEventListener("input", () => {
-            try {
-              logBgColorInput.value = logBgColorText.value
-            } catch (e) {}
+          const inputs = [
+            { picker: bgColorInput, text: bgColorText, type: "logColor" },
+            { picker: textColorInput, text: textColorText, type: "logColor" },
+            {
+              picker: highlightColorInput,
+              text: highlightColorText,
+              type: "themeColor",
+            },
+            {
+              picker: promptColorInput,
+              text: promptColorText,
+              type: "themeColor",
+            },
+            {
+              picker: emphasisColorInput,
+              text: emphasisColorText,
+              type: "themeColor",
+            },
+          ]
+          inputs.forEach(({ picker, text, type }) => {
+            const changeHandler = () => {
+              if (type === "logColor" || type === "themeColor") {
+                localStorage.setItem(USER_MODIFIED_COLOR_FLAG, "true")
+              }
+              updateGuideColors()
+              generatePreview()
+            }
+            picker.addEventListener("input", () => {
+              text.value = picker.value
+              changeHandler()
+            })
+            text.addEventListener("input", () => {
+              if (/^#([0-9a-fA-F]{3}){1,2}$/.test(text.value)) {
+                try {
+                  picker.value = text.value
+                  changeHandler()
+                } catch (e) {}
+              }
+            })
           })
-          logTextColorInput.addEventListener(
-            "input",
-            () => (logTextColorText.value = logTextColorInput.value),
+          ;[baseFontSizeInput, titleFontSizeInput, containerWidthInput].forEach(
+            (input) => {
+              input.addEventListener("input", generatePreview)
+            },
           )
-          logTextColorText.addEventListener("input", () => {
+        }
+        function setupAutoSave(textarea) {
+          if (!textarea || !textarea.id) return
+          const storageKey = `${AUTOSAVE_PREFIX}${textarea.id}`
+          try {
+            const savedContent = localStorage.getItem(storageKey)
+            if (savedContent !== null) {
+              textarea.value = savedContent
+            }
+          } catch (e) {
+            console.error("자동 저장 복원 실패:", e)
+          }
+          textarea.addEventListener("input", () => {
             try {
-              logTextColorInput.value = logTextColorText.value
-            } catch (e) {}
+              localStorage.setItem(storageKey, textarea.value)
+            } catch (e) {
+              console.error("자동 저장 실패:", e)
+            }
           })
-          highlightColorInput.addEventListener(
-            "input",
-            () => (highlightColorText.value = highlightColorInput.value),
+        }
+        function addChatSection(content = "") {
+          const uniqueId = `chatInput_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+          const newSection = document.createElement("div")
+          newSection.classList.add("section", "chat-section")
+          newSection.innerHTML = ` <div class="section-header"> <label>채팅 입력</label> <div class="section-controls"> <button type="button" class="move-btn move-up" title="위로 이동">▲</button> <button type="button" class="move-btn move-down" title="아래로 이동">▼</button> <button type="button" class="danger-button remove-section-btn" title="채팅 입력 섹션 삭제">X</button> </div> </div> <div class="markdown-toolbar"> <button type="button" class="format-btn" data-speaker="USER" title="USER 대사 (Shift+U)">USER<kbd>Shift+U</kbd></button> <button type="button" class="format-btn" data-speaker="AI" title="AI 대사 (Shift+A)">AI<kbd>Shift+A</kbd></button> <button type="button" class="format-btn" data-narration="true" title="나레이션 (Shift+N)">나레이션<kbd>Shift+N</kbd></button> <span class="toolbar-divider"></span> <button type="button" class="markdown-btn" data-type="bold" title="굵게 (Ctrl+B)"><b>B</b><kbd>Ctrl+B</kbd></button> <button type="button" class="markdown-btn" data-type="italic" title="기울임 (Ctrl+I)"><i>I</i><kbd>Ctrl+I</kbd></button> <button type="button" class="markdown-btn" data-type="boldItalic" title="굵은 기울임"><b><i>BI</i></b></button> <button type="button" class="markdown-btn" data-type="highlight" title="하이라이트 적용 (^텍스트^) (Ctrl+H)">하이라이트<kbd>Ctrl+H</kbd></button> <button type="button" class="markdown-btn" data-type="emphasis" title="강조 적용 ($텍스트$) (Ctrl+E)">강조<kbd>Ctrl+E</kbd></button> </div> <textarea id="${uniqueId}" class="full-width chat-input-area" placeholder="여기에 추가 채팅 내용을 입력하세요..." title="채팅 내용 입력 (자동 저장됨)">${content}</textarea> `
+          chatSectionsContainer.appendChild(newSection)
+          const newTextarea = newSection.querySelector("textarea")
+          setupAutoSave(newTextarea)
+          updateMoveButtons()
+          addToolbarListeners(newSection)
+          return newSection
+        }
+        function removeChatSection(sectionElement) {
+          const textareaId = sectionElement.querySelector("textarea")?.id
+          if (textareaId) {
+            const storageKey = `${AUTOSAVE_PREFIX}${textareaId}`
+            try {
+              localStorage.removeItem(storageKey)
+            } catch (e) {
+              console.error("자동 저장 삭제 실패:", e)
+            }
+          }
+          sectionElement.remove()
+          updateMoveButtons()
+        }
+        function updateMoveButtons() {
+          const sections =
+            chatSectionsContainer.querySelectorAll(".chat-section")
+          sections.forEach((section, index) => {
+            const upBtn = section.querySelector(".move-up")
+            const downBtn = section.querySelector(".move-down")
+            const removeBtn = section.querySelector(".remove-section-btn")
+            if (upBtn) upBtn.disabled = index === 0
+            if (downBtn) downBtn.disabled = index === sections.length - 1
+            if (removeBtn) removeBtn.disabled = sections.length === 1
+          })
+        }
+        function moveSection(sectionElement, direction) {
+          if (direction === "up" && sectionElement.previousElementSibling) {
+            chatSectionsContainer.insertBefore(
+              sectionElement,
+              sectionElement.previousElementSibling,
+            )
+          } else if (
+            direction === "down" &&
+            sectionElement.nextElementSibling
+          ) {
+            chatSectionsContainer.insertBefore(
+              sectionElement,
+              sectionElement.nextElementSibling.nextSibling,
+            )
+          }
+          updateMoveButtons()
+        }
+        function addToolbarListeners(parentElement) {
+          parentElement.querySelectorAll(".markdown-btn").forEach((button) => {
+            button.addEventListener("click", function () {
+              const type = this.dataset.type
+              const textarea =
+                this.closest(".chat-section").querySelector("textarea")
+              applyMarkdown(textarea, type)
+            })
+          })
+          parentElement.querySelectorAll(".format-btn").forEach((button) => {
+            button.addEventListener("click", function () {
+              const textarea =
+                this.closest(".chat-section").querySelector("textarea")
+              if (this.dataset.speaker) {
+                applyPrefix(textarea, this.dataset.speaker + ": ")
+              } else if (this.dataset.narration) {
+                applyPrefix(textarea, "- ")
+              }
+            })
+          })
+        }
+        function generatePreview() {
+          const chatTextareas =
+            chatSectionsContainer.querySelectorAll(".chat-input-area")
+          const chatTexts = Array.from(chatTextareas).map(
+            (textarea) => textarea.value,
           )
-          highlightColorText.addEventListener("input", () => {
-            try {
-              highlightColorInput.value = highlightColorText.value
-            } catch (e) {}
-          })
-          emphasisColorInput.addEventListener(
-            "input",
-            () => (emphasisColorText.value = emphasisColorInput.value),
+          const currentSettings = getCurrentSettings()
+          try {
+            const html = formatChatToHTML(chatTexts, currentSettings)
+            htmlOutput.value = html
+            previewArea.innerHTML = html
+          } catch (error) {
+            console.error("HTML 생성/미리보기 중 오류 발생:", error)
+            previewArea.innerHTML = `<p style='color: red;'>미리보기를 생성하는 중 오류가 발생했습니다. 콘솔을 확인해주세요.</p>`
+            htmlOutput.value = ``
+          }
+        }
+        function resetAll() {
+          if (
+            !confirm(
+              "정말로 모든 입력 내용과 설정을 초기화하시겠습니까?\n(저장된 프리셋은 삭제되지 않습니다)",
+            )
+          ) {
+            return
+          }
+          updateDefaultSettingsFromCSS()
+          const isDarkMode = body.classList.contains("dark-mode")
+          const baseSettings = { ...DEFAULT_SETTINGS }
+          baseSettings.backgroundColor = getComputedStyle(
+            document.documentElement,
           )
-          emphasisColorText.addEventListener("input", () => {
-            try {
-              emphasisColorInput.value = emphasisColorText.value
-            } catch (e) {}
+            .getPropertyValue(isDarkMode ? "--log-bg-dark" : "--log-bg-light")
+            .trim()
+          baseSettings.textColor = getComputedStyle(document.documentElement)
+            .getPropertyValue(
+              isDarkMode ? "--log-text-dark" : "--log-text-light",
+            )
+            .trim()
+          baseSettings.highlightColor = getComputedStyle(
+            document.documentElement,
+          )
+            .getPropertyValue("--highlight-color")
+            .trim()
+          baseSettings.promptColor = getComputedStyle(document.documentElement)
+            .getPropertyValue("--secondary-color")
+            .trim()
+          baseSettings.emphasisColor = getComputedStyle(
+            document.documentElement,
+          )
+            .getPropertyValue("--emphasis-color")
+            .trim()
+          applySettings(baseSettings)
+          localStorage.removeItem(USER_MODIFIED_COLOR_FLAG)
+          const sections =
+            chatSectionsContainer.querySelectorAll(".chat-section")
+          sections.forEach((section, index) => {
+            const textarea = section.querySelector("textarea")
+            const storageKey = `${AUTOSAVE_PREFIX}${textarea.id}`
+            localStorage.removeItem(storageKey)
+            if (index === 0) {
+              textarea.value = ""
+            } else {
+              section.remove()
+            }
           })
+          updateMoveButtons()
+          htmlOutput.value = ""
+          previewArea.innerHTML =
+            "미리보기 영역입니다. 'HTML 생성하기' 버튼을 눌러주세요."
+          alert("모든 내용이 초기화되었습니다.")
+          generatePreview()
+        }
+        function loadPresets() {
+          presetListSelect.innerHTML =
+            '<option value="">-- 프리셋 선택 --</option>'
+          try {
+            const presets = JSON.parse(
+              localStorage.getItem(PRESET_STORAGE_KEY) || "{}",
+            )
+            Object.keys(presets)
+              .sort()
+              .forEach((name) => {
+                const option = document.createElement("option")
+                option.value = name
+                option.textContent = name
+                presetListSelect.appendChild(option)
+              })
+          } catch (e) {
+            console.error("프리셋 로딩 실패:", e)
+            localStorage.removeItem(PRESET_STORAGE_KEY)
+          }
+        }
+        function savePreset() {
+          const name = presetNameInput.value.trim()
+          if (!name) {
+            alert("저장할 프리셋 이름을 입력해주세요.")
+            presetNameInput.focus()
+            return
+          }
+          try {
+            const presets = JSON.parse(
+              localStorage.getItem(PRESET_STORAGE_KEY) || "{}",
+            )
+            presets[name] = getCurrentSettings()
+            localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(presets))
+            loadPresets()
+            presetListSelect.value = name
+            presetNameInput.value = ""
+            alert(`프리셋 '${name}'이(가) 저장되었습니다.`)
+            localStorage.setItem(USER_MODIFIED_COLOR_FLAG, "true")
+          } catch (e) {
+            console.error("프리셋 저장 실패:", e)
+            alert("프리셋 저장 중 오류가 발생했습니다.")
+          }
+        }
+        function loadPreset() {
+          const name = presetListSelect.value
+          if (!name) {
+            alert("불러올 프리셋을 선택해주세요.")
+            return
+          }
+          try {
+            const presets = JSON.parse(
+              localStorage.getItem(PRESET_STORAGE_KEY) || "{}",
+            )
+            if (presets[name]) {
+              applySettings(presets[name], true)
+              generatePreview()
+              alert(`프리셋 '${name}'을(를) 불러왔습니다.`)
+            } else {
+              alert("선택한 프리셋을 찾을 수 없습니다.")
+              loadPresets()
+            }
+          } catch (e) {
+            console.error("프리셋 불러오기 실패:", e)
+            alert("프리셋 불러오기 중 오류가 발생했습니다.")
+          }
+        }
+        function deletePreset() {
+          const name = presetListSelect.value
+          if (!name) {
+            alert("삭제할 프리셋을 선택해주세요.")
+            return
+          }
+          if (!confirm(`정말로 프리셋 '${name}'을(를) 삭제하시겠습니까?`)) {
+            return
+          }
+          try {
+            const presets = JSON.parse(
+              localStorage.getItem(PRESET_STORAGE_KEY) || "{}",
+            )
+            if (presets[name]) {
+              delete presets[name]
+              localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(presets))
+              loadPresets()
+              alert(`프리셋 '${name}'이(가) 삭제되었습니다.`)
+            } else {
+              alert("선택한 프리셋을 찾을 수 없습니다.")
+              loadPresets()
+            }
+          } catch (e) {
+            console.error("프리셋 삭제 실패:", e)
+            alert("프리셋 삭제 중 오류가 발생했습니다.")
+          }
+        }
+        copyButton.addEventListener("click", function () {
+          if (!htmlOutput.value) {
+            alert("먼저 HTML을 생성해주세요.")
+            return
+          }
+          const textToCopy = htmlOutput.value
+          const button = this
+          const originalText = button.textContent
+          function updateButtonState(success) {
+            button.textContent = success ? "복사 완료!" : "복사 실패"
+            button.style.backgroundColor = success ? "#28a745" : "#dc3545"
+            setTimeout(() => {
+              button.textContent = originalText
+              button.style.backgroundColor = ""
+            }, 2000)
+          }
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard
+              .writeText(textToCopy)
+              .then(() => {
+                updateButtonState(true)
+              })
+              .catch((err) => {
+                console.warn("navigator.clipboard 실패:", err)
+                tryCopyExecCommand(textToCopy, button, updateButtonState)
+              })
+          } else {
+            console.warn("navigator.clipboard 사용 불가, execCommand 시도.")
+            tryCopyExecCommand(textToCopy, button, updateButtonState)
+          }
+        })
+        function tryCopyExecCommand(textToCopy, button, updateButtonState) {
+          const textarea = htmlOutput
+          const originalReadOnly = textarea.readOnly
+          let success = false
+          try {
+            textarea.readOnly = false
+            textarea.select()
+            textarea.setSelectionRange(0, textToCopy.length)
+            success = document.execCommand("copy")
+          } catch (e) {
+            console.error("execCommand 복사 실패:", e)
+            success = false
+          } finally {
+            textarea.readOnly = originalReadOnly
+            window.getSelection()?.removeAllRanges()
+          }
+          updateButtonState(success)
+          if (!success) {
+            alert(
+              "자동 복사에 실패했습니다.\n텍스트 영역의 내용을 직접 복사해주세요. (Ctrl+A, Ctrl+C)",
+            )
+          }
         }
 
-        // 색상 테마 버튼 로직 (V21과 동일)
+        // --- 이벤트 리스너 설정 ---
+        themeToggleCheckbox.addEventListener("change", toggleTheme)
+        resetAllButton.addEventListener("click", resetAll)
         document.querySelectorAll(".theme-btn").forEach((button) => {
           button.addEventListener("click", function () {
             const themeName = this.getAttribute("data-theme")
@@ -1173,228 +2065,138 @@
             if (!theme) return
             highlightColorInput.value = theme.highlightColor
             highlightColorText.value = theme.highlightColor
+            promptColorInput.value = theme.promptColor
+            promptColorText.value = theme.promptColor
             emphasisColorInput.value = theme.emphasisColor
             emphasisColorText.value = theme.emphasisColor
-            const characterName = document.getElementById("characterName").value
-            const modelName = document.getElementById("modelName").value
-            const promptName = document.getElementById("promptName").value
-            const assistModelName =
-              document.getElementById("assistModelName").value
-            const userName = document.getElementById("userName").value
-            const chatNumber = document.getElementById("chatNumber").value
-            const chatTextareas =
-              chatSectionsContainer.querySelectorAll(".chat-input-area")
-            const chatTexts = Array.from(chatTextareas).map(
-              (textarea) => textarea.value,
-            )
-            const styleOptions = {
-              backgroundColor: logBgColorInput.value,
-              textColor: logTextColorInput.value,
-              highlightColor: highlightColorInput.value,
-              emphasisColor: emphasisColorInput.value,
-              baseFontSize: baseFontSizeInput.value,
-              titleFontSize: titleFontSizeInput.value,
-              containerMaxWidth: containerWidthInput.value,
-            }
-            try {
-              const previewHtml = formatChatToHTML(
-                chatTexts,
-                characterName,
-                modelName,
-                promptName,
-                assistModelName,
-                userName,
-                chatNumber,
-                styleOptions,
-              )
-              previewArea.innerHTML = previewHtml
-            } catch (error) {
-              console.error("미리보기 업데이트 중 오류 발생:", error)
-              previewArea.innerHTML =
-                "<p style='color: red;'>미리보기를 생성하는 중 오류가 발생했습니다.</p>"
-            }
+            localStorage.setItem(USER_MODIFIED_COLOR_FLAG, "true")
+            updateGuideColors()
+            generatePreview()
           })
         })
-
-        // Auto-Save Logic (V21과 동일)
-        function setupAutoSave(textarea) {
-          if (!textarea || !textarea.id) return
-          const textareaId = textarea.id
-          const storageKey = `autoSavedChat_${textareaId}`
-          try {
-            const savedContent = localStorage.getItem(storageKey)
-            if (savedContent !== null) {
-              textarea.value = savedContent
-            }
-          } catch (e) {
-            console.error("자동 저장된 내용 복원 실패:", e)
-          }
-          textarea.addEventListener("input", () => {
-            try {
-              localStorage.setItem(storageKey, textarea.value)
-            } catch (e) {
-              console.error("자동 저장 실패 (용량 초과 등):", e)
-            }
-          })
-        }
         chatSectionsContainer
           .querySelectorAll(".chat-input-area")
-          .forEach((textarea) => {
-            setupAutoSave(textarea)
-          })
-
-        // --- Chat Section Add/Remove Logic (UPDATED for V22 Toolbar) ---
-        let chatSectionCounter =
-          chatSectionsContainer.querySelectorAll(".chat-section").length
-        function addChatSection() {
-          chatSectionCounter++
-          const newSection = document.createElement("div")
-          newSection.classList.add("section", "chat-section")
-          newSection.dataset.sectionId = chatSectionCounter
-          const headerDiv = document.createElement("div")
-          headerDiv.classList.add("section-header")
-          const newLabel = document.createElement("label")
-          const newTextareaId = `chatInput_${chatSectionCounter}`
-          newLabel.htmlFor = newTextareaId
-          newLabel.textContent = `채팅 입력 ${chatSectionCounter}`
-          const removeBtn = document.createElement("button")
-          removeBtn.classList.add("danger-button")
-          removeBtn.textContent = "X"
-          removeBtn.type = "button"
-          removeBtn.title = `채팅 입력 ${chatSectionCounter} 섹션 삭제`
-          removeBtn.addEventListener("click", () => {
-            const storageKey = `autoSavedChat_${newTextareaId}`
-            try {
-              localStorage.removeItem(storageKey)
-            } catch (e) {
-              console.error("자동 저장 삭제 실패:", e)
+          .forEach(setupAutoSave)
+        addChatSectionBtn.addEventListener("click", () => addChatSection())
+        chatSectionsContainer.addEventListener("click", function (event) {
+          const target = event.target
+          const section = target.closest(".chat-section")
+          if (!section) return
+          if (
+            target.classList.contains("remove-section-btn") &&
+            !target.disabled
+          ) {
+            if (confirm("이 채팅 섹션을 삭제하시겠습니까?")) {
+              removeChatSection(section)
             }
-            newSection.remove()
-          })
-          headerDiv.appendChild(newLabel)
-          headerDiv.appendChild(removeBtn)
-
-          // --- Add UPDATED Toolbar for new sections ---
-          const newToolbar = document.createElement("div")
-          newToolbar.classList.add("markdown-toolbar")
-          newToolbar.innerHTML = `
-                    <button type="button" class="format-btn" onclick="applySpeakerPrefix('${newTextareaId}', 'USER')" title="현재 줄 또는 선택 영역 앞에 'USER: ' 추가/변경">USER 대사</button>
-                    <button type="button" class="format-btn" onclick="applySpeakerPrefix('${newTextareaId}', 'AI')" title="현재 줄 또는 선택 영역 앞에 'AI: ' 추가/변경">AI 대사</button>
-                    <button type="button" class="format-btn" onclick="applyNarrationPrefix('${newTextareaId}')" title="현재 줄 또는 선택 영역 앞에 나레이션 표시('- ') 추가/변경">나레이션</button>
-                    <span style="margin: 0 5px; color: #ccc">|</span>
-                    <button type="button" onclick="applyMarkdown('${newTextareaId}', 'bold')" title="굵게 적용"><b>B</b></button>
-                    <button type="button" onclick="applyMarkdown('${newTextareaId}', 'italic')" title="기울임 적용"><i>I</i></button>
-                    <button type="button" onclick="applyMarkdown('${newTextareaId}', 'highlight')" title="하이라이트 적용">하이라이트</button>
-                    <button type="button" onclick="applyMarkdown('${newTextareaId}', 'emphasis')" title="강조 적용">강조</button>
-                `
-
-          const newTextarea = document.createElement("textarea")
-          newTextarea.id = newTextareaId
-          newTextarea.classList.add("full-width", "chat-input-area")
-          newTextarea.style.height = "150px"
-          newTextarea.style.fontFamily = "monospace"
-          newTextarea.placeholder = "여기에 추가 채팅 내용을 입력하세요..."
-          newTextarea.title = `채팅 입력 ${chatSectionCounter} 내용 (자동 저장됨)`
-          newSection.appendChild(headerDiv)
-          newSection.appendChild(newToolbar)
-          newSection.appendChild(newTextarea)
-          chatSectionsContainer.appendChild(newSection)
-          setupAutoSave(newTextarea)
-        }
-        addChatSectionBtn.addEventListener("click", addChatSection)
-
-        // HTML 생성 버튼 이벤트 (V21과 동일)
-        generateButton.addEventListener("click", function () {
-          const characterName = document.getElementById("characterName").value
-          const modelName = document.getElementById("modelName").value
-          const promptName = document.getElementById("promptName").value
-          const assistModelName =
-            document.getElementById("assistModelName").value
-          const userName = document.getElementById("userName").value
-          const chatNumber = document.getElementById("chatNumber").value
-          const chatTextareas =
-            chatSectionsContainer.querySelectorAll(".chat-input-area")
-          const chatTexts = Array.from(chatTextareas).map(
-            (textarea) => textarea.value,
-          )
-          const styleOptions = {
-            backgroundColor: logBgColorInput.value,
-            textColor: logTextColorInput.value,
-            highlightColor: highlightColorInput.value,
-            emphasisColor: emphasisColorInput.value,
-            baseFontSize: baseFontSizeInput.value,
-            titleFontSize: titleFontSizeInput.value,
-            containerMaxWidth: containerWidthInput.value,
+          } else if (target.classList.contains("move-up") && !target.disabled) {
+            moveSection(section, "up")
+          } else if (
+            target.classList.contains("move-down") &&
+            !target.disabled
+          ) {
+            moveSection(section, "down")
           }
-          const html = formatChatToHTML(
-            chatTexts,
-            characterName,
-            modelName,
-            promptName,
-            assistModelName,
-            userName,
-            chatNumber,
-            styleOptions,
-          )
-          htmlOutput.value = html
-          previewArea.innerHTML = html
         })
+        addToolbarListeners(chatSectionsContainer)
+        generateButton.addEventListener("click", generatePreview)
+        loadExampleBtn.addEventListener("click", function () {
+          const firstChatInput =
+            chatSectionsContainer.querySelector(".chat-input-area")
+          if (firstChatInput) {
+            const exampleText = `- 화창한 봄날, 공원에서 우연히 만난 두 사람은 **짧게** 대화를 나누기 시작했다.\n\nUSER: 안녕하세요? 오늘 ^날씨^가 어때요?\n\n- AI는 잠시 생각에 잠기더니 *환하게 웃으며* 대답했다.\n\nAI: 안녕하세요! 오늘 날씨는 맑고 화창합니다. 최고 기온은 $23도$로 예상됩니다. ***야외 활동하기 좋은 날씨네요!***`
+            if (
+              firstChatInput.value &&
+              !confirm(
+                "입력된 내용이 있습니다. 예제 텍스트로 덮어쓰시겠습니까?",
+              )
+            ) {
+              return
+            }
+            firstChatInput.value = exampleText
+            firstChatInput.dispatchEvent(new Event("input", { bubbles: true }))
+            generatePreview()
+            alert("예제 텍스트를 불러왔습니다.")
+          } else {
+            alert("채팅 입력 영역을 찾을 수 없습니다.")
+          }
+        })
+        savePresetBtn.addEventListener("click", savePreset)
+        loadPresetBtn.addEventListener("click", loadPreset)
+        deletePresetBtn.addEventListener("click", deletePreset)
 
-        // 복사 버튼 이벤트 (V21과 동일)
-        copyButton.addEventListener("click", function () {
-          if (!htmlOutput.value) {
-            alert("먼저 HTML을 생성해주세요.")
+        // --- *** 단축키 리스너 (Ctrl+Shift+1/2/3 조합으로 변경) *** ---
+        document.addEventListener("keydown", function (event) {
+          const activeElement = document.activeElement
+          if (
+            activeElement.tagName !== "TEXTAREA" &&
+            activeElement.tagName !== "INPUT"
+          ) {
             return
           }
-          htmlOutput.select()
-          try {
-            document.execCommand("copy")
-            this.textContent = "복사 완료!"
-          } catch (err) {
-            navigator.clipboard
-              .writeText(htmlOutput.value)
-              .then(() => {
-                this.textContent = "복사 완료!"
-              })
-              .catch((e) => {
-                console.error("복사 실패:", e)
-                this.textContent = "복사 실패"
-              })
+          let handled = false
+          const textarea = activeElement
+            .closest(".chat-section")
+            ?.querySelector("textarea")
+          if (!textarea) return // textarea 없으면 단축키 처리 안함
+
+          // *** Ctrl + Shift + 1/2/3 조합 확인 ***
+          if (event.ctrlKey && event.shiftKey && !event.altKey) {
+            switch (
+              event.key // key 값은 '1', '2', '3' 그대로 사용
+            ) {
+              case "!":
+                applyPrefix(textarea, "USER: ")
+                handled = true
+                break
+              case "@":
+                applyPrefix(textarea, "AI: ")
+                handled = true
+                break
+              case "#":
+                applyPrefix(textarea, "- ")
+                handled = true
+                break
+            }
           }
-          setTimeout(() => {
-            this.textContent = "HTML 복사하기"
-          }, 2000)
+          // Ctrl + B/I/H/E 조합 (기존 유지)
+          else if (event.ctrlKey && !event.shiftKey && !event.altKey) {
+            switch (
+              event.key.toUpperCase() // 여기는 대문자로 비교해도 괜찮음
+            ) {
+              case "B":
+                applyMarkdown(textarea, "bold")
+                handled = true
+                break
+              case "I":
+                applyMarkdown(textarea, "italic")
+                handled = true
+                break
+              case "H":
+                applyMarkdown(textarea, "highlight")
+                handled = true
+                break // ^
+              case "E":
+                applyMarkdown(textarea, "emphasis")
+                handled = true
+                break // $
+            }
+          }
+
+          if (handled) {
+            event.preventDefault() // 브라우저 기본 동작 방지
+          }
         })
 
-        // Load Example Button Event (V21과 동일)
-        if (loadExampleBtn) {
-          loadExampleBtn.addEventListener("click", function () {
-            const firstChatInput = document.getElementById("chatInput_1")
-            if (firstChatInput) {
-              const exampleText = `* 화창한 봄날, 공원에서 우연히 만난 두 사람은 날씨에 관한 대화를 **나누기 시작**했다.\n\nUSER: 안녕하세요? 오늘 ##날씨##가 어때요?\n\n* AI는 잠시 생각에 잠기더니 __환하게 웃으며__ 대답했다.\n\nAI: 안녕하세요! 오늘 날씨는 맑고 화창합니다. 최고 기온은 !!23도!!로 예상됩니다. 야외 활동하기 좋은 날씨네요!`
-              if (
-                firstChatInput.value &&
-                !confirm(
-                  "입력된 내용이 있습니다. 예제 텍스트로 덮어쓰시겠습니까?",
-                )
-              ) {
-                return
-              }
-              firstChatInput.value = exampleText
-              generateButton.click()
-              alert("예제 텍스트를 불러왔습니다.")
-              firstChatInput.dispatchEvent(
-                new Event("input", { bubbles: true }),
-              )
-            } else {
-              alert("첫 번째 채팅 입력 영역을 찾을 수 없습니다.")
-            }
-          })
-        }
-
-        // Initialization (V21과 동일)
+        // --- 초기화 실행 ---
+        updateDefaultSettingsFromCSS()
+        applySettings(DEFAULT_SETTINGS)
         applySavedTheme()
         syncColorInputs()
+        loadPresets()
+        updateGuideColors()
+        updateMoveButtons()
+        generatePreview()
       })
     </script>
   </body>

@@ -1025,25 +1025,25 @@
                   type="button"
                   class="format-btn"
                   data-speaker="USER"
-                  title="USER 대사 (Shift+U)"
+                  title="USER 대사 (Alt+S)"
                 >
-                  USER<kbd>Ctrl+Shift+1</kbd>
+                  USER<kbd>Alt+S</kbd>
                 </button>
                 <button
                   type="button"
                   class="format-btn"
                   data-speaker="AI"
-                  title="AI 대사 (Shift+A)"
+                  title="AI 대사 (Alt+A)"
                 >
-                  AI<kbd>Ctrl+Shift+2</kbd>
+                  AI<kbd>Alt+A</kbd>
                 </button>
                 <button
                   type="button"
                   class="format-btn"
                   data-narration="true"
-                  title="나레이션 (Shift+N)"
+                  title="나레이션 (Alt+D)"
                 >
-                  나레이션<kbd>Ctrl+Shift+3</kbd>
+                  나레이션<kbd>Alt+D</kbd>
                 </button>
                 <span class="toolbar-divider"></span>
                 <button
@@ -1764,7 +1764,7 @@
           const uniqueId = `chatInput_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
           const newSection = document.createElement("div")
           newSection.classList.add("section", "chat-section")
-          newSection.innerHTML = ` <div class="section-header"> <label>채팅 입력</label> <div class="section-controls"> <button type="button" class="move-btn move-up" title="위로 이동">▲</button> <button type="button" class="move-btn move-down" title="아래로 이동">▼</button> <button type="button" class="danger-button remove-section-btn" title="채팅 입력 섹션 삭제">X</button> </div> </div> <div class="markdown-toolbar"> <button type="button" class="format-btn" data-speaker="USER" title="USER 대사 (Shift+U)">USER<kbd>Shift+U</kbd></button> <button type="button" class="format-btn" data-speaker="AI" title="AI 대사 (Shift+A)">AI<kbd>Shift+A</kbd></button> <button type="button" class="format-btn" data-narration="true" title="나레이션 (Shift+N)">나레이션<kbd>Shift+N</kbd></button> <span class="toolbar-divider"></span> <button type="button" class="markdown-btn" data-type="bold" title="굵게 (Ctrl+B)"><b>B</b><kbd>Ctrl+B</kbd></button> <button type="button" class="markdown-btn" data-type="italic" title="기울임 (Ctrl+I)"><i>I</i><kbd>Ctrl+I</kbd></button> <button type="button" class="markdown-btn" data-type="boldItalic" title="굵은 기울임"><b><i>BI</i></b></button> <button type="button" class="markdown-btn" data-type="highlight" title="하이라이트 적용 (^텍스트^) (Ctrl+H)">하이라이트<kbd>Ctrl+H</kbd></button> <button type="button" class="markdown-btn" data-type="emphasis" title="강조 적용 ($텍스트$) (Ctrl+E)">강조<kbd>Ctrl+E</kbd></button> </div> <textarea id="${uniqueId}" class="full-width chat-input-area" placeholder="여기에 추가 채팅 내용을 입력하세요..." title="채팅 내용 입력 (자동 저장됨)">${content}</textarea> `
+          newSection.innerHTML = ` <div class="section-header"> <label>채팅 입력</label> <div class="section-controls"> <button type="button" class="move-btn move-up" title="위로 이동">▲</button> <button type="button" class="move-btn move-down" title="아래로 이동">▼</button> <button type="button" class="danger-button remove-section-btn" title="채팅 입력 섹션 삭제">X</button> </div> </div> <div class="markdown-toolbar"> <button type="button" class="format-btn" data-speaker="USER" title="USER 대사 (Alt+S)">USER<kbd>Alt+S</kbd></button> <button type="button" class="format-btn" data-speaker="AI" title="AI 대사 (Alt+A)">AI<kbd>Alt+A</kbd></button> <button type="button" class="format-btn" data-narration="true" title="나레이션 (Alt+D)">나레이션<kbd>Alt+D</kbd></button> <span class="toolbar-divider"></span> <button type="button" class="markdown-btn" data-type="bold" title="굵게 (Ctrl+B)"><b>B</b><kbd>Ctrl+B</kbd></button> <button type="button" class="markdown-btn" data-type="italic" title="기울임 (Ctrl+I)"><i>I</i><kbd>Ctrl+I</kbd></button> <button type="button" class="markdown-btn" data-type="boldItalic" title="굵은 기울임"><b><i>BI</i></b></button> <button type="button" class="markdown-btn" data-type="highlight" title="하이라이트 적용 (^텍스트^) (Ctrl+H)">하이라이트<kbd>Ctrl+H</kbd></button> <button type="button" class="markdown-btn" data-type="emphasis" title="강조 적용 ($텍스트$) (Ctrl+E)">강조<kbd>Ctrl+E</kbd></button> </div> <textarea id="${uniqueId}" class="full-width chat-input-area" placeholder="여기에 추가 채팅 내용을 입력하세요..." title="채팅 내용 입력 (자동 저장됨)">${content}</textarea> `
           chatSectionsContainer.appendChild(newSection)
           const newTextarea = newSection.querySelector("textarea")
           setupAutoSave(newTextarea)
@@ -2140,20 +2140,20 @@
             ?.querySelector("textarea")
           if (!textarea) return // textarea 없으면 단축키 처리 안함
 
-          // *** Ctrl + Shift + 1/2/3 조합 확인 ***
-          if (event.ctrlKey && event.shiftKey && !event.altKey) {
+          // *** Alt + A/S/D 조합 확인 ***
+          if (!event.ctrlKey && !event.shiftKey && event.altKey) {
             switch (
-              event.key // key 값은 '1', '2', '3' 그대로 사용
+              event.key // key 값은 A, S, D 사용
             ) {
-              case "!":
-                applyPrefix(textarea, "USER: ")
-                handled = true
-                break
-              case "@":
+              case "A":
                 applyPrefix(textarea, "AI: ")
                 handled = true
                 break
-              case "#":
+              case "S":
+                applyPrefix(textarea, "USER: ")
+                handled = true
+                break
+              case "D":
                 applyPrefix(textarea, "- ")
                 handled = true
                 break

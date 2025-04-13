@@ -1265,7 +1265,7 @@
           emphasisColor = "#1f618d",
           baseFontSize = 15,
           titleFontSize = 38,
-          containerMaxWidth = 650,
+          containerWidth = 650,
         } = settings
         const chatNum = chatNumber || Math.floor(Math.random() * 900) + 100
         const bgColorIsDark =
@@ -1309,7 +1309,7 @@
           return text
         }
         const currentDate = getCurrentDate()
-        let html = `<div style="width: 100%; max-width: ${containerMaxWidth}px; margin: 10px auto; background-color: ${backgroundColor}; border-radius: 0; overflow: hidden; font-family: 'Pretendard', Arial, sans-serif; letter-spacing: -0.03em; color: ${textColor}; border: 1px solid ${borderColor}; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">`
+        let html = `<div style="width: 100%; max-width: ${containerWidth}px; margin: 10px auto; background-color: ${backgroundColor}; border-radius: 0; overflow: hidden; font-family: 'Pretendard', Arial, sans-serif; letter-spacing: -0.03em; color: ${textColor}; border: 1px solid ${borderColor}; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">`
         html += `<style> summary::-webkit-details-marker, summary::marker { display: none; } summary { display: block; cursor: pointer; outline: none; } </style>`
         html += `<div style="background-color: ${elementBgColor}; padding: 32px 40px; border-bottom: 1px solid ${borderColor};"> <div style="display: block; margin-bottom: 8px;"> <span style="font-size: 14px; color: ${narrationColor}; font-weight: 500;">#${chatNum}</span> </div> <h1 style="font-size: ${titleFontSize}px; margin: 0; font-weight: 700; color: ${textColor}; line-height: 1.2;">CHAT LOG</h1> </div>`
         html += `<div class="log-section character-info" style="background-color: ${elementBgColor}; margin: 16px 20px; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor}; padding: 32px;">`

@@ -2141,7 +2141,7 @@
           if (!textarea) return // textarea 없으면 단축키 처리 안함
 
           // *** Alt + A/S/D 조합 확인 ***
-          if (!event.ctrlKey && !event.shiftKey && event.altKey) {
+          if (event.ctrlKey && !event.shiftKey && event.altKey) {
             switch (
               event.key // key 값은 A, S, D 사용
             ) {

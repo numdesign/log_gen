@@ -3,10 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>챗챈 로그 제조기 (V1.1)</title>
+    <title>챗챈 로그 제조기 (V1.2)</title>
     <style>
-      /* --- CSS --- */
+      /* --- CSS (기존과 동일) --- */
       :root {
+        /* ... CSS Variables ... */
         /* Light Mode Colors */
         --bg-color: #f0f2f5;
         --text-color: #1d2129;
@@ -44,14 +45,13 @@
         --border-radius-md: 8px;
         --border-radius-lg: 12px;
         --transition-speed: 0.2s;
-        /* 로그 기본 색상 (테마별) */
         --log-bg-light: #ffffff;
         --log-text-light: #1d2129;
         --log-bg-dark: #242526;
         --log-text-dark: #e4e6eb;
       }
       body.dark-mode {
-        /* Dark Mode Colors */
+        /* ... Dark Mode Variables ... */
         --bg-color: #18191a;
         --text-color: #e4e6eb;
         --container-bg: #242526;
@@ -75,8 +75,8 @@
         --toolbar-text: #e4e6eb;
         --preview-bg: #18191a;
       }
-      /* --- 기본 스타일 --- */
       body {
+        /* ... body styles ... */
         font-family: var(--body-font);
         background-color: var(--bg-color);
         color: var(--text-color);
@@ -89,6 +89,7 @@
           color var(--transition-speed);
       }
       .container {
+        /* ... container styles ... */
         max-width: 800px;
         margin: 20px auto;
         background-color: var(--container-bg);
@@ -102,6 +103,7 @@
           box-shadow var(--transition-speed);
       }
       h1 {
+        /* ... h1 styles ... */
         font-size: 22px;
         margin-top: 0;
         margin-bottom: 25px;
@@ -114,6 +116,7 @@
           border-color var(--transition-speed);
       }
       h2 {
+        /* ... h2 styles ... */
         font-size: 18px;
         margin-bottom: 15px;
         margin-top: 30px;
@@ -123,6 +126,7 @@
         color: var(--text-color);
       }
       label {
+        /* ... label styles ... */
         display: block;
         margin-bottom: 8px;
         font-weight: 600;
@@ -131,6 +135,7 @@
         font-size: 14px;
       }
       .style-config-label {
+        /* ... style-config-label styles ... */
         font-size: 13px;
         color: var(--secondary-label-color);
         margin-bottom: 4px;
@@ -139,8 +144,10 @@
       input[type="text"],
       input[type="number"],
       input[type="checkbox"],
+      input[type="radio"],
       textarea,
       select {
+        /* ... input styles ... */
         background-color: var(--input-bg);
         border: 1px solid var(--input-border-color);
         color: var(--input-text-color);
@@ -156,14 +163,18 @@
           color var(--transition-speed),
           box-shadow var(--transition-speed);
       }
-      input[type="checkbox"] {
+      input[type="checkbox"],
+      input[type="radio"] {
+        /* ... checkbox/radio styles ... */
         width: auto;
         padding: 0;
         vertical-align: middle;
+        margin-right: 4px;
       }
       input:focus,
       textarea:focus,
       select:focus {
+        /* ... focus styles ... */
         border-color: var(--primary-color);
         box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
         outline: none;
@@ -174,6 +185,7 @@
         text-align: right;
       }
       input[type="color"] {
+        /* ... color input styles ... */
         background-color: var(--input-bg);
         border: 1px solid var(--input-border-color);
         border-radius: var(--border-radius-sm);
@@ -192,6 +204,7 @@
         font-family: var(--code-font);
       }
       .input-group {
+        /* ... input-group styles ... */
         display: flex;
         gap: 15px;
         margin-bottom: 15px;
@@ -205,8 +218,11 @@
       .input-group.align-center {
         align-items: center;
       }
-      /* --- 버튼 스타일 --- */
+      .input-group.align-center > div {
+        flex-basis: auto;
+      }
       button {
+        /* ... button styles ... */
         cursor: pointer;
         border-radius: var(--border-radius-sm);
         font-weight: 600;
@@ -235,6 +251,7 @@
         cursor: not-allowed;
       }
       .primary-button {
+        /* ... primary-button styles ... */
         background-color: var(--primary-color);
         color: white;
         padding: 10px 18px;
@@ -280,8 +297,8 @@
         flex-wrap: wrap;
         align-items: stretch;
       }
-      /* --- 섹션 & 컴포넌트 --- */
       details.section {
+        /* ... details styles ... */
         border: 1px solid var(--border-color);
         border-radius: var(--border-radius-md);
         margin-bottom: 20px;
@@ -295,30 +312,24 @@
         border-bottom: 1px solid var(--border-color);
       }
       summary {
-        position: relative; /* ::marker 숨기기 위해 필요할 수 있음 */
+        /* ... summary styles ... */
+        position: relative;
         font-weight: 600;
         cursor: pointer;
         padding: 15px 20px;
         color: var(--text-color);
-        list-style: none; /* 기본 마커 숨김 (대체) */
+        list-style: none;
         transition:
           background-color var(--transition-speed),
           color var(--transition-speed);
       }
-      summary {
-        /* ... (summary 스타일) ... */
-      }
-      /* --- *** 기본 details 마커(▼) 숨기기 *** --- */
-      summary::-webkit-details-marker {
-        display: none;
-      }
+      summary::-webkit-details-marker,
       summary::marker {
         display: none;
       }
       summary:focus {
         outline: none;
       }
-      /* --- *** 숨기기 끝 *** --- */
       summary:hover {
         background-color: rgba(0, 0, 0, 0.03);
       }
@@ -329,6 +340,7 @@
         padding: 20px;
       }
       .theme-toggle-section {
+        /* ... theme toggle section styles ... */
         padding: 15px 20px;
         margin-bottom: 20px;
         border-bottom: 1px solid var(--border-color);
@@ -339,10 +351,12 @@
         gap: 10px;
       }
       .toggle-switch-label {
+        /* ... toggle switch styles ... */
         display: inline-flex;
         align-items: center;
         cursor: pointer;
         margin-bottom: 0;
+        font-weight: normal;
       }
       .toggle-switch-label input[type="checkbox"] {
         opacity: 0;
@@ -351,6 +365,7 @@
         position: absolute;
       }
       .toggle-switch-slider {
+        /* ... toggle slider styles ... */
         position: relative;
         display: inline-block;
         width: 50px;
@@ -362,6 +377,7 @@
         flex-shrink: 0;
       }
       .toggle-switch-slider::before {
+        /* ... toggle knob styles ... */
         content: "";
         position: absolute;
         width: 20px;
@@ -383,11 +399,12 @@
         transform: translateX(24px);
       }
       .toggle-switch-text {
-        font-weight: 600;
         color: var(--label-color);
+        margin-left: 8px;
+        font-size: 14px;
       }
-      /* --- 작은 토글 스위치 스타일 --- */
       .toggle-switch-label.small-toggle .toggle-switch-slider {
+        /* ... small toggle styles ... */
         width: 40px;
         height: 22px;
         border-radius: 11px;
@@ -403,8 +420,29 @@
         + .toggle-switch-slider::before {
         transform: translateX(18px);
       }
-      /* --- 스타일 끝 --- */
+      .toggle-switch-label .toggle-text-off,
+      .toggle-switch-label .toggle-text-on {
+        display: none;
+      }
+      .toggle-switch-label
+        input[type="checkbox"]:not(:checked)
+        ~ .toggle-text-off {
+        display: inline;
+      }
+      .toggle-switch-label input[type="checkbox"]:checked ~ .toggle-text-on {
+        display: inline;
+      }
+      .toggle-grid {
+        display: grid; /* Grid 레이아웃 사용 */
+        grid-template-columns: repeat(2, 1fr); /* 2개의 동일한 너비 컬럼 생성 */
+        gap: 10px 15px; /* 행(세로) 간격 10px, 열(가로) 간격 15px (값 조절 가능) */
+        margin-top: 10px; /* 위쪽 레이블과의 간격 */
+      }
+      .toggle-grid > .input-group {
+        margin-bottom: 0;
+      }
       .color-theme-buttons {
+        /* ... color theme button styles ... */
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
@@ -437,6 +475,7 @@
         flex: 1;
       }
       .markdown-toolbar {
+        /* ... markdown toolbar styles ... */
         margin-bottom: 8px;
         display: flex;
         flex-wrap: wrap;
@@ -477,6 +516,7 @@
         color: var(--secondary-label-color);
       }
       .chat-section {
+        /* ... chat section styles ... */
         position: relative;
         border: 1px solid var(--divider-color);
         border-radius: var(--border-radius-md);
@@ -516,6 +556,7 @@
         line-height: 1;
       }
       .format-guide-container {
+        /* ... format guide styles ... */
         margin-bottom: 15px;
         padding: 15px;
         background-color: var(--toolbar-bg);
@@ -549,6 +590,7 @@
         display: inline-block;
       }
       #htmlOutput {
+        /* ... html output textarea styles ... */
         height: 250px;
         font-family: var(--code-font);
         font-size: 13px;
@@ -557,6 +599,7 @@
         word-wrap: break-word;
       }
       .preview-area {
+        /* ... preview area styles ... */
         border: 1px solid var(--border-color);
         padding: 20px;
         min-height: 300px;
@@ -592,8 +635,23 @@
       #presetName {
         min-width: 150px;
       }
+      .additional-options-box {
+        /* ... additional options box styles ... */
+        border: 1px solid var(--divider-color);
+        border-radius: var(--border-radius-sm);
+        padding: 15px;
+        margin-top: 15px;
+        background-color: var(--input-bg);
+      }
+      .additional-options-box > .input-group {
+        margin-bottom: 10px;
+      }
+      .additional-options-box > .input-group:last-child {
+        margin-bottom: 0;
+      }
 
       @media (max-width: 600px) {
+        /* ... media queries ... */
         body {
           padding: 10px;
         }
@@ -612,6 +670,13 @@
         }
         .input-group > div {
           min-width: 100%;
+          flex-grow: 0;
+          flex-shrink: 1;
+          flex-basis: auto;
+        }
+        .toggle-grid {
+          grid-template-columns: 1fr; /* 컬럼(열)을 1개로 변경 */
+          gap: 8px; /* 세로 간격 조절 (필요시 값 변경) */
         }
         input[type="number"] {
           width: 100%;
@@ -637,16 +702,18 @@
         .color-settings-grid {
           grid-template-columns: 1fr;
         }
-        /* 작은 토글 스위치 모바일 배치 */
         .input-group .small-toggle {
           margin-top: 5px;
+        }
+        .additional-options-box > .input-group {
+          align-items: flex-start;
         }
       }
     </style>
   </head>
   <body class="light-mode">
     <div class="container">
-      <h1>챗챈 로그 제조기 (V1.1)</h1>
+      <h1>챗챈 로그 제조기 (V1.2)</h1>
       <div class="theme-toggle-section">
         <label
           for="themeToggleCheckbox"
@@ -968,56 +1035,59 @@
                 />
               </div>
             </div>
-            <div
-              style="
-                border: 1px solid var(--divider-color);
-                border-radius: var(--border-radius-sm);
-                padding: 15px;
-                margin-top: 15px;
-                background-color: var(--input-bg);
-              "
-            >
-              <label
-                class="style-config-label"
-                style="
-                  margin-bottom: 10px;
-                  font-weight: 600;
-                  color: var(--label-color);
-                "
-                >추가 스타일 및 출력 옵션</label
-              >
-              <div class="input-group align-center" style="margin: 0 0 10px 0">
-                <div>
-                  <label
-                    for="italicizeNarration"
-                    class="toggle-switch-label small-toggle"
-                    title="나레이션 텍스트를 이탤릭체로 표시할지 여부"
-                  >
+            <div class="additional-options-box">
+              <label class="style-config-label" style="font-weight: 600; color: var(--label-color); margin-bottom: 10px;">추가 스타일 및 출력 옵션</label>
+              <div class="toggle-grid">
+                <div class="input-group align-center"> <div>
+                  <label for="italicizeNarration" class="toggle-switch-label small-toggle" title="나레이션 텍스트를 이탤릭체로 표시할지 여부">
                     <input type="checkbox" id="italicizeNarration" checked />
                     <span class="toggle-switch-slider"></span>
-                    <span class="toggle-switch-text" style="margin-left: 8px"
-                      >나레이션 기울임꼴 사용</span
-                    >
+                    <span class="toggle-switch-text">나레이션 기울임꼴 사용</span>
                   </label>
+                  </div>
                 </div>
-              </div>
-              <div class="input-group align-center" style="margin: 0">
-                <div>
-                  <label
-                    for="simpleOutputMode"
-                    class="toggle-switch-label small-toggle"
-                    title="체크 시 캐릭터 정보 헤더를 제외하고 채팅 로그 부분만 생성합니다."
-                  >
+                <div class="input-group align-center"> <div>
+                  <label for="simpleOutputMode" class="toggle-switch-label small-toggle" title="체크 시 캐릭터 정보 헤더를 제외하고 채팅 로그 부분만 생성합니다">
                     <input type="checkbox" id="simpleOutputMode" />
                     <span class="toggle-switch-slider"></span>
-                    <span class="toggle-switch-text" style="margin-left: 8px"
-                      >간단 출력 (채팅만)</span
-                    >
+                    <span class="toggle-switch-text">간단 출력 (채팅만)</span>
                   </label>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
+                <div class="input-group align-center"> <div>
+                  <label for="disableChatLogCollapse" class="toggle-switch-label small-toggle" title="체크 시 채팅 로그 섹션이 접히지 않습니다">
+                    <input type="checkbox" id="disableChatLogCollapse" />
+                    <span class="toggle-switch-slider"></span>
+                    <span class="toggle-switch-text">채팅 로그 항상 펼치기</span>
+                  </label>
+                  </div>
+                </div>
+                <div class="input-group align-center"> <div>
+                  <label for="inputModeToggle" class="toggle-switch-label small-toggle" title="체크 시 자동으로 채팅 내역을 인식해 로그를 생성합니다">
+                    <input type="checkbox" id="inputModeToggle" />
+                    <span class="toggle-switch-slider"></span>
+                    <span class="toggle-switch-text">사칭방지용 딸깍 모드<span class="toggle-text-off" style="font-weight: bold">풀사칭용</span><span class="toggle-text-on" style="font-weight: bold">사칭방지용</span>
+                    </span>
+                  </label>
+                  </div>
+                </div>
+                <div class="input-group align-center"> <div>
+                  <label for="dialogueBubbleToggle" class="toggle-switch-label small-toggle" title="체크 시 AI와 USER의 대사를 말풍선 형태로 표시합니다">
+                    <input type="checkbox" id="dialogueBubbleToggle" checked />
+                    <span class="toggle-switch-slider"></span>
+                    <span class="toggle-switch-text">대사 말풍선 사용</span>
+                  </label>
+                  </div>
+                </div>
+                <div class="input-group align-center"> <div>
+                  <label for="narrationLineToggle" class="toggle-switch-label small-toggle" title="체크 시 나레이션 왼쪽에 인용선(세로선)을 표시합니다">
+                    <input type="checkbox" id="narrationLineToggle" checked />
+                    <span class="toggle-switch-slider"></span>
+                    <span class="toggle-switch-text">나레이션 인용선 사용</span>
+                  </label>
+                  </div>
+                </div>
+              </div> </div>
           <div class="preset-manager">
             <label>설정 프리셋 관리</label>
             <div class="preset-controls">
@@ -1036,10 +1106,12 @@
             </div>
             <div class="preset-controls">
               <select id="presetList">
-                <option value="">-- 프리셋 선택 --</option></select
-              ><button id="loadPresetBtn" class="secondary-button">
-                불러오기</button
-              ><button id="deletePresetBtn" class="danger-button">삭제</button>
+                <option value="">-- 프리셋 선택 --</option>
+              </select>
+              <button id="loadPresetBtn" class="secondary-button">
+                불러오기
+              </button>
+              <button id="deletePresetBtn" class="danger-button">삭제</button>
             </div>
           </div>
         </div>
@@ -1049,12 +1121,24 @@
         <summary>채팅 내용 입력</summary>
         <div class="section-content">
           <div class="format-guide-container" id="formatGuide">
-            <strong>입력 형식 안내</strong>
+            <strong
+              >입력 형식 안내 (<span id="guideInputMode">풀사칭용</span
+              >)</strong
+            >
+            <span id="guidePrefix" style="display: block">
+              - 나레이션: <code>-</code> 또는 <code>*</code> 로 시작<br />
+              - 대화: <code>USER:</code> 또는 <code>AI:</code> 로 시작<br />
+              - 예: <code>- 조용한 밤.</code><br />
+              - 예: <code>USER: 안녕?</code><br />
+            </span>
+            <span id="guideAuto" style="display: none">
+              - 대사: <code>"큰따옴표"</code> 또는 <code>“둥근따옴표”</code> 로
+              감싸기<br />
+              - 나레이션: 따옴표 없이 입력<br />
+              - 예: <code>"안녕?"</code><br />
+              - 예: <code>USER가 인사했다.</code><br />
+            </span>
             <span>
-              - 나레이션: <code>-</code> 또는 <code>*</code> 로 시작 (예:
-              <code>- 조용한 밤이었다.</code>)<br />
-              - 대화: <code>USER:</code> 또는 <code>AI:</code> 로 시작 (예:
-              <code>USER: 안녕?</code>)<br />
               - 빈 줄은 무시됩니다.<br />
               <strong>마크다운 강조:</strong> (툴바 또는 단축키 사용)<br />
               &nbsp;&nbsp;<code>**굵게**</code> &rarr;
@@ -1062,8 +1146,8 @@
               &nbsp;&nbsp;<code>*기울임*</code> &rarr;
               <em style="font-style: italic">이탤릭체</em> <br />
               &nbsp;&nbsp;<code>***굵은기울임***</code> &rarr;
-              <strong><em style="font-style: italic">굵은 이탤릭체</em></strong>
-              <br />
+              <strong><em style="font-style: italic">굵은 이탤릭체</em></strong
+              ><br />
               &nbsp;&nbsp;<code>^하이라이트^</code> &rarr;
               <span class="highlight-example" id="guideHighlightExample"
                 >하이라이트</span
@@ -1109,51 +1193,58 @@
                   data-narration="true"
                   title="나레이션 (Ctrl+Alt+1)"
                 >
-                  나레이션<kbd>Ctrl+Alt+1</kbd></button
-                ><button
+                  나레이션<kbd>Ctrl+Alt+1</kbd>
+                </button>
+                <button
                   type="button"
                   class="format-btn"
                   data-speaker="AI"
                   title="AI 대사 (Ctrl+Alt+2)"
                 >
-                  AI<kbd>Ctrl+Alt+2</kbd></button
-                ><button
+                  AI<kbd>Ctrl+Alt+2</kbd>
+                </button>
+                <button
                   type="button"
                   class="format-btn"
                   data-speaker="USER"
                   title="USER 대사 (Ctrl+Alt+3)"
                 >
-                  USER<kbd>Ctrl+Alt+3</kbd></button
-                ><span class="toolbar-divider"></span
-                ><button
+                  USER<kbd>Ctrl+Alt+3</kbd>
+                </button>
+                <span class="toolbar-divider"></span>
+                <button
                   type="button"
                   class="markdown-btn"
                   data-type="bold"
                   title="굵게 (Ctrl+B)"
                 >
-                  <b>B</b><kbd>Ctrl+B</kbd></button
-                ><button
+                  <b>B</b><kbd>Ctrl+B</kbd>
+                </button>
+                <button
                   type="button"
                   class="markdown-btn"
                   data-type="italic"
                   title="기울임 (Ctrl+I)"
                 >
-                  <i>I</i><kbd>Ctrl+I</kbd></button
-                ><button
+                  <i>I</i><kbd>Ctrl+I</kbd>
+                </button>
+                <button
                   type="button"
                   class="markdown-btn"
                   data-type="boldItalic"
                   title="굵은 기울임"
                 >
-                  <b><i>BI</i></b></button
-                ><button
+                  <b><i>BI</i></b>
+                </button>
+                <button
                   type="button"
                   class="markdown-btn"
                   data-type="highlight"
                   title="하이라이트 적용 (^텍스트^) (Ctrl+H)"
                 >
-                  하이라이트<kbd>Ctrl+H</kbd></button
-                ><button
+                  하이라이트<kbd>Ctrl+H</kbd>
+                </button>
+                <button
                   type="button"
                   class="markdown-btn"
                   data-type="emphasis"
@@ -1222,10 +1313,10 @@
     </div>
 
     <script>
-      // --- 상수 및 설정 ---
-      const PRESET_STORAGE_KEY = "chatLogPresets_v27"
-      const AUTOSAVE_PREFIX = "autoSavedChat_v27_"
-      const USER_MODIFIED_COLOR_FLAG = "userModifiedLogColors_v27"
+      // --- 상수 및 설정 (V.1.4) ---
+      const PRESET_STORAGE_KEY = "chatLogPresets_v30" // 버전업
+      const AUTOSAVE_PREFIX = "autoSavedChat_v30_" // 버전업
+      const USER_MODIFIED_COLOR_FLAG = "userModifiedLogColors_v30" // 버전업
       let DEFAULT_SETTINGS = {
         characterName: "",
         modelName: "",
@@ -1244,98 +1335,62 @@
         containerWidth: 650,
         italicizeNarration: true,
         simpleOutputMode: false,
+        disableChatLogCollapse: false,
+        isAutoInputMode: false, // false: prefix, true: auto
+        dialogueUseBubble: true, // <-- 추가 (대사 말풍선 기본값: 사용)
+        narrationUseLine: true
       }
       const colorThemes = {
-        ocean_blue: {
-          highlightColor: "#2980b9",
-          promptColor: "#5dade2",
-          emphasisColor: "#1a5276",
+        /* 기존과 동일 */ ocean_blue: {
+          h: "#2980b9",
+          p: "#5dade2",
+          e: "#1a5276",
         },
-        forest_green: {
-          highlightColor: "#27ae60",
-          promptColor: "#58d68d",
-          emphasisColor: "#1e8449",
-        },
-        royal_purple: {
-          highlightColor: "#8e44ad",
-          promptColor: "#bb8fce",
-          emphasisColor: "#6c3483",
-        },
-        sunset_orange: {
-          highlightColor: "#e67e22",
-          promptColor: "#f5b041",
-          emphasisColor: "#a04000",
-        },
-        ruby_red: {
-          highlightColor: "#c0392b",
-          promptColor: "#f1948a",
-          emphasisColor: "#922b21",
-        },
-        teal_green: {
-          highlightColor: "#16a085",
-          promptColor: "#48c9b0",
-          emphasisColor: "#0e6655",
-        },
-        graphite: {
-          highlightColor: "#566573",
-          promptColor: "#aeb6bf",
-          emphasisColor: "#34495e",
-        },
-        indigo_amber: {
-          highlightColor: "#34495e",
-          promptColor: "#7f8c8d",
-          emphasisColor: "#d35400",
-        },
-        lavender_mint: {
-          highlightColor: "#9b59b6",
-          promptColor: "#a569bd",
-          emphasisColor: "#1abc9c",
-        },
-        rose_plum: {
-          highlightColor: "#d9534f",
-          promptColor: "#ec7063",
-          emphasisColor: "#8e44ad",
-        },
+        forest_green: { h: "#27ae60", p: "#58d68d", e: "#1e8449" },
+        royal_purple: { h: "#8e44ad", p: "#bb8fce", e: "#6c3483" },
+        sunset_orange: { h: "#e67e22", p: "#f5b041", e: "#a04000" },
+        ruby_red: { h: "#c0392b", p: "#f1948a", e: "#922b21" },
+        teal_green: { h: "#16a085", p: "#48c9b0", e: "#0e6655" },
+        graphite: { h: "#566573", p: "#aeb6bf", e: "#34495e" },
+        indigo_amber: { h: "#34495e", p: "#7f8c8d", e: "#d35400" },
+        lavender_mint: { h: "#9b59b6", p: "#a569bd", e: "#1abc9c" },
+        rose_plum: { h: "#d9534f", p: "#ec7063", e: "#8e44ad" },
       }
+      // colorThemes 접근 시 단축키 사용 (h:highlightColor, p:promptColor, e:emphasisColor)
 
-      // --- 유틸리티 함수 ---
+      // --- 유틸리티 함수 (기존과 동일) ---
       function adjustColor(color, amount) {
-        let usePound = false
+        let u = false
         if (color.startsWith("#")) {
           color = color.slice(1)
-          usePound = true
+          u = true
         }
-        let num = parseInt(color, 16)
-        if (isNaN(num)) return usePound ? "#000000" : "000000"
-        let r = (num >> 16) + amount
+        let n = parseInt(color, 16)
+        if (isNaN(n)) return u ? "#000000" : "000000"
+        let r = (n >> 16) + amount
         r = Math.max(0, Math.min(255, r))
-        let b = ((num >> 8) & 0x00ff) + amount
+        let b = ((n >> 8) & 0x00ff) + amount
         b = Math.max(0, Math.min(255, b))
-        let g = (num & 0x0000ff) + amount
+        let g = (n & 0x0000ff) + amount
         g = Math.max(0, Math.min(255, g))
         return (
-          (usePound ? "#" : "") +
+          (u ? "#" : "") +
           ((r << 16) | (b << 8) | g).toString(16).padStart(6, "0")
         )
       }
       function getCurrentDate() {
-        const now = new Date()
-        const year = now.getFullYear()
-        const month = String(now.getMonth() + 1).padStart(2, "0")
-        const day = String(now.getDate()).padStart(2, "0")
-        return `${year}.${month}.${day}`
+        const n = new Date()
+        return `${n.getFullYear()}.${String(n.getMonth() + 1).padStart(2, "0")}.${String(n.getDate()).padStart(2, "0")}`
       }
 
-      // --- HTML 생성 함수 (수정: 나레이션 Regex 개선 및 디버깅 로그 추가) ---
+      // --- HTML 생성 함수 (V.1.4 - 파싱/렌더링/스타일 수정) ---
       function formatChatToHTML(chatTexts, settings) {
-        console.log("formatChatToHTML 시작됨. 설정:", settings) // 함수 시작 로그
-        console.log("입력된 chatTexts:", chatTexts) // 입력 텍스트 확인
-
+        console.log("formatChatToHTML 시작됨. 설정:", settings)
         const {
-          characterName = "캐릭터 이름",
-          modelName = "AI 모델명",
-          promptName = "프롬프트명",
-          assistModelName = "보조 모델명",
+          characterName = "?",
+          modelName = "?",
+          promptName = "?",
+          assistModelName = "?",
           userName = "USER",
           chatNumber,
           characterImageUrl = "",
@@ -1349,10 +1404,13 @@
           containerWidth = 650,
           italicizeNarration = true,
           simpleOutputMode = false,
-        } = settings
+          disableChatLogCollapse = false,
+          isAutoInputMode = false,
+          dialogueUseBubble = true, // <-- 추가 (기본값 지정)
+          narrationUseLine = true   // <-- 추가 (기본값 지정)
+        } = settings // 기본값 일부 변경
         const chatNum = chatNumber || Math.floor(Math.random() * 900) + 100
-        const bgColorIsDark =
-          parseInt(backgroundColor.slice(1), 16) < parseInt("888888", 16)
+        const bgColorIsDark = parseInt(backgroundColor.slice(1), 16) < 0x888888
         const elementBgColor = adjustColor(
           backgroundColor,
           bgColorIsDark ? +5 : -5,
@@ -1369,7 +1427,6 @@
         )
         const cardBorderRadius = "12px"
 
-        // 마크다운 처리 함수 정의
         function processEmphasis(text) {
           if (!text) return ""
           text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -1398,256 +1455,308 @@
         let html = `<div style="width: 100%; max-width: ${containerWidth}px; margin: 10px auto; background-color: ${backgroundColor}; border-radius: 0; overflow: hidden; font-family: 'Pretendard', Arial, sans-serif; letter-spacing: -0.03em; color: ${textColor}; border: 1px solid ${borderColor}; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">`
 
         if (!simpleOutputMode) {
-          // 헤더 HTML 생성 로직 (생략)
-          html += `<div style="background-color: ${elementBgColor}; padding: 32px 40px; border-bottom: 1px solid ${borderColor};"> <div style="display: block; margin-bottom: 8px;"> <span style="font-size: 14px; color: ${narrationColor}; font-weight: 500;">#${chatNum}</span> </div> <h1 style="font-size: ${titleFontSize}px; margin: 0; font-weight: 700; color: ${textColor}; line-height: 1.2;">CHAT LOG</h1> </div>`
-          html += `<div class="log-section character-info" style="background-color: ${elementBgColor}; margin: 16px 20px; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor}; padding: 32px;">`
-          html += `<div style="width: 100%; display: block; text-align: center;">`
+          /* 헤더 생성 */ html += `<div style="background-color: ${elementBgColor}; padding: 32px 40px; border-bottom: 1px solid ${borderColor};"> <div style="display: block; margin-bottom: 8px;"> <span style="font-size: 14px; color: ${narrationColor}; font-weight: 500;">#${chatNum}</span> </div> <h1 style="font-size: ${titleFontSize}px; margin: 0; font-weight: 700; color: ${textColor}; line-height: 1.2;">CHAT LOG</h1> </div>`
+          html += `<div class="log-section character-info" style="background-color: ${elementBgColor}; margin: 16px 20px; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor}; padding: 32px;"> <div style="width: 100%; display: block; text-align: center;">`
           if (characterImageUrl) {
             html += `<img src="${characterImageUrl.replace(/"/g, "&quot;")}" alt="${characterName.replace(/"/g, "&quot;")}" style="max-width: 150px; max-height: 150px; border-radius: 50%; margin: 0 auto 15px auto; display: block; border: 3px solid ${borderColor}; object-fit: cover;">`
           } else {
-            html += `<div style="font-size: 12px; color: ${narrationColor}; padding: 20px 10px; line-height: 1.4; margin: 15px auto; text-align: center;">이 문구를 지우고 이미지를 삽입해주세요</div>`
+            html += `<div style="font-size: 12px; color: ${narrationColor}; padding: 20px 10px; line-height: 1.4; margin: 15px auto; text-align: center;">이미지 영역</div>`
           }
-          html += `<h2 style="font-size: 28px; color: ${textColor}; margin: 0 0 16px 0; font-weight: 700; border: none; padding: 0;">${characterName}</h2>`
-          html += `<div style="margin: 8px 0; font-size: ${baseFontSize}px; color: ${messageTextColor}; display: block; text-align: center;">`
+          html += `<h2 style="font-size: 28px; color: ${textColor}; margin: 0 0 16px 0; font-weight: 700; border: none; padding: 0;">${characterName}</h2> <div style="margin: 8px 0; font-size: ${baseFontSize}px; color: ${messageTextColor}; display: block; text-align: center;">`
           if (modelName)
-            html += `<span style="display: inline-block; background-color: ${highlightColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(highlightColor, 10)}; margin: 0 5px 10px;">${modelName}</span>`
+            html += `<span style="display: inline-block; background-color: ${highlightColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(highlightColor, -10)}; margin: 0 5px 10px;">${modelName}</span>`
           if (promptName)
-            html += `<span style="display: inline-block; background-color: ${promptColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(promptColor, 10)}; margin: 0 5px 10px;">${promptName}</span>`
+            html += `<span style="display: inline-block; background-color: ${promptColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(promptColor, -10)}; margin: 0 5px 10px;">${promptName}</span>`
           if (assistModelName)
-            html += `<span style="display: inline-block; background-color: ${emphasisColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(emphasisColor, 10)}; margin: 0 5px 10px;">${assistModelName}</span>`
+            html += `<span style="display: inline-block; background-color: ${emphasisColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(emphasisColor, -10)}; margin: 0 5px 10px;">${assistModelName}</span>`
           html += `</div></div></div>`
-          html += `<div class="log-section conversation-header" style="background-color: ${elementBgColor}; margin: 0 20px 16px; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor}; padding: 20px 32px;">`
-          html += `<div style="font-size: 12px; font-weight: 600; color: ${narrationColor}; margin-bottom: 4px;">MONO</div>`
-          html += `<div style="font-size: 20px; font-weight: 700; color: ${textColor};">CONVERSATION</div>`
-          html += `</div>`
+          html += `<div class="log-section conversation-header" style="background-color: ${elementBgColor}; margin: 0 20px 16px; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor}; padding: 20px 32px;"> <div style="font-size: 12px; font-weight: 600; color: ${narrationColor}; margin-bottom: 4px;">MONO</div> <div style="font-size: 20px; font-weight: 700; color: ${textColor};">CONVERSATION</div> </div>`
         }
 
         console.log("--- 채팅 내용 처리 시작 ---")
         chatTexts.forEach((chatText, index) => {
-          console.log(`[ 섹션 ${index + 1} ] 원본 텍스트:\n`, chatText) // 각 섹션 텍스트 확인
-          if (!chatText && chatTexts.length > 1 && index > 0) {
-            console.log(`[ 섹션 ${index + 1} ] 비어있으므로 건너뜁니다.`)
+          console.log(`[ 섹션 ${index + 1} ] 원본 길이:`, chatText?.length)
+          if (!chatText?.trim() && chatTexts.length > 1 && index > 0) {
+            console.log(`[ 섹션 ${index + 1} ] skip`)
             return
           }
           const lines = chatText.trim().split("\n")
           const chatParts = []
-          let currentSpeaker = null
-          let currentContent = []
 
-          console.log(`[ 섹션 ${index + 1} ] 줄 파싱 시작...`)
-          for (let i = 0; i < lines.length; i++) {
-            // for 루프로 변경하여 인덱스 사용
-            let line = lines[i].trim()
-            console.log(`  [줄 ${i + 1}] 처리 시작: "${line}"`)
-            if (!line) {
-              console.log(`    -> 빈 줄입니다. 건너뜁니다.`)
-              continue // 빈 줄은 건너뛰기
-            }
-
-            const userMatch = line.match(/^USER:\s*(.*)/i)
-            const aiMatch = line.match(/^AI:\s*(.*)/i)
-            // *** 수정: 나레이션 Regex 개선 (공백 옵션 처리) ***
-            const narrationMatch = line.match(/^([\*\-])\s*(.*)/)
-
-            let speakerType = null
-            let content = null
-
-            if (userMatch) {
-              speakerType = "user"
-              content = userMatch[1]
-              console.log(`    -> USER 매치됨. 내용: "${content}"`)
-            } else if (aiMatch) {
-              speakerType = "ai"
-              content = aiMatch[1]
-              console.log(`    -> AI 매치됨. 내용: "${content}"`)
-            } else if (
-              narrationMatch &&
-              !line.startsWith("**") &&
-              !line.startsWith("***") &&
-              !line.startsWith("$") &&
-              !line.startsWith("^")
-            ) {
-              // 마크다운 강조와 겹치지 않는 경우만 나레이션으로 처리
-              speakerType = "narration"
-              content = narrationMatch[2] || "" // 내용이 없을 수도 있음 (예: "-")
-              console.log(
-                `    -> 나레이션(${narrationMatch[1]}) 매치됨. 내용: "${content}"`,
-              )
-            } else {
-              console.log(`    -> 특정 타입 매치 안됨.`)
-            }
-
-            if (speakerType) {
-              // 현재 줄이 USER, AI, 나레이션 시작인 경우
-              // 이전까지 모아둔 내용이 있으면 먼저 push
-              if (currentSpeaker && currentContent.length > 0) {
-                const joinedContent = currentContent.join("\n")
-                chatParts.push({ type: currentSpeaker, content: joinedContent })
-                console.log(
-                  `      -> 이전 타입(${currentSpeaker}) 내용 push: "${joinedContent}"`,
-                )
+          if (isAutoInputMode) {
+            // 자동 인식(사칭방지용)
+            console.log(`[ 섹션 ${index + 1} ] 자동 인식(사칭방지용) 모드 파싱`)
+            let cp = null // currentPart
+            for (let i = 0; i < lines.length; i++) {
+              let l = lines[i].trim()
+              if (!l) {
+                if (cp && cp.content.length > 0) {
+                  chatParts.push({
+                    type: cp.type,
+                    content: cp.content.join("\n"),
+                  })
+                  console.log(`   -> 이전 ${cp.type} 저장 (빈 줄)`)
+                  cp = null
+                }
+                continue
               }
-              // 새로운 타입 시작
-              currentSpeaker = speakerType
-              currentContent = content ? [content] : [] // 내용이 없으면 빈 배열로 시작
-              console.log(`      -> 새로운 타입(${speakerType}) 시작.`)
-            } else {
-              // 현재 줄이 특정 타입 시작이 아닌 경우 (이전 내용에 이어짐)
-              if (currentSpeaker) {
-                // 이전 타입이 있으면 거기에 추가
-                currentContent.push(line)
-                console.log(
-                  `    -> 이전 타입(${currentSpeaker})에 내용 추가: "${line}"`,
-                )
-              } else if (
-                chatParts.length > 0 &&
-                chatParts[chatParts.length - 1].type === "narration"
-              ) {
-                // 이전 타입이 없고, 마지막 chatPart가 나레이션이면 거기에 추가
-                chatParts[chatParts.length - 1].content += "\n" + line
-                console.log(`    -> 이전 나레이션에 내용 추가: "${line}"`)
+              let lt = "narration"
+              let lc = l
+              // *** Regex 수정: 다양한 따옴표 허용 및 내용 추출 ***
+              const dm = l.match(/^["“](.*?)["”]$/) // Non-greedy match inside quotes
+              if (dm) {
+                lt = "dialogue"
+                lc = dm[1]
+                console.log(`  [${i + 1}] 대사: "${lc}"`)
               } else {
-                // 이전 타입도 없고, 이전 나레이션도 없으면 기본 나레이션으로 처리
-                chatParts.push({ type: "narration", content: line })
-                console.log(`    -> 기본 나레이션으로 처리하여 push: "${line}"`)
+                console.log(`  [${i + 1}] 나레: "${lc}"`)
+              }
+              if (!cp || cp.type !== lt) {
+                if (cp && cp.content.length > 0) {
+                  chatParts.push({
+                    type: cp.type,
+                    content: cp.content.join("\n"),
+                  })
+                  console.log(`   -> 이전 ${cp.type} 저장`)
+                }
+                cp = { type: lt, content: [lc] }
+                console.log(`   -> 새 ${lt} 시작`)
+              } else {
+                cp.content.push(lc)
+                console.log(`   -> ${lt} 추가`)
               }
             }
-          } // end of line processing loop
-
-          // 루프 종료 후 마지막으로 남아있는 내용 push
-          if (currentSpeaker && currentContent.length > 0) {
-            const joinedContent = currentContent.join("\n")
-            chatParts.push({ type: currentSpeaker, content: joinedContent })
-            console.log(
-              `  [루프 종료] 마지막 타입(${currentSpeaker}) 내용 push: "${joinedContent}"`,
-            )
-          }
-
-          console.log(
-            `[ 섹션 ${index + 1} ] 파싱 결과 chatParts:`,
-            JSON.stringify(chatParts),
-          ) // 파싱 결과 확인
-
-          // --- chatParts를 HTML로 변환 ---
-          if (chatParts.length > 0) {
-            const firstEntryTopMargin =
-              simpleOutputMode && index === 0 ? "20px" : "0"
-            html += `<div class="log-section chat-entry" style="margin: ${firstEntryTopMargin} 20px 16px; background-color: ${elementBgColor}; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor};">`
-            html += `<details open style="padding: 5px;"> <summary style="padding: 16px 25px; list-style:none; outline: none; border-radius: ${parseInt(cardBorderRadius) - 2}px;"> <div style="font-size: 20px; font-weight: 700; color: ${textColor}; display: block;">CHAT LOG ${index + 1}</div> </summary> <div style="padding: 15px 25px; background-color: ${backgroundColor}; border-radius: 0 0 ${parseInt(cardBorderRadius) - 2}px ${parseInt(cardBorderRadius) - 2}px;">`
-
-            console.log(`  [ 섹션 ${index + 1} ] chatParts HTML 렌더링 시작...`)
-            chatParts.forEach((part, partIndex) => {
-              console.log(
-                `    [Part ${partIndex}] 타입: ${part.type}, 내용: "${part.content}"`,
-              )
-              const processedContent = processEmphasis(part.content)
-              console.log(`      -> 처리된 내용: "${processedContent}"`)
-              if (part.type === "narration") {
-                const narrationStyle = `font-size: ${baseFontSize}px; color: ${narrationColor}; line-height: 1.6; ${italicizeNarration ? "font-style: italic;" : ""}`
-                html += `<div style="margin: 24px 0; display: block; border-left: 3px solid ${highlightColor}; padding-left: 16px;"> <div style="${narrationStyle}">${processedContent || "&nbsp;"}</div> </div>`
-              } else if (part.type === "user") {
-                html += `<div style="margin: 16px 0; text-align: right;"> <div style="max-width: 75%; display: inline-block; text-align: left;"> <div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px; text-align: right;">${userName}</div> <div style="background-color: ${darkElementBgColor}; border-radius: 12px; padding: 16px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border: 1px solid ${borderColor};">${processedContent}</div> </div> </div>`
-              } else if (part.type === "ai") {
-                html += `<div style="margin: 16px 0; text-align: left;"> <div style="max-width: 75%; display: inline-block;"> <div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px;">${characterName}</div> <div style="background-color: ${backgroundColor}; border-radius: 12px; padding: 16px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border: 1px solid ${highlightColor};">${processedContent}</div> </div> </div>`
-              }
-            })
-            html += `</div> </details> </div>`
+            if (cp && cp.content.length > 0) {
+              chatParts.push({ type: cp.type, content: cp.content.join("\n") })
+              console.log(`  [종료] 마지막 ${cp.type} 저장`)
+            }
           } else {
-            console.log(`  [ 섹션 ${index + 1} ] 처리할 chatParts가 없습니다.`)
-            // chatParts가 비어있으면 해당 섹션의 HTML 구조를 아예 만들지 않거나, 빈 구조를 만들 수 있음
-            // 현재 로직에서는 chatParts가 비면 아예 해당 chat-entry div가 생성되지 않음.
+            // 접두사(풀사칭용)
+            console.log(`[ 섹션 ${index + 1} ] 접두사(풀사칭용) 모드 파싱`)
+            let cs = null
+            let cc = [] // currentSpeaker, currentContent
+            for (let i = 0; i < lines.length; i++) {
+              let l = lines[i].trim()
+              if (!l) {
+                if (cs && cc.length > 0) {
+                  chatParts.push({ type: cs, content: cc.join("\n") })
+                  console.log(`      -> 이전 ${cs} 저장 (빈 줄)`)
+                  cc = []
+                }
+                cs = null
+                console.log(`     -> 빈 줄 skip`)
+                continue
+              }
+              const um = l.match(/^USER:\s*(.*)/i)
+              const am = l.match(/^AI:\s*(.*)/i)
+              const nm = l.match(/^([\*\-])\s*(.*)/)
+              let st = null
+              let ct = null
+              if (um) {
+                st = "user"
+                ct = um[1]
+              } else if (am) {
+                st = "ai"
+                ct = am[1]
+              } else if (
+                nm &&
+                !l.startsWith("**") &&
+                !l.startsWith("***") &&
+                !l.startsWith("$") &&
+                !l.startsWith("^")
+              ) {
+                st = "narration"
+                ct = nm[2] || ""
+              }
+              if (st) {
+                if (cs && cc.length > 0) {
+                  chatParts.push({ type: cs, content: cc.join("\n") })
+                  console.log(`      -> 이전 ${cs} 저장`)
+                }
+                cs = st
+                cc = ct ? [ct] : []
+                console.log(`      -> 새 ${st} 시작`)
+              } else {
+                if (cs) {
+                  cc.push(l)
+                  console.log(`    -> ${cs} 추가`)
+                } else if (
+                  chatParts.length > 0 &&
+                  chatParts[chatParts.length - 1].type === "narration"
+                ) {
+                  chatParts[chatParts.length - 1].content += "\n" + l
+                  console.log(`    -> 이전 나레 추가`)
+                } else {
+                  chatParts.push({ type: "narration", content: l })
+                  console.log(`    -> 기본 나레 처리`)
+                  cs = "narration"
+                  cc = []
+                }
+              }
+            }
+            if (cs && cc.length > 0) {
+              chatParts.push({ type: cs, content: cc.join("\n") })
+              console.log(`  [종료] 마지막 ${cs} 저장`)
+            }
           }
-        }) // end of chatTexts.forEach
+          console.log(
+            `[ 섹션 ${index + 1} ] 파싱 결과:`,
+            JSON.stringify(chatParts),
+          )
+
+          if (chatParts.length > 0) {
+            // HTML 렌더링
+            const fm = simpleOutputMode && index === 0 ? "20px" : "0" // firstMargin
+            const ct = disableChatLogCollapse ? "div" : "details" // containerTag
+            const st = disableChatLogCollapse ? "div" : "summary" // summaryTag
+            const da = disableChatLogCollapse ? "" : " open" // detailsOpenAttribute
+            const sc = disableChatLogCollapse
+              ? "cursor: default;"
+              : "cursor: pointer;" // summaryCursorStyle
+
+            html += `<div class="log-section chat-entry" style="margin: ${fm} 20px 16px; background-color: ${elementBgColor}; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor};">`
+            html += `<${ct}${da} style="padding: 0;">` // 컨테이너 시작 (내부 패딩 없음)
+
+            // 제목 (div/summary) - 패딩 적용, disable 시 테두리 추가
+            const ts = `padding: 15px 25px; list-style:none; outline: none; font-size: 20px; font-weight: 700; color: ${textColor}; display: block; ${sc}` // titleStyle
+            // *** 수정: disable 시 하단 테두리 추가 ***
+            const tb = disableChatLogCollapse
+              ? `border-bottom: 1px solid ${borderColor};`
+              : "" // titleBorder
+            html += `<${st} style="${ts} ${tb}">CHAT LOG ${index + 1}</${st}>`
+
+            // 내용 컨테이너 (div) - 패딩 및 배경색 항상 적용, radius는 조건부
+            const cp = "padding: 15px 25px;" // contentPadding
+            // *** 수정: 배경색 항상 적용 ***
+            const cb = `background-color: ${backgroundColor};` // contentBackground
+            const cr = disableChatLogCollapse
+              ? ""
+              : `border-radius: 0 0 ${parseInt(cardBorderRadius) - 1}px ${parseInt(cardBorderRadius) - 1}px;` // contentRadius
+            html += `<div style="${cp} ${cb} ${cr}">` // 내용 컨테이너 시작
+
+            console.log(`  [ 섹션 ${index + 1} ] HTML 렌더링 시작...`)
+            chatParts.forEach((part, partIndex) => {
+              const pc = processEmphasis(part.content) // processedContent
+              if (part.type === "narration") {
+                const pc = processEmphasis(part.content);
+                const textStyle = `font-size: ${baseFontSize}px; color: ${narrationColor}; line-height: 1.6; ${italicizeNarration ? "font-style: italic;" : ""}`;
+                  if (narrationUseLine) { // --- 인용선 사용 시 HTML ---
+                    html += `<div style="margin: 16px 0; display: block; border-left: 3px solid ${highlightColor}; padding-left: 16px;"> <div style="${textStyle}">${pc || "&nbsp;"}</div> </div>`;
+                  } else { // --- 인용선 미사용 시 HTML ---
+                    html += `<div style="margin: 16px 0; display: block; padding-left: 0;"> <div style="${textStyle}">${pc || "&nbsp;"}</div> </div>`;
+                }
+              } else if (part.type === "user") {
+                const pc = processEmphasis(part.content); // 유저 이름 표시 부분
+                const userNameDisplay = `<div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px; text-align: right;">${userName}</div>`;
+                if (dialogueUseBubble) { // --- 말풍선 사용 시 HTML ---
+                  html += `<div style="margin: 32px 0; text-align: right;"> <div style="max-width: 75%; display: inline-block; text-align: left;"> ${userNameDisplay} <div style="background-color: ${darkElementBgColor}; border-radius: 12px; padding: 10px 20px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border: 1px solid ${borderColor};">${pc || "&nbsp;"}</div> </div> </div>`;
+                } else { // --- 말풍선 미사용 시 HTML (예시: 오른쪽 선 + 간단한 패딩) ---
+                  html += `<div style="margin: 32px 0; text-align: right;"> <div style="max-width: 75%; display: inline-block; text-align: right;"> ${userNameDisplay} <div style="display: inline-block; text-align: left; background-color: ${darkElementBgColor}; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border-right: 3px solid ${emphasisColor}; padding: 10px 20px;">${pc || "&nbsp;"}</div> </div> </div>`;
+                }
+              } else if (part.type === "ai") {
+                const pc = processEmphasis(part.content); // 캐릭터 이름 표시 부분
+                const characterNameDisplay = `<div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px;">${characterName}</div>`;
+                if (dialogueUseBubble) { // --- 말풍선 사용 시 HTML ---
+                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="max-width: 75%; display: inline-block;"> ${characterNameDisplay} <div style="background-color: ${backgroundColor}; border-radius: 12px; padding: 10px 20px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border: 1px solid ${highlightColor};">${pc || "&nbsp;"}</div> </div> </div>`;
+                } else { // --- 말풍선 미사용 시 HTML ---
+                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="max-width: 75%; display: inline-block;"> ${characterNameDisplay} <div style="display: inline-block; background-color: ${darkElementBgColor}; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border-left: 3px solid ${emphasisColor}; padding: 10px 20px;">${pc || "&nbsp;"}</div> </div> </div>`;
+                }
+              } else if (part.type === "dialogue") {
+                const pc = processEmphasis(part.content);
+                if (dialogueUseBubble) { // --- 말풍선 사용 시 HTML ---
+                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="display: inline-block; background-color: ${darkElementBgColor}; border-radius: 12px; padding: 10px 20px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6;">${pc || "&nbsp;"}</div> </div>`;
+                } else { // --- 말풍선 미사용 시 HTML (예시: 왼쪽 선 + 간단한 패딩) ---
+                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="display: inline-block; border-left: 3px solid ${emphasisColor}; background-color: ${darkElementBgColor}; padding: 5px 16px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6;">${pc || "&nbsp;"}</div> </div>`;
+                }
+              } // 자동인식 대사 (배경=기본배경, 테두리 없음)
+            })
+            html += `</div>` // 내용 컨테이너 닫기
+            html += `</${ct}>` // 컨테이너 닫기
+            html += `</div>` // chat-entry 닫기
+          } else {
+            console.log(`  [ 섹션 ${index + 1} ] 처리할 chatParts 없음`)
+          }
+        })
 
         console.log("--- 채팅 내용 처리 종료 ---")
-
         html += `<div style="background-color: ${elementBgColor}; padding: 24px 40px; text-align: right; font-size: 13px; color: ${narrationColor}; border-top: 1px solid ${borderColor};"> <div style="display: inline-block; margin-right: 20px;">CHAT LOG | ${characterName || "Log"}</div> <div style="display: inline-block;">${currentDate}</div> </div>`
-        html += `</div>`
+        html += `</div>` // 전체 래퍼 닫기
         console.log("formatChatToHTML 종료됨.")
         return html
       }
 
-      // --- 마크다운 / 접두사 적용 헬퍼 함수 ---
+      // --- 마크다운 / 접두사 적용 헬퍼 함수 (기존과 동일) ---
       function applyMarkdown(textarea, markdownType) {
         if (!textarea) return
-        const start = textarea.selectionStart
-        const end = textarea.selectionEnd
-        const selectedText = textarea.value.substring(start, end)
-        let prefix = "",
-          suffix = ""
+        const s = textarea.selectionStart,
+          e = textarea.selectionEnd,
+          st = textarea.value.substring(s, e)
+        let p = "",
+          x = ""
         switch (markdownType) {
           case "bold":
-            prefix = "**"
-            suffix = "**"
+            p = "**"
+            x = "**"
             break
           case "italic":
-            prefix = "*"
-            suffix = "*"
+            p = "*"
+            x = "*"
             break
           case "boldItalic":
-            prefix = "***"
-            suffix = "***"
+            p = "***"
+            x = "***"
             break
           case "highlight":
-            prefix = "^"
-            suffix = "^"
+            p = "^"
+            x = "^"
             break
           case "emphasis":
-            prefix = "$"
-            suffix = "$"
+            p = "$"
+            x = "$"
             break
           default:
             return
         }
-        const replacement = selectedText
-          ? `${prefix}${selectedText}${suffix}`
-          : `${prefix}${suffix}`
-        const cursorPosition = start + prefix.length
-        textarea.setRangeText(
-          replacement,
-          start,
-          end,
-          selectedText ? "select" : "end",
-        )
-        if (!selectedText) {
-          textarea.setSelectionRange(cursorPosition, cursorPosition)
+        const r = st ? `${p}${st}${x}` : `${p}${x}`
+        const cp = s + p.length
+        textarea.setRangeText(r, s, e, st ? "select" : "end")
+        if (!st) {
+          textarea.setSelectionRange(cp, cp)
         }
         textarea.focus()
         textarea.dispatchEvent(new Event("input", { bubbles: true }))
       }
       function applyPrefix(textarea, prefix) {
         if (!textarea) return
-        const start = textarea.selectionStart
-        const end = textarea.selectionEnd
-        const value = textarea.value
-        let lineStart = value.lastIndexOf("\n", start - 1) + 1
-        let lineEnd = value.indexOf("\n", end)
-        if (lineEnd === -1) lineEnd = value.length
-        const affectedLines = value.substring(lineStart, lineEnd).split("\n")
-        let newLines = []
-        let firstLinePrefixLength = 0
-        affectedLines.forEach((line, index) => {
-          let currentPrefixMatch = line.match(/^([\*\-]\s+|USER:\s+|AI:\s*)/i)
-          let lineContent = currentPrefixMatch
-            ? line.substring(currentPrefixMatch[0].length)
-            : line
-          let newLine = prefix + lineContent
-          newLines.push(newLine)
-          if (index === 0) {
-            firstLinePrefixLength = prefix.length
+        const s = textarea.selectionStart,
+          e = textarea.selectionEnd,
+          v = textarea.value
+        let ls = v.lastIndexOf("\n", s - 1) + 1
+        let le = v.indexOf("\n", e)
+        if (le === -1) le = v.length
+        const al = v.substring(ls, le).split("\n")
+        let nl = []
+        let fpl = 0
+        al.forEach((l, i) => {
+          let cm = l.match(/^([\*\-]\s*|USER:\s*|AI:\s*)/i)
+          let lc = cm ? l.substring(cm[0].length) : l
+          let ln = prefix + lc
+          nl.push(ln)
+          if (i === 0) {
+            fpl = prefix.length
           }
         })
-        const replacement = newLines.join("\n")
-        textarea.setRangeText(replacement, lineStart, lineEnd, "preserve")
-        const newCursorPos = lineStart + firstLinePrefixLength
-        textarea.setSelectionRange(newCursorPos, newCursorPos)
+        const r = nl.join("\n")
+        textarea.setRangeText(r, ls, le, "preserve")
+        const nc = ls + fpl
+        textarea.setSelectionRange(nc, nc)
         textarea.focus()
         textarea.dispatchEvent(new Event("input", { bubbles: true }))
       }
 
       // --- 페이지 로드 시 실행 및 이벤트 리스너 설정 ---
       document.addEventListener("DOMContentLoaded", function () {
-        // --- 요소 가져오기 ---
+        // --- 요소 가져오기 (V.1.4) ---
         const body = document.body
         const themeToggleCheckbox = document.getElementById(
           "themeToggleCheckbox",
@@ -1678,6 +1787,12 @@
         const italicizeNarrationCheckbox =
           document.getElementById("italicizeNarration")
         const simpleOutputCheckbox = document.getElementById("simpleOutputMode")
+        const disableChatLogCollapseCheckbox = document.getElementById(
+          "disableChatLogCollapse",
+        )
+        const inputModeToggle = document.getElementById("inputModeToggle") // Toggle 사용
+        const dialogueBubbleToggle = document.getElementById("dialogueBubbleToggle"); // <-- 추가
+        const narrationLineToggle = document.getElementById("narrationLineToggle");   // <-- 추가
         const presetNameInput = document.getElementById("presetName")
         const savePresetBtn = document.getElementById("savePresetBtn")
         const presetListSelect = document.getElementById("presetList")
@@ -1698,66 +1813,68 @@
         const guideEmphasisExample = document.getElementById(
           "guideEmphasisExample",
         )
+        const guideInputModeSpan = document.getElementById("guideInputMode")
+        const guidePrefixSpan = document.getElementById("guidePrefix")
+        const guideAutoSpan = document.getElementById("guideAuto")
 
-        // --- 함수 정의 (V.04/V.05 개선된 버전 사용) ---
+        // --- 함수 정의 ---
         function updateDefaultSettingsFromCSS() {
           try {
-            const computedStyle = getComputedStyle(document.documentElement)
-            DEFAULT_SETTINGS.backgroundColor = computedStyle
+            const c = getComputedStyle(document.documentElement)
+            DEFAULT_SETTINGS.backgroundColor = c
               .getPropertyValue("--log-bg-light")
               .trim()
-            DEFAULT_SETTINGS.textColor = computedStyle
+            DEFAULT_SETTINGS.textColor = c
               .getPropertyValue("--log-text-light")
               .trim()
-            DEFAULT_SETTINGS.highlightColor = computedStyle
+            DEFAULT_SETTINGS.highlightColor = c
               .getPropertyValue("--highlight-color")
               .trim()
-            DEFAULT_SETTINGS.promptColor = computedStyle
+            DEFAULT_SETTINGS.promptColor = c
               .getPropertyValue("--secondary-color")
               .trim()
-            DEFAULT_SETTINGS.emphasisColor = computedStyle
+            DEFAULT_SETTINGS.emphasisColor = c
               .getPropertyValue("--emphasis-color")
               .trim()
           } catch (e) {
-            console.error(
-              "CSS 변수에서 기본 설정 값을 가져오는 데 실패했습니다.",
-              e,
-            )
+            console.error(e)
           }
         }
         function getCurrentSettings() {
-          const settings = { ...DEFAULT_SETTINGS } // 기본값으로 시작
+          const s = { ...DEFAULT_SETTINGS }
           try {
-            settings.characterName = characterNameInput.value
-            settings.modelName = modelNameInput.value
-            settings.promptName = promptNameInput.value
-            settings.assistModelName = assistModelNameInput.value
-            settings.userName = userNameInput.value || DEFAULT_SETTINGS.userName // 빈 값일 경우 기본값
-            settings.chatNumber = chatNumberInput.value
-            settings.characterImageUrl = characterImageUrlInput.value
-            settings.backgroundColor = bgColorInput.value
-            settings.textColor = textColorInput.value
-            settings.highlightColor = highlightColorInput.value
-            settings.promptColor = promptColorInput.value
-            settings.emphasisColor = emphasisColorInput.value
-            settings.baseFontSize =
+            s.characterName = characterNameInput.value
+            s.modelName = modelNameInput.value
+            s.promptName = promptNameInput.value
+            s.assistModelName = assistModelNameInput.value
+            s.userName = userNameInput.value || DEFAULT_SETTINGS.userName
+            s.chatNumber = chatNumberInput.value
+            s.characterImageUrl = characterImageUrlInput.value
+            s.backgroundColor = bgColorInput.value
+            s.textColor = textColorInput.value
+            s.highlightColor = highlightColorInput.value
+            s.promptColor = promptColorInput.value
+            s.emphasisColor = emphasisColorInput.value
+            s.baseFontSize =
               parseFloat(baseFontSizeInput.value) ||
               DEFAULT_SETTINGS.baseFontSize
-            settings.titleFontSize =
+            s.titleFontSize =
               parseFloat(titleFontSizeInput.value) ||
               DEFAULT_SETTINGS.titleFontSize
-            settings.containerWidth =
+            s.containerWidth =
               parseFloat(containerWidthInput.value) ||
               DEFAULT_SETTINGS.containerWidth
-            settings.italicizeNarration = italicizeNarrationCheckbox.checked
-            settings.simpleOutputMode = simpleOutputCheckbox.checked
-          } catch (error) {
-            console.error("설정 값 읽기 중 오류 발생:", error)
-            // 오류 발생 시 기본 설정 객체를 반환하거나, 부분적으로 읽은 설정을 반환할 수 있음
-            // 여기서는 기본 설정 복사본을 반환하여 안전하게 처리
+            s.italicizeNarration = italicizeNarrationCheckbox.checked
+            s.simpleOutputMode = simpleOutputCheckbox.checked
+            s.disableChatLogCollapse = disableChatLogCollapseCheckbox.checked
+            s.isAutoInputMode = inputModeToggle.checked
+            s.dialogueUseBubble = dialogueBubbleToggle.checked; // <-- 추가
+            s.narrationUseLine = narrationLineToggle.checked;   // <-- 추가
+          } catch (e) {
+            console.error("설정 읽기 오류:", e)
             return { ...DEFAULT_SETTINGS }
           }
-          return settings
+          return s
         }
         function applySettings(settings, markAsModified = false) {
           try {
@@ -1783,209 +1900,183 @@
             containerWidthInput.value = settings.containerWidth
             italicizeNarrationCheckbox.checked = !!settings.italicizeNarration
             simpleOutputCheckbox.checked = !!settings.simpleOutputMode
-
+            disableChatLogCollapseCheckbox.checked =
+              !!settings.disableChatLogCollapse
+            inputModeToggle.checked = !!settings.isAutoInputMode
+            dialogueBubbleToggle.checked = !!settings.dialogueUseBubble; // <-- 추가
+            narrationLineToggle.checked = !!settings.narrationUseLine;   // <-- 추가
+            updateInputModeGuide(settings.isAutoInputMode)
             if (markAsModified) {
               localStorage.setItem(USER_MODIFIED_COLOR_FLAG, "true")
             }
             updateGuideColors()
-          } catch (error) {
-            console.error("설정 적용 중 오류 발생:", error)
+          } catch (e) {
+            console.error("설정 적용 오류:", e)
           }
         }
         function setTheme(isDarkMode) {
-          const currentMode = isDarkMode ? "dark" : "light"
-          const previousMode = isDarkMode ? "light" : "dark"
-          body.classList.replace(`${previousMode}-mode`, `${currentMode}-mode`)
+          const c = isDarkMode ? "dark" : "light"
+          const p = isDarkMode ? "light" : "dark"
+          body.classList.replace(`${p}-mode`, `${c}-mode`)
           themeToggleText.textContent = isDarkMode ? "다크 모드" : "라이트 모드"
           try {
-            const currentBg = bgColorInput.value.toLowerCase()
-            const currentText = textColorInput.value.toLowerCase()
-            // 기본 테마 색상 가져오기 (수정: null 체크 추가)
-            const rootStyle = getComputedStyle(document.documentElement)
-            const prevDefaultBg = rootStyle
+            const bg = bgColorInput.value.toLowerCase()
+            const tx = textColorInput.value.toLowerCase()
+            const rs = getComputedStyle(document.documentElement)
+            const pdb = rs
               .getPropertyValue(
-                previousMode === "dark" ? "--log-bg-dark" : "--log-bg-light",
+                p === "dark" ? "--log-bg-dark" : "--log-bg-light",
               )
               ?.trim()
               .toLowerCase()
-            const prevDefaultText = rootStyle
+            const pdt = rs
               .getPropertyValue(
-                previousMode === "dark"
-                  ? "--log-text-dark"
-                  : "--log-text-light",
+                p === "dark" ? "--log-text-dark" : "--log-text-light",
               )
               ?.trim()
               .toLowerCase()
-
-            const userModifiedColors =
+            const umc =
               localStorage.getItem(USER_MODIFIED_COLOR_FLAG) === "true"
-
-            // 기본 색상값이 성공적으로 로드되었을 때만 비교 및 적용 로직 실행
-            if (prevDefaultBg && prevDefaultText) {
-              if (
-                !userModifiedColors ||
-                (currentBg === prevDefaultBg && currentText === prevDefaultText)
-              ) {
-                const newBgColor = rootStyle
+            if (pdb && pdt) {
+              if (!umc || (bg === pdb && tx === pdt)) {
+                const nbg = rs
                   .getPropertyValue(
-                    currentMode === "dark" ? "--log-bg-dark" : "--log-bg-light",
+                    c === "dark" ? "--log-bg-dark" : "--log-bg-light",
                   )
                   ?.trim()
-                const newTextColor = rootStyle
+                const ntx = rs
                   .getPropertyValue(
-                    currentMode === "dark"
-                      ? "--log-text-dark"
-                      : "--log-text-light",
+                    c === "dark" ? "--log-text-dark" : "--log-text-light",
                   )
                   ?.trim()
-
-                if (newBgColor && newTextColor) {
-                  // 새 색상 값도 확인
-                  bgColorInput.value = newBgColor
-                  bgColorText.value = newBgColor
-                  textColorInput.value = newTextColor
-                  textColorText.value = newTextColor
-                  localStorage.removeItem(USER_MODIFIED_COLOR_FLAG) // 자동 변경 시 플래그 제거
+                if (nbg && ntx) {
+                  bgColorInput.value = nbg
+                  bgColorText.value = nbg
+                  textColorInput.value = ntx
+                  textColorText.value = ntx
+                  localStorage.removeItem(USER_MODIFIED_COLOR_FLAG)
                 }
               }
             }
           } catch (e) {
-            console.error("테마 변경 중 기본 로그 색상 적용 실패:", e)
+            console.error(e)
           }
           updateGuideColors()
-          generatePreview() // 테마 변경 시에도 미리보기 업데이트
+          generatePreview()
         }
         function toggleTheme() {
-          const isDarkMode = themeToggleCheckbox.checked
-          localStorage.setItem("theme_v25", isDarkMode ? "dark" : "light") // 테마 저장 키 유지 또는 변경 고려
-          setTheme(isDarkMode)
-        }
-        function toggleTheme() {
-          const isDarkMode = themeToggleCheckbox.checked
-          localStorage.setItem("theme_v25", isDarkMode ? "dark" : "light")
-          setTheme(isDarkMode)
+          const i = themeToggleCheckbox.checked
+          localStorage.setItem("theme_v25", i ? "dark" : "light")
+          setTheme(i)
         }
         function applySavedTheme() {
-          const savedTheme =
+          const s =
             localStorage.getItem("theme_v25") ||
             (window.matchMedia("(prefers-color-scheme: dark)").matches
               ? "dark"
               : "light")
-          const isDarkMode = savedTheme === "dark"
-          themeToggleCheckbox.checked = isDarkMode
-          setTheme(isDarkMode)
+          const i = s === "dark"
+          themeToggleCheckbox.checked = i
+          setTheme(i)
         }
         function updateGuideColors() {
-          const highlightColor = highlightColorInput.value
-          const emphasisColor = emphasisColorInput.value
+          const h = highlightColorInput.value
+          const e = emphasisColorInput.value
           if (guideHighlightExample) {
-            guideHighlightExample.style.backgroundColor = highlightColor
+            guideHighlightExample.style.backgroundColor = h
           }
           if (guideEmphasisExample) {
-            guideEmphasisExample.style.backgroundColor = emphasisColor
+            guideEmphasisExample.style.backgroundColor = e
           }
         }
         function syncColorInputs() {
-          const inputs = [
-            { picker: bgColorInput, text: bgColorText, type: "logColor" },
-            { picker: textColorInput, text: textColorText, type: "logColor" },
-            {
-              picker: highlightColorInput,
-              text: highlightColorText,
-              type: "themeColor",
-            },
-            {
-              picker: promptColorInput,
-              text: promptColorText,
-              type: "themeColor",
-            },
-            {
-              picker: emphasisColorInput,
-              text: emphasisColorText,
-              type: "themeColor",
-            },
+          const i = [
+            { p: bgColorInput, t: bgColorText, y: "logColor" },
+            { p: textColorInput, t: textColorText, y: "logColor" },
+            { p: highlightColorInput, t: highlightColorText, y: "themeColor" },
+            { p: promptColorInput, t: promptColorText, y: "themeColor" },
+            { p: emphasisColorInput, t: emphasisColorText, y: "themeColor" },
           ]
-          inputs.forEach(({ picker, text, type }) => {
-            const changeHandler = () => {
-              if (type === "logColor" || type === "themeColor") {
+          i.forEach(({ p, t, y }) => {
+            const h = () => {
+              if (y === "logColor" || y === "themeColor") {
                 localStorage.setItem(USER_MODIFIED_COLOR_FLAG, "true")
               }
               updateGuideColors()
               generatePreview()
             }
-            picker.addEventListener("input", () => {
-              text.value = picker.value
-              changeHandler()
+            p.addEventListener("input", () => {
+              t.value = p.value
+              h()
             })
-            text.addEventListener("input", () => {
-              if (/^#([0-9a-fA-F]{3}){1,2}$/.test(text.value)) {
+            t.addEventListener("input", () => {
+              if (/^#([0-9a-fA-F]{3}){1,2}$/.test(t.value)) {
                 try {
-                  picker.value = text.value
-                  changeHandler()
+                  p.value = t.value
+                  h()
                 } catch (e) {}
               }
             })
           })
           ;[baseFontSizeInput, titleFontSizeInput, containerWidthInput].forEach(
-            (input) => {
-              input.addEventListener("input", generatePreview)
+            (n) => {
+              n?.addEventListener("input", generatePreview)
             },
           )
         }
         function setupAutoSave(textarea) {
           if (!textarea || !textarea.id) return
-          const storageKey = `${AUTOSAVE_PREFIX}${textarea.id}`
+          const k = `${AUTOSAVE_PREFIX}${textarea.id}`
           try {
-            const savedContent = localStorage.getItem(storageKey)
-            if (savedContent !== null) {
-              textarea.value = savedContent
+            const s = localStorage.getItem(k)
+            if (s !== null) {
+              textarea.value = s
             }
           } catch (e) {
-            console.error("자동 저장 복원 실패:", e)
+            console.error(e)
           }
           textarea.addEventListener("input", () => {
             try {
-              localStorage.setItem(storageKey, textarea.value)
+              localStorage.setItem(k, textarea.value)
             } catch (e) {
-              console.error("자동 저장 실패:", e)
+              console.error(e)
             }
           })
         }
         function addChatSection(content = "") {
-          const uniqueId = `chatInput_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
-          const newSection = document.createElement("div")
-          newSection.classList.add("section", "chat-section")
-          newSection.innerHTML = ` <div class="section-header"> <label>채팅 입력</label> <div class="section-controls"> <button type="button" class="move-btn move-up" title="위로 이동">▲</button> <button type="button" class="move-btn move-down" title="아래로 이동">▼</button> <button type="button" class="danger-button remove-section-btn" title="채팅 입력 섹션 삭제">X</button> </div> </div> <div class="markdown-toolbar"> <button type="button" class="format-btn" data-narration="true" title="나레이션 (Ctrl+Alt+1)">나레이션<kbd>Ctrl+Alt+1</kbd></button> <button type="button" class="format-btn" data-speaker="AI" title="AI 대사 (Ctrl+Alt+2)">AI<kbd>Ctrl+Alt+2</kbd></button> <button type="button" class="format-btn" data-speaker="USER" title="USER 대사 (Ctrl+Alt+3)">USER<kbd>Ctrl+Alt+3</kbd></button> <span class="toolbar-divider"></span> <button type="button" class="markdown-btn" data-type="bold" title="굵게 (Ctrl+B)"><b>B</b><kbd>Ctrl+B</kbd></button> <button type="button" class="markdown-btn" data-type="italic" title="기울임 (Ctrl+I)"><i>I</i><kbd>Ctrl+I</kbd></button> <button type="button" class="markdown-btn" data-type="boldItalic" title="굵은 기울임"><b><i>BI</i></b></button> <button type="button" class="markdown-btn" data-type="highlight" title="하이라이트 적용 (^텍스트^) (Ctrl+H)">하이라이트<kbd>Ctrl+H</kbd></button> <button type="button" class="markdown-btn" data-type="emphasis" title="강조 적용 ($텍스트$) (Ctrl+E)">강조<kbd>Ctrl+E</kbd></button> </div> <textarea id="${uniqueId}" class="full-width chat-input-area" placeholder="여기에 추가 채팅 내용을 입력하세요..." title="채팅 내용 입력 (자동 저장됨)">${content}</textarea> `
-          chatSectionsContainer.appendChild(newSection)
-          const newTextarea = newSection.querySelector("textarea")
-          setupAutoSave(newTextarea)
+          const u = `chatInput_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+          const n = document.createElement("div")
+          n.classList.add("section", "chat-section")
+          n.innerHTML = `<div class="section-header"><label>채팅 입력</label><div class="section-controls"><button type="button" class="move-btn move-up" title="위로 이동">▲</button><button type="button" class="move-btn move-down" title="아래로 이동">▼</button><button type="button" class="danger-button remove-section-btn" title="채팅 입력 섹션 삭제">X</button></div></div><div class="markdown-toolbar"><button type="button" class="format-btn" data-narration="true" title="나레이션 (Ctrl+Alt+1)">나레이션<kbd>Ctrl+Alt+1</kbd></button><button type="button" class="format-btn" data-speaker="AI" title="AI 대사 (Ctrl+Alt+2)">AI<kbd>Ctrl+Alt+2</kbd></button><button type="button" class="format-btn" data-speaker="USER" title="USER 대사 (Ctrl+Alt+3)">USER<kbd>Ctrl+Alt+3</kbd></button><span class="toolbar-divider"></span><button type="button" class="markdown-btn" data-type="bold" title="굵게 (Ctrl+B)"><b>B</b><kbd>Ctrl+B</kbd></button><button type="button" class="markdown-btn" data-type="italic" title="기울임 (Ctrl+I)"><i>I</i><kbd>Ctrl+I</kbd></button><button type="button" class="markdown-btn" data-type="boldItalic" title="굵은 기울임"><b><i>BI</i></b></button><button type="button" class="markdown-btn" data-type="highlight" title="하이라이트 적용 (^텍스트^) (Ctrl+H)">하이라이트<kbd>Ctrl+H</kbd></button><button type="button" class="markdown-btn" data-type="emphasis" title="강조 적용 ($텍스트$) (Ctrl+E)">강조<kbd>Ctrl+E</kbd></button></div><textarea id="${u}" class="full-width chat-input-area" placeholder="여기에 추가 채팅 내용을 입력하세요..." title="채팅 내용 입력 (자동 저장됨)">${content}</textarea>`
+          chatSectionsContainer.appendChild(n)
+          const t = n.querySelector("textarea")
+          setupAutoSave(t)
           updateMoveButtons()
-          addToolbarListeners(newSection)
-          return newSection
+          addToolbarListeners(n)
+          return n
         }
         function removeChatSection(sectionElement) {
-          const textareaId = sectionElement.querySelector("textarea")?.id
-          if (textareaId) {
-            const storageKey = `${AUTOSAVE_PREFIX}${textareaId}`
+          const i = sectionElement.querySelector("textarea")?.id
+          if (i) {
+            const k = `${AUTOSAVE_PREFIX}${i}`
             try {
-              localStorage.removeItem(storageKey)
+              localStorage.removeItem(k)
             } catch (e) {
-              console.error("자동 저장 삭제 실패:", e)
+              console.error(e)
             }
           }
           sectionElement.remove()
           updateMoveButtons()
         }
         function updateMoveButtons() {
-          const sections =
-            chatSectionsContainer.querySelectorAll(".chat-section")
-          sections.forEach((section, index) => {
-            const upBtn = section.querySelector(".move-up")
-            const downBtn = section.querySelector(".move-down")
-            const removeBtn = section.querySelector(".remove-section-btn")
-            if (upBtn) upBtn.disabled = index === 0
-            if (downBtn) downBtn.disabled = index === sections.length - 1
-            if (removeBtn) removeBtn.disabled = sections.length === 1
+          const s = chatSectionsContainer.querySelectorAll(".chat-section")
+          s.forEach((e, i) => {
+            const u = e.querySelector(".move-up")
+            const d = e.querySelector(".move-down")
+            const r = e.querySelector(".remove-section-btn")
+            if (u) u.disabled = i === 0
+            if (d) d.disabled = i === s.length - 1
+            if (r) r.disabled = s.length === 1
           })
         }
         function moveSection(sectionElement, direction) {
@@ -2006,381 +2097,312 @@
           updateMoveButtons()
         }
         function addToolbarListeners(parentElement) {
-          parentElement.querySelectorAll(".markdown-btn").forEach((button) => {
-            button.addEventListener("click", function () {
-              const type = this.dataset.type
-              const textarea =
-                this.closest(".chat-section").querySelector("textarea")
-              applyMarkdown(textarea, type)
+          parentElement.querySelectorAll(".markdown-btn").forEach((b) => {
+            b.addEventListener("click", function () {
+              const t = this.dataset.type
+              const a = this.closest(".chat-section").querySelector("textarea")
+              applyMarkdown(a, t)
             })
           })
-          parentElement.querySelectorAll(".format-btn").forEach((button) => {
-            button.addEventListener("click", function () {
-              const textarea =
-                this.closest(".chat-section").querySelector("textarea")
+          parentElement.querySelectorAll(".format-btn").forEach((b) => {
+            b.addEventListener("click", function () {
+              const a = this.closest(".chat-section").querySelector("textarea")
               if (this.dataset.speaker) {
-                applyPrefix(textarea, this.dataset.speaker + ": ")
+                applyPrefix(a, this.dataset.speaker + ": ")
               } else if (this.dataset.narration) {
-                applyPrefix(textarea, "- ")
+                applyPrefix(a, "- ")
               }
             })
           })
         }
         function generatePreview() {
           try {
-            const chatTextareas =
-              chatSectionsContainer.querySelectorAll(".chat-input-area")
-            const chatTexts = Array.from(chatTextareas).map(
-              (textarea) => textarea.value,
-            )
-            const currentSettings = getCurrentSettings() // 수정된 함수 호출
-            const html = formatChatToHTML(chatTexts, currentSettings)
-            htmlOutput.value = html
-            previewArea.innerHTML = html
-          } catch (error) {
-            console.error("HTML 생성/미리보기 중 오류 발생:", error)
-            previewArea.innerHTML = `<p style='color: red;'>미리보기를 생성하는 중 오류가 발생했습니다. 콘솔(F12)을 확인해주세요.</p><pre>${error.stack}</pre>`
+            const t = chatSectionsContainer.querySelectorAll(".chat-input-area")
+            const c = Array.from(t).map((e) => e.value)
+            const s = getCurrentSettings()
+            const h = formatChatToHTML(c, s)
+            htmlOutput.value = h
+            previewArea.innerHTML = h
+          } catch (e) {
+            console.error("미리보기 오류:", e)
+            previewArea.innerHTML = `<p style='color: red;'>미리보기 오류. 콘솔(F12) 확인.</p><pre>${e.stack || e}</pre>`
             htmlOutput.value = ``
           }
         }
         function resetAll() {
           if (
             !confirm(
-              "정말로 모든 입력 내용과 설정을 초기화하시겠습니까?\n(저장된 프리셋은 삭제되지 않습니다)",
+              "모든 입력 내용과 설정을 초기화하시겠습니까? (프리셋 제외)",
             )
-          ) {
+          )
             return
-          }
           updateDefaultSettingsFromCSS()
-          const isDarkMode = body.classList.contains("dark-mode")
-          const baseSettings = { ...DEFAULT_SETTINGS } // 기본 설정 복사
-          // 테마별 기본 색상 적용
-          baseSettings.backgroundColor = getComputedStyle(
-            document.documentElement,
-          )
-            .getPropertyValue(isDarkMode ? "--log-bg-dark" : "--log-bg-light")
+          const i = body.classList.contains("dark-mode")
+          const b = { ...DEFAULT_SETTINGS }
+          b.backgroundColor = getComputedStyle(document.documentElement)
+            .getPropertyValue(i ? "--log-bg-dark" : "--log-bg-light")
             .trim()
-          baseSettings.textColor = getComputedStyle(document.documentElement)
-            .getPropertyValue(
-              isDarkMode ? "--log-text-dark" : "--log-text-light",
-            )
+          b.textColor = getComputedStyle(document.documentElement)
+            .getPropertyValue(i ? "--log-text-dark" : "--log-text-light")
             .trim()
-          // CSS 변수에서 다른 색상도 가져오기 (옵션)
-          baseSettings.highlightColor = getComputedStyle(
-            document.documentElement,
-          )
+          b.highlightColor = getComputedStyle(document.documentElement)
             .getPropertyValue("--highlight-color")
             .trim()
-          baseSettings.promptColor = getComputedStyle(document.documentElement)
+          b.promptColor = getComputedStyle(document.documentElement)
             .getPropertyValue("--secondary-color")
             .trim()
-          baseSettings.emphasisColor = getComputedStyle(
-            document.documentElement,
-          )
+          b.emphasisColor = getComputedStyle(document.documentElement)
             .getPropertyValue("--emphasis-color")
             .trim()
-
-          // italicizeNarration과 simpleOutputMode는 DEFAULT_SETTINGS에 정의된 값 사용 (baseSettings에 이미 포함됨)
-
-          applySettings(baseSettings) // 모든 기본 설정 적용
+          b.italicizeNarration = DEFAULT_SETTINGS.italicizeNarration
+          b.simpleOutputMode = DEFAULT_SETTINGS.simpleOutputMode
+          b.disableChatLogCollapse = DEFAULT_SETTINGS.disableChatLogCollapse
+          b.isAutoInputMode = DEFAULT_SETTINGS.isAutoInputMode
+          applySettings(b)
           localStorage.removeItem(USER_MODIFIED_COLOR_FLAG)
-          // 채팅 섹션 초기화
-          const sections =
-            chatSectionsContainer.querySelectorAll(".chat-section")
-          sections.forEach((section, index) => {
-            const textarea = section.querySelector("textarea")
-            const storageKey = `${AUTOSAVE_PREFIX}${textarea.id}`
-            localStorage.removeItem(storageKey)
-            if (index === 0) {
-              textarea.value = ""
-            } else {
-              section.remove()
+          const s = chatSectionsContainer.querySelectorAll(".chat-section")
+          s.forEach((e, x) => {
+            const t = e.querySelector("textarea")
+            if (t && t.id) {
+              const k = `${AUTOSAVE_PREFIX}${t.id}`
+              localStorage.removeItem(k)
+            }
+            if (x === 0 && t) {
+              t.value = ""
+            } else if (x > 0) {
+              e.remove()
             }
           })
           updateMoveButtons()
           htmlOutput.value = ""
-          previewArea.innerHTML =
-            "미리보기 영역입니다. 'HTML 생성하기' 버튼을 눌러주세요."
-          alert("모든 내용이 초기화되었습니다.")
-          generatePreview() // 초기화 후 미리보기 업데이트
+          previewArea.innerHTML = "미리보기 영역입니다."
+          alert("초기화 완료.")
+          generatePreview()
         }
         function loadPresets() {
           presetListSelect.innerHTML =
             '<option value="">-- 프리셋 선택 --</option>'
           try {
-            const presets = JSON.parse(
+            const p = JSON.parse(
               localStorage.getItem(PRESET_STORAGE_KEY) || "{}",
             )
-            Object.keys(presets)
+            Object.keys(p)
               .sort()
-              .forEach((name) => {
-                const option = document.createElement("option")
-                option.value = name
-                option.textContent = name
-                presetListSelect.appendChild(option)
+              .forEach((n) => {
+                const o = document.createElement("option")
+                o.value = n
+                o.textContent = n
+                presetListSelect.appendChild(o)
               })
           } catch (e) {
-            console.error("프리셋 로딩 실패:", e)
-            // localStorage.removeItem(PRESET_STORAGE_KEY); // 문제 발생 시 저장된 데이터 삭제 (선택 사항)
+            console.error(e)
           }
         }
         function savePreset() {
-          const name = presetNameInput.value.trim()
-          if (!name) {
-            alert("저장할 프리셋 이름을 입력해주세요.")
+          const n = presetNameInput.value.trim()
+          if (!n) {
+            alert("프리셋 이름 입력")
             presetNameInput.focus()
             return
           }
           try {
-            const presets = JSON.parse(
+            const p = JSON.parse(
               localStorage.getItem(PRESET_STORAGE_KEY) || "{}",
             )
-            presets[name] = getCurrentSettings() // 현재 모든 설정 저장
-            localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(presets))
-            loadPresets() // 목록 새로고침
-            presetListSelect.value = name // 저장된 프리셋 선택
-            presetNameInput.value = "" // 입력 필드 비우기
-            alert(`프리셋 '${name}'이(가) 저장되었습니다.`)
-            localStorage.setItem(USER_MODIFIED_COLOR_FLAG, "true") // 저장 시 사용자 수정으로 간주
+            p[n] = getCurrentSettings()
+            localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(p))
+            loadPresets()
+            presetListSelect.value = n
+            presetNameInput.value = ""
+            alert(`프리셋 '${n}' 저장 완료.`)
+            localStorage.setItem(USER_MODIFIED_COLOR_FLAG, "true")
           } catch (e) {
-            console.error("프리셋 저장 실패:", e)
-            alert(
-              "프리셋 저장 중 오류가 발생했습니다. (LocalStorage 용량 초과 등)",
-            )
+            console.error(e)
+            alert("프리셋 저장 실패")
           }
         }
         function loadPreset() {
-          const name = presetListSelect.value
-          if (!name) {
-            alert("불러올 프리셋을 선택해주세요.")
+          const n = presetListSelect.value
+          if (!n) {
+            alert("프리셋 선택")
             return
           }
           try {
-            const presets = JSON.parse(
+            const p = JSON.parse(
               localStorage.getItem(PRESET_STORAGE_KEY) || "{}",
             )
-            if (presets[name]) {
-              applySettings(presets[name], true) // 설정 적용 및 사용자 수정으로 간주
-              generatePreview() // 미리보기 업데이트
-              alert(`프리셋 '${name}'을(를) 불러왔습니다.`)
+            if (p[n]) {
+              applySettings(p[n], true)
+              generatePreview()
+              alert(`프리셋 '${n}' 로드 완료.`)
             } else {
-              alert("선택한 프리셋을 찾을 수 없습니다.")
-              loadPresets() // 목록 새로고침
+              alert("프리셋 없음")
+              loadPresets()
             }
           } catch (e) {
-            console.error("프리셋 불러오기 실패:", e)
-            alert("프리셋 불러오기 중 오류가 발생했습니다.")
+            console.error(e)
+            alert("프리셋 로드 실패")
           }
         }
         function deletePreset() {
-          const name = presetListSelect.value
-          if (!name) {
-            alert("삭제할 프리셋을 선택해주세요.")
+          const n = presetListSelect.value
+          if (!n) {
+            alert("삭제할 프리셋 선택")
             return
           }
-          if (!confirm(`정말로 프리셋 '${name}'을(를) 삭제하시겠습니까?`)) {
+          if (!confirm(`프리셋 '${n}' 삭제?`)) {
             return
           }
           try {
-            const presets = JSON.parse(
+            const p = JSON.parse(
               localStorage.getItem(PRESET_STORAGE_KEY) || "{}",
             )
-            if (presets[name]) {
-              delete presets[name]
-              localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(presets))
-              loadPresets() // 목록 새로고침
-              alert(`프리셋 '${name}'이(가) 삭제되었습니다.`)
+            if (p[n]) {
+              delete p[n]
+              localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(p))
+              loadPresets()
+              alert(`프리셋 '${n}' 삭제 완료.`)
             } else {
-              alert("선택한 프리셋을 찾을 수 없습니다.")
-              loadPresets() // 목록 새로고침
+              alert("프리셋 없음")
+              loadPresets()
             }
           } catch (e) {
-            console.error("프리셋 삭제 실패:", e)
-            alert("프리셋 삭제 중 오류가 발생했습니다.")
+            console.error(e)
+            alert("프리셋 삭제 실패")
           }
         }
-        // copyButton 이벤트 리스너는 아래에서 별도 설정됨
         function tryCopyExecCommand(textToCopy, button, updateButtonState) {
-          const textarea = htmlOutput
-          const originalReadOnly = textarea.readOnly
-          let success = false
+          const t = htmlOutput
+          const o = t.readOnly
+          let s = false
           try {
-            textarea.readOnly = false
-            textarea.select()
-            textarea.setSelectionRange(0, textToCopy.length)
-            success = document.execCommand("copy")
+            t.readOnly = false
+            t.select()
+            t.setSelectionRange(0, textToCopy.length)
+            s = document.execCommand("copy")
           } catch (e) {
-            console.error("execCommand 복사 실패:", e)
-            success = false
+            console.error(e)
+            s = false
           } finally {
-            textarea.readOnly = originalReadOnly
+            t.readOnly = o
             window.getSelection()?.removeAllRanges()
           }
-          updateButtonState(success)
-          if (!success) {
-            alert(
-              "자동 복사에 실패했습니다.\n텍스트 영역의 내용을 직접 복사해주세요. (Ctrl+A, Ctrl+C)",
-            )
+          updateButtonState(s)
+          if (!s) {
+            alert("자동 복사 실패.\n직접 복사하세요.")
+          }
+        }
+        function updateInputModeGuide(isAutoMode) {
+          if (guideInputModeSpan && guidePrefixSpan && guideAutoSpan) {
+            guideInputModeSpan.textContent = isAutoMode
+              ? "사칭방지용"
+              : "풀사칭용"
+            guidePrefixSpan.style.display = isAutoMode ? "none" : "block"
+            guideAutoSpan.style.display = isAutoMode ? "block" : "none"
           }
         }
 
-        // --- 이벤트 리스너 설정 (V.05의 safelyAttachListener 방식 유지) ---
+        // --- 이벤트 리스너 설정 ---
         function safelyAttachListener(element, eventType, handler) {
           if (element) {
             element.addEventListener(eventType, handler)
           } else {
-            console.warn(
-              `Listener attachment skipped: Element not found for handler ${handler.name}`,
-            )
+            console.warn(`Listener skipped: ${handler?.name || "anon"}`)
           }
         }
-
-        // 기본 컨트롤
         safelyAttachListener(themeToggleCheckbox, "change", toggleTheme)
         safelyAttachListener(resetAllButton, "click", resetAll)
-
-        // 색상 테마 버튼
-        document.querySelectorAll(".theme-btn").forEach((button) => {
-          safelyAttachListener(button, "click", function () {
-            const themeName = this.getAttribute("data-theme")
-            const theme = colorThemes[themeName]
-            if (!theme) return
-            highlightColorInput.value = theme.highlightColor
-            highlightColorText.value = theme.highlightColor
-            promptColorInput.value = theme.promptColor
-            promptColorText.value = theme.promptColor
-            emphasisColorInput.value = theme.emphasisColor
-            emphasisColorText.value = theme.emphasisColor
+        document.querySelectorAll(".theme-btn").forEach((b) => {
+          safelyAttachListener(b, "click", function () {
+            const t = this.getAttribute("data-theme")
+            const m = colorThemes[t]
+            if (!m) return
+            highlightColorInput.value = m.h
+            highlightColorText.value = m.h
+            promptColorInput.value = m.p
+            promptColorText.value = m.p
+            emphasisColorInput.value = m.e
+            emphasisColorText.value = m.e
             localStorage.setItem(USER_MODIFIED_COLOR_FLAG, "true")
             updateGuideColors()
             generatePreview()
           })
         })
-
-        // 채팅 섹션 관련
         if (chatSectionsContainer) {
           chatSectionsContainer
             .querySelectorAll(".chat-input-area")
             .forEach(setupAutoSave)
-          chatSectionsContainer.addEventListener("click", function (event) {
-            const target = event.target
-            const section = target.closest(".chat-section")
-            if (!section) return
-            if (
-              target.classList.contains("remove-section-btn") &&
-              !target.disabled
-            ) {
-              if (confirm("이 채팅 섹션을 삭제하시겠습니까?")) {
-                removeChatSection(section)
+          chatSectionsContainer.addEventListener("click", function (e) {
+            const t = e.target
+            const s = t.closest(".chat-section")
+            if (!s) return
+            if (t.classList.contains("remove-section-btn") && !t.disabled) {
+              if (confirm("섹션 삭제?")) {
+                removeChatSection(s)
               }
-            } else if (
-              target.classList.contains("move-up") &&
-              !target.disabled
-            ) {
-              moveSection(section, "up")
-            } else if (
-              target.classList.contains("move-down") &&
-              !target.disabled
-            ) {
-              moveSection(section, "down")
+            } else if (t.classList.contains("move-up") && !t.disabled) {
+              moveSection(s, "up")
+            } else if (t.classList.contains("move-down") && !t.disabled) {
+              moveSection(s, "down")
             }
           })
           addToolbarListeners(chatSectionsContainer)
         }
         safelyAttachListener(addChatSectionBtn, "click", () => addChatSection())
-
-        // 프리셋 관련 버튼
         safelyAttachListener(savePresetBtn, "click", savePreset)
         safelyAttachListener(loadPresetBtn, "click", loadPreset)
         safelyAttachListener(deletePresetBtn, "click", deletePreset)
-
-        // 하단 액션 버튼
         safelyAttachListener(generateButton, "click", generatePreview)
         safelyAttachListener(loadExampleBtn, "click", function () {
-          const firstChatInput =
-            chatSectionsContainer?.querySelector(".chat-input-area") // null 체크
-          if (firstChatInput) {
-            const exampleText = `- 화창한 봄날, 공원에서 우연히 만난 두 사람은 **짧게** 대화를 나누기 시작했다.\n\nUSER: 안녕하세요? 오늘 ^날씨^가 어때요?\n\n- AI는 잠시 생각에 잠기더니 *환하게 웃으며* 대답했다.\n\nAI: 안녕하세요! 오늘 날씨는 맑고 화창합니다. 최고 기온은 $23도$로 예상됩니다. ***야외 활동하기 좋은 날씨네요!***`
-            if (
-              firstChatInput.value &&
-              !confirm(
-                "입력된 내용이 있습니다. 예제 텍스트로 덮어쓰시겠습니까?",
-              )
-            ) {
+          const f = chatSectionsContainer?.querySelector(".chat-input-area")
+          if (f) {
+            const pEx = `- 화창한 봄날.\nUSER: 안녕하세요?\nAI: $23도$입니다.`
+            const aEx = `화창한 봄날.\n“안녕하세요?”\n재스퍼는 말했다.\n“**$23도$**입니다.”`
+            const a = getCurrentSettings().isAutoInputMode
+            const t = a ? aEx : pEx
+            const m = a ? "(사칭방지용 예제)" : "(풀사칭용 예제)"
+            if (f.value && !confirm(`내용 있음. 예제 덮어쓰기?\n${m}`)) {
               return
             }
-            firstChatInput.value = exampleText
-            firstChatInput.dispatchEvent(new Event("input", { bubbles: true })) // 자동 저장 트리거
+            f.value = t
+            f.dispatchEvent(new Event("input", { bubbles: true }))
             generatePreview()
-            alert("예제 텍스트를 불러왔습니다.")
+            alert(`예제 로드 완료. ${m}`)
           } else {
-            alert("채팅 입력 영역을 찾을 수 없습니다.")
+            alert("채팅 입력 영역 없음")
           }
         })
         safelyAttachListener(copyButton, "click", function () {
           if (!htmlOutput.value) {
-            alert("먼저 HTML을 생성해주세요.")
+            alert("HTML 생성 먼저.")
             return
           }
-          const textToCopy = htmlOutput.value
-          const button = this
-          const originalText = button.textContent
-          function updateButtonState(success) {
-            button.textContent = success ? "복사 완료!" : "복사 실패"
-            button.style.backgroundColor = success ? "#28a745" : "#dc3545"
+          const x = htmlOutput.value
+          const b = this
+          const o = b.textContent
+          function u(s) {
+            b.textContent = s ? "복사 완료!" : "복사 실패"
+            b.style.backgroundColor = s ? "#28a745" : "#dc3545"
             setTimeout(() => {
-              button.textContent = originalText
-              button.style.backgroundColor = ""
+              b.textContent = o
+              b.style.backgroundColor = ""
             }, 2000)
           }
           if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard
-              .writeText(textToCopy)
+              .writeText(x)
               .then(() => {
-                updateButtonState(true)
+                u(true)
               })
-              .catch((err) => {
-                console.warn("navigator.clipboard 실패:", err)
-                tryCopyExecCommand(textToCopy, button, updateButtonState)
+              .catch((e) => {
+                console.warn(e)
+                tryCopyExecCommand(x, b, u)
               })
           } else {
-            console.warn("navigator.clipboard 사용 불가, execCommand 시도.")
-            tryCopyExecCommand(textToCopy, button, updateButtonState)
+            console.warn("Clipboard API 불가")
+            tryCopyExecCommand(x, b, u)
           }
         })
-        safelyAttachListener(copyButton, "click", function () {
-          if (!htmlOutput.value) {
-            alert("먼저 HTML을 생성해주세요.")
-            return
-          }
-          const textToCopy = htmlOutput.value
-          const button = this
-          const originalText = button.textContent
-          function updateButtonState(success) {
-            button.textContent = success ? "복사 완료!" : "복사 실패"
-            button.style.backgroundColor = success ? "#28a745" : "#dc3545"
-            setTimeout(() => {
-              button.textContent = originalText
-              button.style.backgroundColor = ""
-            }, 2000)
-          }
-          if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard
-              .writeText(textToCopy)
-              .then(() => {
-                updateButtonState(true)
-              })
-              .catch((err) => {
-                console.warn("navigator.clipboard 실패:", err)
-                tryCopyExecCommand(textToCopy, button, updateButtonState)
-              })
-          } else {
-            console.warn("navigator.clipboard 사용 불가, execCommand 시도.")
-            tryCopyExecCommand(textToCopy, button, updateButtonState)
-          }
-        })
-
-        // 설정 변경 시 미리보기 자동 업데이트 리스너 (V.05 버전)
         const inputsToTrackForPreview = [
           characterNameInput,
           modelNameInput,
@@ -2404,9 +2426,7 @@
           emphasisColorText,
         ]
         inputsToTrackForPreview.forEach((input) => {
-          // 'input' 이벤트는 실시간 변경 감지에 좋음
           safelyAttachListener(input, "input", () => {
-            // 색상 텍스트 입력 시 색상 피커와 동기화
             try {
               if (
                 input === bgColorText &&
@@ -2434,11 +2454,10 @@
               )
                 emphasisColorInput.value = input.value
             } catch (e) {
-              console.error("Color sync error:", e)
+              console.error(e)
             }
             generatePreview()
           })
-          // 'change' 이벤트는 최종 값 변경 시 (예: 숫자 입력 후 포커스 아웃)
           if (input && input.type === "number") {
             safelyAttachListener(input, "change", generatePreview)
           }
@@ -2449,67 +2468,63 @@
           generatePreview,
         )
         safelyAttachListener(simpleOutputCheckbox, "change", generatePreview)
-
-        // --- *** 단축키 리스너 (Ctrl+Shift+1/2/3 조합으로 변경) *** ---
+        safelyAttachListener(
+          disableChatLogCollapseCheckbox,
+          "change",
+          generatePreview,
+        )
+        safelyAttachListener(inputModeToggle, "change", () => {
+          updateInputModeGuide(inputModeToggle.checked)
+          generatePreview()
+        })
+        safelyAttachListener(dialogueBubbleToggle, "change", generatePreview) // <-- 추가
+        safelyAttachListener(narrationLineToggle, "change", generatePreview)   // <-- 추가
+        // 입력 모드 변경 시 가이드 업데이트 및 미리보기
         document.addEventListener("keydown", function (event) {
-          const activeElement = document.activeElement
-          if (
-            activeElement.tagName !== "TEXTAREA" &&
-            activeElement.tagName !== "INPUT"
-          ) {
+          const a = document.activeElement
+          if (a.tagName !== "TEXTAREA" && a.tagName !== "INPUT") {
             return
           }
-          let handled = false
-          const textarea = activeElement
-            .closest(".chat-section")
-            ?.querySelector("textarea")
-          if (!textarea) return // textarea 없으면 단축키 처리 안함
-
-          // *** Ctrl + Alt + 1/2/3 조합 확인 ***
+          let h = false
+          const t = a.closest(".chat-section")?.querySelector("textarea")
+          if (!t) return
           if (event.ctrlKey && !event.shiftKey && event.altKey) {
-            switch (
-              event.key // key 값은 A, S, D 사용
-            ) {
+            switch (event.key) {
+              case "1":
+                applyPrefix(t, "- ")
+                h = true
+                break
               case "2":
-                applyPrefix(textarea, "AI: ")
-                handled = true
+                applyPrefix(t, "AI: ")
+                h = true
                 break
               case "3":
-                applyPrefix(textarea, "USER: ")
-                handled = true
-                break
-              case "1":
-                applyPrefix(textarea, "- ")
-                handled = true
+                applyPrefix(t, "USER: ")
+                h = true
                 break
             }
-          }
-          // Ctrl + B/I/H/E 조합 (기존 유지)
-          else if (event.ctrlKey && !event.shiftKey && !event.altKey) {
-            switch (
-              event.key.toUpperCase() // 여기는 대문자로 비교해도 괜찮음
-            ) {
+          } else if (event.ctrlKey && !event.shiftKey && !event.altKey) {
+            switch (event.key.toUpperCase()) {
               case "B":
-                applyMarkdown(textarea, "bold")
-                handled = true
+                applyMarkdown(t, "bold")
+                h = true
                 break
               case "I":
-                applyMarkdown(textarea, "italic")
-                handled = true
+                applyMarkdown(t, "italic")
+                h = true
                 break
               case "H":
-                applyMarkdown(textarea, "highlight")
-                handled = true
-                break // ^
+                applyMarkdown(t, "highlight")
+                h = true
+                break
               case "E":
-                applyMarkdown(textarea, "emphasis")
-                handled = true
-                break // $
+                applyMarkdown(t, "emphasis")
+                h = true
+                break
             }
           }
-
-          if (handled) {
-            event.preventDefault() // 브라우저 기본 동작 방지
+          if (h) {
+            event.preventDefault()
           }
         })
 
@@ -2522,12 +2537,10 @@
           updateGuideColors()
           updateMoveButtons()
           generatePreview()
-          console.log("챗챈 로그 제조기 초기화 완료 (V.06).")
+          console.log("챗챈 로그 제조기 초기화 완료 (V.1.4).")
         } catch (initError) {
-          console.error("초기화 중 심각한 오류 발생:", initError)
-          alert(
-            "페이지 초기화 중 오류가 발생했습니다. 개발자 콘솔(F12)을 확인해주세요.",
-          )
+          console.error("초기화 오류:", initError)
+          alert("페이지 초기화 오류. 콘솔(F12) 확인.")
         }
       })
     </script>

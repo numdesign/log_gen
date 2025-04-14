@@ -2356,8 +2356,8 @@
         safelyAttachListener(loadExampleBtn, "click", function () {
           const f = chatSectionsContainer?.querySelector(".chat-input-area")
           if (f) {
-            const pEx = `- 화창한 봄날.\nUSER: 안녕하세요?\nAI: $23도$입니다.`
-            const aEx = `화창한 봄날.\n“안녕하세요?”\n재스퍼는 말했다.\n“**$23도$**입니다.”`
+            const pEx = `- 화창한 봄날, 공원에서 우연히 만난 두 사람은 *짧게* 대화를 나누기 시작했다.\nUSER: 안녕하세요? 오늘 ^날씨^가 어때요?\n- AI는 잠시 생각에 잠기더니 환하게 웃으며 대답했다.\nAI: 안녕하세요! 오늘 날씨는 맑고 화창합니다. 최고 기온은 $23도$로 예상됩니다. ***야외 활동하기 좋은 날씨네요!***`
+            const aEx = `화창한 봄날, 공원에서 우연히 만난 두 사람은 *짧게* 대화를 나누기 시작했다.\n"안녕하세요? 오늘 ^날씨^가 어때요?"\nAI는 잠시 생각에 잠기더니 환하게 웃으며 대답했다.\n"안녕하세요! 오늘 날씨는 맑고 화창합니다. 최고 기온은 $23도$로 예상됩니다. ***야외 활동하기 좋은 날씨네요!***"`
             const a = getCurrentSettings().isAutoInputMode
             const t = a ? aEx : pEx
             const m = a ? "(사칭방지용 예제)" : "(풀사칭용 예제)"

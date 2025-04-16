@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>챗챈 로그 제조기 (V1.3)</title>
+    <title>챗챈 로그 제조기 (V1.2)</title>
     <style>
       /* --- CSS (기존과 동일) --- */
       :root {
@@ -714,7 +714,7 @@
   </head>
   <body class="light-mode">
     <div class="container">
-      <h1>챗챈 로그 제조기 (V1.3)</h1>
+      <h1>챗챈 로그 제조기 (V1.2)</h1>
       <div class="theme-toggle-section">
         <label
           for="themeToggleCheckbox"
@@ -1494,14 +1494,14 @@
 
         if (!simpleOutputMode) {
           /* 헤더 생성 */
-          let headerInfoSpanContent = `#${chatNum}`
+           let headerInfoSpanContent = ''
           if (showBriefHeaderInfo) { // 토글이 켜져 있으면
             const styledNameParts = []
             const getQuoteLineStyle = (color) => {
                 const validColor = color || '#888888' // 색상값이 없으면 연한 회색으로 대체
                 // 사용자가 원하는 스타일 적용
                 const styleString = `
-                  display: inline-block; background-color: ${validColor}; padding:0.1em 0.3em; color: #ffffff;`
+                  display: inline-block; background-color: ${validColor}; padding:0.1em 0.3em; border: 1px solid ${adjustColor(validColor, -10)};`
                 // 스타일 문자열 내 공백 정리
                 return styleString.replace(/\s+/g, ' ').trim()
             }
@@ -1519,16 +1519,13 @@
             }
             if (styledNameParts.length > 0) {
                 const joinedStyledNames = styledNameParts.join('&ensp;'); // HTML 조각들을 ' / '로 연결
-                const outerSpanStyle = `font-size: 13.5px; font-weight: 200; line-height:1; letter-spacing:0em`
-                headerInfoSpanContent += `<span>&ensp;|&ensp;</span><span style="${outerSpanStyle}">${joinedStyledNames}</span>`
+                const outerSpanStyle = `font-size: 11px; font-weight: 400; color:#fff; line-height:1; letter-spacing:0em`
+                headerInfoSpanContent = `<span style="${outerSpanStyle}">${joinedStyledNames}</span>`
                 }
+        } else { // 토글이 꺼져 있을 때
+          headerInfoSpanContent = `#${chatNum}`
         }
-          html += `<div style="background-color: ${elementBgColor}; padding: 32px 40px; border-bottom: 1px solid ${borderColor};">`
-          html += `<div style="display: block; margin-bottom: 8px;">`
-          html += `<span style="font-size: 14px; color: ${narrationColor}; font-weight: 500;">${headerInfoSpanContent}</span>`
-          html += `</div>`
-          html += `<h1 style="font-size: ${titleFontSize}px; margin: 0; font-weight: 700; color: ${textColor}; line-height: 1.2;">CHAT LOG</h1>`
-          html += `</div>`
+          html += `<div style="background-color: ${elementBgColor}; padding: 32px 40px; border-bottom: 1px solid ${borderColor};"> <div style="display: block; margin-bottom: 8px; text-align: left;"> <span style="font-size: 14px; color: ${narrationColor}; font-weight: 500;">${headerInfoSpanContent || '&nbsp;'}</span> </div> <h1 style="font-size: ${titleFontSize}px; margin: 0; font-weight: 700; color: ${textColor}; line-height: 1.2;">CHAT LOG</h1> </div>`
            /* 캐릭터 정보 섹션 */
           html += `<div class="log-section character-info" style="background-color: ${elementBgColor}; margin: 16px 20px; border-radius: ${logSectionRadius}px; overflow: hidden; border: 1px solid ${borderColor}; padding: 32px;"> <div style="width: 100%; display: block; text-align: center;">`
           /* 캐릭터 이미지 출력 */
@@ -1540,7 +1537,7 @@
             }
           }
           /* 메시지 헤더 */
-          html += `<h2 style="font-size: 28px; color: ${textColor}; margin: 0 0 16px 0; font-weight: 700; border: none; padding: 0;">${characterName}</h2> <div style="margin: 8px 0; font-size: ${baseFontSize}px; color: ${messageTextColor}; display: block; text-align: center;">`
+          html += `<h2 style="font-size: 28px; color: ${textColor}; margin: 0 0 6px 0; font-weight: 700; border: none; padding: 0;">${characterName}</h2> <div style="margin: 8px 0; font-size: ${baseFontSize}px; color: ${messageTextColor}; display: block; text-align: center;">`
           if (!showBriefHeaderInfo) {
             html += `<div style="margin: 8px 0; font-size: ${baseFontSize}px; color: ${messageTextColor}; display: block; text-align: center;">`
              if (modelName)

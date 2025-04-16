@@ -765,8 +765,8 @@
                 <option value="GPT-4o ChatGPT"></option>
                 <option value="GPT-4.5"></option>
                 <option value="Claude 3.7 Sonnet"></option>
-                <option value="Gemini Pro 2.5 Exp"></option>
-                <option value="Gemini Flash 2.0 Exp"></option>
+                <option value="Gemini pro 2.5"></option>
+                <option value="Gemini flash 2.0"></option>
               </datalist>
             </div>
           </div>
@@ -792,8 +792,8 @@
                 <option value="GPT-4o ChatGPT"></option>
                 <option value="GPT-4.5"></option>
                 <option value="Claude 3.7 Sonnet"></option>
-                <option value="Gemini Pro 2.5 Exp"></option>
-                <option value="Gemini Flash 2.0 Exp"></option>
+                <option value="Gemini pro 2.5"></option>
+                <option value="Gemini flash 2.0"></option>
               </datalist>
             </div>
           </div>
@@ -825,6 +825,13 @@
               placeholder="https://example.com/image.png"
               title="로그 상단 표시 이미지 URL"
             />
+          </div>
+          <div class="input-group align-center" style="margin-bottom: 0; justify-content: flex-start;"> <div> <label for="noCharacterImageToggle" class="toggle-switch-label small-toggle" title="체크 시 캐릭터 이미지를 로그에 표시하지 않고, URL 입력란을 비활성화합니다.">
+            <input type="checkbox" id="noCharacterImageToggle">
+            <span class="toggle-switch-slider"></span>
+            <span class="toggle-switch-text">캐릭터 이미지 사용 안 함</span>
+            </label>
+            </div>
           </div>
         </div>
       </details>
@@ -998,7 +1005,7 @@
             <div class="input-group" style="margin-top: 15px">
               <div>
                 <label class="style-config-label" for="baseFontSize"
-                  >글자 크기 (기본, px)</label
+                  >글자 크기 (px)</label
                 ><input
                   type="number"
                   id="baseFontSize"
@@ -1006,7 +1013,7 @@
                   max="30"
                   value="15"
                   step="1"
-                  title="로그 본문 글자 크기"
+                  title="로그 본문 글자 크기(기본값:15px)"
                 />
               </div>
               <div>
@@ -1019,7 +1026,7 @@
                   max="60"
                   value="38"
                   step="1"
-                  title="로그 제목 글자 크기"
+                  title="로그 제목 글자 크기(기본값:38px)"
                 />
               </div>
               <div>
@@ -1032,8 +1039,20 @@
                   max="1500"
                   value="650"
                   step="10"
-                  title="생성 로그 최대 너비"
+                  title="생성 로그 최대 너비 (기본값:650px)"
                 />
+              </div>
+              <div>
+                <label class="style-config-label" for="logSectionRadius">로그 섹션 모서리 (px)</label>
+                <input type="number" id="logSectionRadius" min="0" max="50"  value="12" step="1" title="로그 섹션의 모서리 둥글기(기본값: 12px)"/>
+              </div>
+              <div>
+                <label class="style-config-label" for="lineHeight">줄 간격 (배수)</label>
+                <input type="number" id="lineHeight" min="1" max="3" value="1.6" step="0.1" title="채팅 내용 줄 간격 (기본값: 1.6)"/>
+              </div>
+              <div>
+                <label class="style-config-label" for="letterSpacing">자간 (em)</label>
+                <input type="number" id="letterSpacing" min="-0.5" max="1" value="0" step="0.01" title="채팅 내용 글자 간격 (기본값: -0.05)"/>
               </div>
             </div>
             <div class="additional-options-box">
@@ -1043,7 +1062,7 @@
                   <label for="italicizeNarration" class="toggle-switch-label small-toggle" title="나레이션 텍스트를 이탤릭체로 표시할지 여부">
                     <input type="checkbox" id="italicizeNarration" checked />
                     <span class="toggle-switch-slider"></span>
-                    <span class="toggle-switch-text">나레이션 기울임꼴 사용</span>
+                    <span class="toggle-switch-text">나레이션 기울임꼴</span>
                   </label>
                   </div>
                 </div>
@@ -1051,7 +1070,7 @@
                   <label for="simpleOutputMode" class="toggle-switch-label small-toggle" title="체크 시 캐릭터 정보 헤더를 제외하고 채팅 로그 부분만 생성합니다">
                     <input type="checkbox" id="simpleOutputMode" />
                     <span class="toggle-switch-slider"></span>
-                    <span class="toggle-switch-text">간단 출력 (채팅만)</span>
+                    <span class="toggle-switch-text">채팅 로그만 출력</span>
                   </label>
                   </div>
                 </div>
@@ -1059,7 +1078,7 @@
                   <label for="disableChatLogCollapse" class="toggle-switch-label small-toggle" title="체크 시 채팅 로그 섹션이 접히지 않습니다">
                     <input type="checkbox" id="disableChatLogCollapse" />
                     <span class="toggle-switch-slider"></span>
-                    <span class="toggle-switch-text">채팅 로그 항상 펼치기</span>
+                    <span class="toggle-switch-text">로그 접기 비활성화</span>
                   </label>
                   </div>
                 </div>
@@ -1067,7 +1086,7 @@
                   <label for="inputModeToggle" class="toggle-switch-label small-toggle" title="체크 시 자동으로 채팅 내역을 인식해 로그를 생성합니다">
                     <input type="checkbox" id="inputModeToggle" />
                     <span class="toggle-switch-slider"></span>
-                    <span class="toggle-switch-text">사칭방지용 딸깍 모드<span class="toggle-text-off" style="font-weight: bold">풀사칭용</span><span class="toggle-text-on" style="font-weight: bold">사칭방지용</span>
+                    <span class="toggle-switch-text">딸깍 모드<span class="toggle-text-off" style="font-weight: bold">풀사칭용</span><span class="toggle-text-on" style="font-weight: bold">사칭방지용</span>
                     </span>
                   </label>
                   </div>
@@ -1076,7 +1095,7 @@
                   <label for="dialogueBubbleToggle" class="toggle-switch-label small-toggle" title="체크 시 AI와 USER의 대사를 말풍선 형태로 표시합니다">
                     <input type="checkbox" id="dialogueBubbleToggle" checked />
                     <span class="toggle-switch-slider"></span>
-                    <span class="toggle-switch-text">대사 말풍선 사용</span>
+                    <span class="toggle-switch-text">대사에 말풍선 사용</span>
                   </label>
                   </div>
                 </div>
@@ -1084,10 +1103,19 @@
                   <label for="narrationLineToggle" class="toggle-switch-label small-toggle" title="체크 시 나레이션 왼쪽에 인용선(세로선)을 표시합니다">
                     <input type="checkbox" id="narrationLineToggle" checked />
                     <span class="toggle-switch-slider"></span>
-                    <span class="toggle-switch-text">나레이션 인용선 사용</span>
+                    <span class="toggle-switch-text">나레이션에 인용선 사용</span>
                   </label>
                   </div>
                 </div>
+                <div class="input-group align-center"> <div>
+                  <label for="showBriefHeaderInfo" class="toggle-switch-label small-toggle" title="체크 시 채팅 번호 옆에 모델/프롬프트 정보를 간략히 표시합니다">
+                    <input type="checkbox" id="showBriefHeaderInfo" />
+                    <span class="toggle-switch-slider"></span>
+                    <span class="toggle-switch-text">모델 정보 헤더에 표시</span>
+                  </label>
+                  </div>
+        </div>
+        </div>
               </div> </div>
           <div class="preset-manager">
             <label>설정 프리셋 관리</label>
@@ -1326,6 +1354,7 @@
         userName: "USER",
         chatNumber: "",
         characterImageUrl: "",
+        useCharacterImage: true,
         backgroundColor: "#ffffff",
         textColor: "#1d2129",
         highlightColor: "#3498db",
@@ -1334,12 +1363,16 @@
         baseFontSize: 15,
         titleFontSize: 38,
         containerWidth: 650,
+        logSectionRadius: 12,
+        lineHeight: 1.6,
+        letterSpacing: -0.05,
         italicizeNarration: true,
         simpleOutputMode: false,
         disableChatLogCollapse: false,
-        isAutoInputMode: false, // false: prefix, true: auto
-        dialogueUseBubble: true, // <-- 추가 (대사 말풍선 기본값: 사용)
-        narrationUseLine: true
+        isAutoInputMode: true, // false: prefix, true: auto
+        dialogueUseBubble: true,
+        narrationUseLine: true,
+        showBriefHeaderInfo: false
       }
       const colorThemes = {
         /* 기존과 동일 */ ocean_blue: {
@@ -1395,6 +1428,7 @@
           userName = "USER",
           chatNumber,
           characterImageUrl = "",
+          useCharacterImage = true,
           backgroundColor = "#ffffff",
           textColor = "#1d2129",
           highlightColor = "#3498db",
@@ -1403,12 +1437,16 @@
           baseFontSize = 15,
           titleFontSize = 38,
           containerWidth = 650,
+          logSectionRadius = 12,
+          lineHeight = 1.6,
+          letterSpacing = 0,
           italicizeNarration = true,
           simpleOutputMode = false,
           disableChatLogCollapse = false,
           isAutoInputMode = false,
-          dialogueUseBubble = true, // <-- 추가 (기본값 지정)
-          narrationUseLine = true   // <-- 추가 (기본값 지정)
+          dialogueUseBubble = true,
+          narrationUseLine = true,
+          showBriefHeaderInfo = false
         } = settings // 기본값 일부 변경
         const chatNum = chatNumber || Math.floor(Math.random() * 900) + 100
         const bgColorIsDark = parseInt(backgroundColor.slice(1), 16) < 0x888888
@@ -1426,7 +1464,6 @@
           elementBgColor,
           bgColorIsDark ? +15 : -15,
         )
-        const cardBorderRadius = "12px"
 
         function processEmphasis(text) {
           if (!text) return ""
@@ -1456,22 +1493,66 @@
         let html = `<div style="width: 100%; max-width: ${containerWidth}px; margin: 10px auto; background-color: ${backgroundColor}; border-radius: 0; overflow: hidden; font-family: 'Pretendard', Arial, sans-serif; letter-spacing: -0.03em; color: ${textColor}; border: 1px solid ${borderColor}; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">`
 
         if (!simpleOutputMode) {
-          /* 헤더 생성 */ html += `<div style="background-color: ${elementBgColor}; padding: 32px 40px; border-bottom: 1px solid ${borderColor};"> <div style="display: block; margin-bottom: 8px;"> <span style="font-size: 14px; color: ${narrationColor}; font-weight: 500;">#${chatNum}</span> </div> <h1 style="font-size: ${titleFontSize}px; margin: 0; font-weight: 700; color: ${textColor}; line-height: 1.2;">CHAT LOG</h1> </div>`
-          html += `<div class="log-section character-info" style="background-color: ${elementBgColor}; margin: 16px 20px; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor}; padding: 32px;"> <div style="width: 100%; display: block; text-align: center;">`
-          if (characterImageUrl) {
-            html += `<img src="${characterImageUrl.replace(/"/g, "&quot;")}" alt="${characterName.replace(/"/g, "&quot;")}" style="max-width: 150px; max-height: 150px; border-radius: 50%; margin: 0 auto 15px auto; display: block; border: 3px solid ${borderColor}; object-fit: cover;">`
-          } else {
-            html += `<div style="font-size: 12px; color: ${narrationColor}; padding: 20px 10px; line-height: 1.4; margin: 15px auto; text-align: center;">이미지 영역</div>`
+          /* 헤더 생성 */
+          let headerInfoSpanContent = `#${chatNum}`
+          if (showBriefHeaderInfo) { // 토글이 켜져 있으면
+            const styledNameParts = []
+            const getQuoteLineStyle = (color) => {
+                const validColor = color || '#888888' // 색상값이 없으면 연한 회색으로 대체
+                // 사용자가 원하는 스타일 적용
+                const styleString = `
+                  display: inline-block; background-color: ${validColor}; padding:0.1em 0.3em; color: #ffffff;`
+                // 스타일 문자열 내 공백 정리
+                return styleString.replace(/\s+/g, ' ').trim()
+            }
+            if (modelName) {
+                const style = getQuoteLineStyle(highlightColor)
+                styledNameParts.push(`<span style="${style}">${modelName}</span>`)
+            }
+            if (promptName) {
+                const style = getQuoteLineStyle(promptColor);
+                styledNameParts.push(`<span style="${style}">${promptName}</span>`)
+            }
+            if (assistModelName) {
+                const style = getQuoteLineStyle(emphasisColor);
+                styledNameParts.push(`<span style="${style}">${assistModelName}</span>`)
+            }
+            if (styledNameParts.length > 0) {
+                const joinedStyledNames = styledNameParts.join('&ensp;'); // HTML 조각들을 ' / '로 연결
+                const outerSpanStyle = `font-size: 13.5px; font-weight: 200; line-height:1; letter-spacing:0em`
+                headerInfoSpanContent += `<span>&ensp;|&ensp;</span><span style="${outerSpanStyle}">${joinedStyledNames}</span>`
+                }
+        }
+          html += `<div style="background-color: ${elementBgColor}; padding: 32px 40px; border-bottom: 1px solid ${borderColor};">`
+          html += `<div style="display: block; margin-bottom: 8px;">`
+          html += `<span style="font-size: 14px; color: ${narrationColor}; font-weight: 500;">${headerInfoSpanContent}</span>`
+          html += `</div>`
+          html += `<h1 style="font-size: ${titleFontSize}px; margin: 0; font-weight: 700; color: ${textColor}; line-height: 1.2;">CHAT LOG</h1>`
+          html += `</div>`
+           /* 캐릭터 정보 섹션 */
+          html += `<div class="log-section character-info" style="background-color: ${elementBgColor}; margin: 16px 20px; border-radius: ${logSectionRadius}px; overflow: hidden; border: 1px solid ${borderColor}; padding: 32px;"> <div style="width: 100%; display: block; text-align: center;">`
+          /* 캐릭터 이미지 출력 */
+          if (useCharacterImage) { // 이미지를 사용하도록 설정된 경우에만 실행
+            if (characterImageUrl) { // URL이 있으면 이미지 태그 생성
+              html += `<img src="${characterImageUrl.replace(/"/g, "&quot;")}" alt="${characterName.replace(/"/g, "&quot;")}" style="max-width: 150px; max-height: 150px; border-radius: 50%; margin: 0 auto 15px auto; display: block; border: 3px solid ${borderColor}; object-fit: cover;">`
+            } else { // URL이 없으면 플레이스홀더 영역 생성
+              html += `<div style="font-size: 12px; color: ${narrationColor}; padding: 20px 10px; line-height: 1.4; margin: 15px auto; text-align: center;">이 문구를 지우고 이미지를 삽입해주세요</div>`
+            }
           }
+          /* 메시지 헤더 */
           html += `<h2 style="font-size: 28px; color: ${textColor}; margin: 0 0 16px 0; font-weight: 700; border: none; padding: 0;">${characterName}</h2> <div style="margin: 8px 0; font-size: ${baseFontSize}px; color: ${messageTextColor}; display: block; text-align: center;">`
-          if (modelName)
-            html += `<span style="display: inline-block; background-color: ${highlightColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(highlightColor, -10)}; margin: 0 5px 10px;">${modelName}</span>`
-          if (promptName)
-            html += `<span style="display: inline-block; background-color: ${promptColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(promptColor, -10)}; margin: 0 5px 10px;">${promptName}</span>`
-          if (assistModelName)
-            html += `<span style="display: inline-block; background-color: ${emphasisColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(emphasisColor, -10)}; margin: 0 5px 10px;">${assistModelName}</span>`
+          if (!showBriefHeaderInfo) {
+            html += `<div style="margin: 8px 0; font-size: ${baseFontSize}px; color: ${messageTextColor}; display: block; text-align: center;">`
+             if (modelName)
+                html += `<span style="display: inline-block; background-color: ${highlightColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(highlightColor, -10)}; margin: 0 5px 10px;">${modelName}</span>`
+             if (promptName)
+                html += `<span style="display: inline-block; background-color: ${promptColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(promptColor, -10)}; margin: 0 5px 10px;">${promptName}</span>`
+             if (assistModelName)
+                html += `<span style="display: inline-block; background-color: ${emphasisColor}; padding: 6px 10px; border-radius: 6px; font-weight: 500; color: #ffffff; text-align: center; border: 1px solid ${adjustColor(emphasisColor, -10)}; margin: 0 5px 10px;">${assistModelName}</span>`
+          html += `</div>`
+          }
           html += `</div></div></div>`
-          html += `<div class="log-section conversation-header" style="background-color: ${elementBgColor}; margin: 0 20px 16px; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor}; padding: 20px 32px;"> <div style="font-size: 12px; font-weight: 600; color: ${narrationColor}; margin-bottom: 4px;">MONO</div> <div style="font-size: 20px; font-weight: 700; color: ${textColor};">CONVERSATION</div> </div>`
+          html += `<div class="log-section conversation-header" style="background-color: ${elementBgColor}; margin: 0 20px 16px; border-radius: ${logSectionRadius}px; overflow: hidden; border: 1px solid ${borderColor}; padding: 20px 32px;"> <div style="font-size: 12px; font-weight: 600; color: ${narrationColor}; margin-bottom: 4px;">MONO</div> <div style="font-size: 20px; font-weight: 700; color: ${textColor};">CONVERSATION</div> </div>`
         }
 
         console.log("--- 채팅 내용 처리 시작 ---")
@@ -1615,7 +1696,7 @@
               ? "cursor: default;"
               : "cursor: pointer;" // summaryCursorStyle
 
-            html += `<div class="log-section chat-entry" style="margin: ${fm} 20px 16px; background-color: ${elementBgColor}; border-radius: ${cardBorderRadius}; overflow: hidden; border: 1px solid ${borderColor};">`
+            html += `<div class="log-section chat-entry" style="margin: ${fm} 20px 16px; background-color: ${elementBgColor}; border-radius: ${logSectionRadius}px; overflow: hidden; border: 1px solid ${borderColor};">`
             html += `<${ct}${da} style="padding: 0;">` // 컨테이너 시작 (내부 패딩 없음)
 
             // 제목 (div/summary) - 패딩 적용, disable 시 테두리 추가
@@ -1632,42 +1713,45 @@
             const cb = `background-color: ${backgroundColor};` // contentBackground
             const cr = disableChatLogCollapse
               ? ""
-              : `border-radius: 0 0 ${parseInt(cardBorderRadius) - 1}px ${parseInt(cardBorderRadius) - 1}px;` // contentRadius
+              : `border-radius: 0 0 ${logSectionRadius - 1}px ${logSectionRadius - 1}px;` // contentRadius
             html += `<div style="${cp} ${cb} ${cr}">` // 내용 컨테이너 시작
 
             console.log(`  [ 섹션 ${index + 1} ] HTML 렌더링 시작...`)
             chatParts.forEach((part, partIndex) => {
               const pc = processEmphasis(part.content) // processedContent
               if (part.type === "narration") {
-                const pc = processEmphasis(part.content);
-                const textStyle = `font-size: ${baseFontSize}px; color: ${narrationColor}; line-height: 1.6; ${italicizeNarration ? "font-style: italic;" : ""}`;
+                const pc = processEmphasis(part.content)
+                const textStyle = `font-size: ${baseFontSize}px; color: ${narrationColor}; line-height: ${lineHeight}; letter-spacing: ${letterSpacing}em; ${italicizeNarration ? "font-style: italic;" : ""}`
                   if (narrationUseLine) { // --- 인용선 사용 시 HTML ---
-                    html += `<div style="margin: 16px 0; display: block; border-left: 3px solid ${highlightColor}; padding-left: 16px;"> <div style="${textStyle}">${pc || "&nbsp;"}</div> </div>`;
+                    html += `<div style="margin: 16px 0; display: block; border-left: 3px solid ${highlightColor}; padding-left: 16px;"> <div style="${textStyle}">${pc || "&nbsp;"}</div> </div>`
                   } else { // --- 인용선 미사용 시 HTML ---
-                    html += `<div style="margin: 16px 0; display: block; padding-left: 0;"> <div style="${textStyle}">${pc || "&nbsp;"}</div> </div>`;
+                    html += `<div style="margin: 16px 0; display: block; padding-left: 0;"> <div style="${textStyle}">${pc || "&nbsp;"}</div> </div>`
                 }
               } else if (part.type === "user") {
                 const pc = processEmphasis(part.content); // 유저 이름 표시 부분
-                const userNameDisplay = `<div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px; text-align: right;">${userName}</div>`;
+                const userNameDisplay = `<div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px; text-align: right;">${userName}</div>`
+                const textStyle = `font-size: ${baseFontSize}px; color: ${narrationColor}; line-height: ${lineHeight}; letter-spacing: ${letterSpacing}em;`
                 if (dialogueUseBubble) { // --- 말풍선 사용 시 HTML ---
-                  html += `<div style="margin: 32px 0; text-align: right;"> <div style="max-width: 75%; display: inline-block; text-align: left;"> ${userNameDisplay} <div style="background-color: ${darkElementBgColor}; border-radius: 12px; padding: 10px 20px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border: 1px solid ${borderColor};">${pc || "&nbsp;"}</div> </div> </div>`;
+                  html += `<div style="margin: 32px 0; text-align: right;"> <div style="max-width: 75%; display: inline-block; text-align: left;"> ${userNameDisplay} <div style="background-color: ${darkElementBgColor}; border-radius: 12px; padding: 10px 20px; border: 1px solid ${borderColor}; ${textStyle};">${pc || "&nbsp;"}</div> </div> </div>`
                 } else { // --- 말풍선 미사용 시 HTML (예시: 오른쪽 선 + 간단한 패딩) ---
-                  html += `<div style="margin: 32px 0; text-align: right;"> <div style="max-width: 75%; display: inline-block; text-align: right;"> ${userNameDisplay} <div style="display: inline-block; text-align: left; background-color: ${darkElementBgColor}; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border-right: 3px solid ${emphasisColor}; padding: 10px 20px;">${pc || "&nbsp;"}</div> </div> </div>`;
+                  html += `<div style="margin: 32px 0; text-align: right;"> <div style="max-width: 75%; display: inline-block; text-align: right;"> ${userNameDisplay} <div style="display: inline-block; text-align: left; background-color: ${darkElementBgColor}; border-right: 3px solid ${emphasisColor}; padding: 10px 20px; ${textStyle};">${pc || "&nbsp;"}</div> </div> </div>`
                 }
               } else if (part.type === "ai") {
-                const pc = processEmphasis(part.content); // 캐릭터 이름 표시 부분
-                const characterNameDisplay = `<div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px;">${characterName}</div>`;
+                const pc = processEmphasis(part.content) // 캐릭터 이름 표시 부분
+                const characterNameDisplay = `<div style="font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-size: 14px;">${characterName}</div>`
+                const textStyle = `font-size: ${baseFontSize}px; color: ${narrationColor}; line-height: ${lineHeight}; letter-spacing: ${letterSpacing}em;`
                 if (dialogueUseBubble) { // --- 말풍선 사용 시 HTML ---
-                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="max-width: 75%; display: inline-block;"> ${characterNameDisplay} <div style="background-color: ${backgroundColor}; border-radius: 12px; padding: 10px 20px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border: 1px solid ${highlightColor};">${pc || "&nbsp;"}</div> </div> </div>`;
+                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="max-width: 75%; display: inline-block;"> ${characterNameDisplay} <div style="background-color: ${backgroundColor}; border-radius: 12px; padding: 10px 20px; border: 1px solid ${highlightColor}; ${textStyle};">${pc || "&nbsp;"}</div> </div> </div>`
                 } else { // --- 말풍선 미사용 시 HTML ---
-                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="max-width: 75%; display: inline-block;"> ${characterNameDisplay} <div style="display: inline-block; background-color: ${darkElementBgColor}; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6; border-left: 3px solid ${emphasisColor}; padding: 10px 20px;">${pc || "&nbsp;"}</div> </div> </div>`;
+                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="max-width: 75%; display: inline-block;"> ${characterNameDisplay} <div style="display: inline-block; background-color: ${darkElementBgColor}; border-left: 3px solid ${emphasisColor}; padding: 10px 20px; ${textStyle};">${pc || "&nbsp;"}</div> </div> </div>`
                 }
               } else if (part.type === "dialogue") {
-                const pc = processEmphasis(part.content);
+                const pc = processEmphasis(part.content)
+                const textStyle = `font-size: ${baseFontSize}px; color: ${narrationColor}; line-height: ${lineHeight}; letter-spacing: ${letterSpacing}em;`
                 if (dialogueUseBubble) { // --- 말풍선 사용 시 HTML ---
-                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="display: inline-block; background-color: ${darkElementBgColor}; border-radius: 12px; padding: 10px 20px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6;">${pc || "&nbsp;"}</div> </div>`;
+                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="display: inline-block; background-color: ${darkElementBgColor}; border-radius: 12px; padding: 10px 20px; ${textStyle};">${pc || "&nbsp;"}</div> </div>`;
                 } else { // --- 말풍선 미사용 시 HTML (예시: 왼쪽 선 + 간단한 패딩) ---
-                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="display: inline-block; border-left: 3px solid ${emphasisColor}; background-color: ${darkElementBgColor}; padding: 5px 16px; font-size: ${baseFontSize}px; color: ${messageTextColor}; line-height: 1.6;">${pc || "&nbsp;"}</div> </div>`;
+                  html += `<div style="margin: 32px 0; text-align: left;"> <div style="display: inline-block; border-left: 3px solid ${emphasisColor}; background-color: ${darkElementBgColor}; padding: 5px 16px; ${textStyle};">${pc || "&nbsp;"}</div> </div>`;
                 }
               } // 자동인식 대사 (배경=기본배경, 테두리 없음)
             })
@@ -1772,6 +1856,8 @@
         const chatNumberInput = document.getElementById("chatNumber")
         const characterImageUrlInput =
           document.getElementById("characterImageUrl")
+        const noCharacterImageToggle = document.getElementById("noCharacterImageToggle")
+        const characterImageUrlLabel = document.querySelector('label[for="characterImageUrl"]')
         const bgColorInput = document.getElementById("backgroundColor")
         const bgColorText = document.getElementById("backgroundColorText")
         const textColorInput = document.getElementById("textColor")
@@ -1785,6 +1871,9 @@
         const baseFontSizeInput = document.getElementById("baseFontSize")
         const titleFontSizeInput = document.getElementById("titleFontSize")
         const containerWidthInput = document.getElementById("containerWidth")
+        const logSectionRadiusInput = document.getElementById("logSectionRadius")
+        const lineHeightInput = document.getElementById("lineHeight")
+        const letterSpacingInput = document.getElementById("letterSpacing")
         const italicizeNarrationCheckbox =
           document.getElementById("italicizeNarration")
         const simpleOutputCheckbox = document.getElementById("simpleOutputMode")
@@ -1792,8 +1881,9 @@
           "disableChatLogCollapse",
         )
         const inputModeToggle = document.getElementById("inputModeToggle") // Toggle 사용
-        const dialogueBubbleToggle = document.getElementById("dialogueBubbleToggle"); // <-- 추가
-        const narrationLineToggle = document.getElementById("narrationLineToggle");   // <-- 추가
+        const dialogueBubbleToggle = document.getElementById("dialogueBubbleToggle")
+        const narrationLineToggle = document.getElementById("narrationLineToggle")
+        const showBriefHeaderInfoToggle = document.getElementById("showBriefHeaderInfo")
         const presetNameInput = document.getElementById("presetName")
         const savePresetBtn = document.getElementById("savePresetBtn")
         const presetListSelect = document.getElementById("presetList")
@@ -1851,6 +1941,7 @@
             s.userName = userNameInput.value || DEFAULT_SETTINGS.userName
             s.chatNumber = chatNumberInput.value
             s.characterImageUrl = characterImageUrlInput.value
+            s.useCharacterImage = !noCharacterImageToggle.checked
             s.backgroundColor = bgColorInput.value
             s.textColor = textColorInput.value
             s.highlightColor = highlightColorInput.value
@@ -1865,12 +1956,22 @@
             s.containerWidth =
               parseFloat(containerWidthInput.value) ||
               DEFAULT_SETTINGS.containerWidth
+            s.logSectionRadius = 
+              parseFloat(logSectionRadiusInput.value) || 
+              DEFAULT_SETTINGS.logSectionRadius;
+            s.lineHeight =
+              parseFloat(lineHeightInput.value) ||
+              DEFAULT_SETTINGS.lineHeight
+            s.letterSpacing =
+              parseFloat(letterSpacingInput.value) ||
+              DEFAULT_SETTINGS.letterSpacing
             s.italicizeNarration = italicizeNarrationCheckbox.checked
             s.simpleOutputMode = simpleOutputCheckbox.checked
             s.disableChatLogCollapse = disableChatLogCollapseCheckbox.checked
             s.isAutoInputMode = inputModeToggle.checked
-            s.dialogueUseBubble = dialogueBubbleToggle.checked; // <-- 추가
-            s.narrationUseLine = narrationLineToggle.checked;   // <-- 추가
+            s.dialogueUseBubble = dialogueBubbleToggle.checked
+            s.narrationUseLine = narrationLineToggle.checked
+            s.showBriefHeaderInfo = showBriefHeaderInfoToggle.checked
           } catch (e) {
             console.error("설정 읽기 오류:", e)
             return { ...DEFAULT_SETTINGS }
@@ -1886,6 +1987,8 @@
             userNameInput.value = settings.userName ?? ""
             chatNumberInput.value = settings.chatNumber ?? ""
             characterImageUrlInput.value = settings.characterImageUrl ?? ""
+            noCharacterImageToggle.checked = !(settings.useCharacterImage ?? true)
+            updateImageUrlInputState(settings.useCharacterImage ?? true)
             bgColorInput.value = settings.backgroundColor
             bgColorText.value = settings.backgroundColor
             textColorInput.value = settings.textColor
@@ -1899,13 +2002,17 @@
             baseFontSizeInput.value = settings.baseFontSize
             titleFontSizeInput.value = settings.titleFontSize
             containerWidthInput.value = settings.containerWidth
+            logSectionRadiusInput.value = settings.logSectionRadius ?? DEFAULT_SETTINGS.logSectionRadius
+            lineHeightInput.value = settings.lineHeight ?? DEFAULT_SETTINGS.lineHeight
+            letterSpacingInput.value = settings.letterSpacing ?? DEFAULT_SETTINGS.letterSpacing
             italicizeNarrationCheckbox.checked = !!settings.italicizeNarration
             simpleOutputCheckbox.checked = !!settings.simpleOutputMode
             disableChatLogCollapseCheckbox.checked =
               !!settings.disableChatLogCollapse
             inputModeToggle.checked = !!settings.isAutoInputMode
-            dialogueBubbleToggle.checked = !!settings.dialogueUseBubble; // <-- 추가
-            narrationLineToggle.checked = !!settings.narrationUseLine;   // <-- 추가
+            dialogueBubbleToggle.checked = !!settings.dialogueUseBubble
+            narrationLineToggle.checked = !!settings.narrationUseLine
+            showBriefHeaderInfoToggle.checked = !!settings.showBriefHeaderInfo
             updateInputModeGuide(settings.isAutoInputMode)
             if (markAsModified) {
               localStorage.setItem(USER_MODIFIED_COLOR_FLAG, "true")
@@ -2302,6 +2409,18 @@
             guideAutoSpan.style.display = isAutoMode ? "block" : "none"
           }
         }
+        function updateImageUrlInputState(useImage) {
+          if (characterImageUrlInput) {
+            characterImageUrlInput.disabled = !useImage
+            characterImageUrlInput.style.opacity = useImage ? '1' : '0.5'
+          if (characterImageUrlLabel) {
+            characterImageUrlLabel.style.opacity = useImage ? '1' : '0.5';
+          }
+          if (!useImage) {
+            characterImageUrlInput.value = "";
+          }
+          }
+        }
 
         // --- 이벤트 리스너 설정 ---
         function safelyAttachListener(element, eventType, handler) {
@@ -2373,6 +2492,11 @@
             alert("채팅 입력 영역 없음")
           }
         })
+        safelyAttachListener(noCharacterImageToggle, 'change', () => {
+          const useImage = !noCharacterImageToggle.checked
+          updateImageUrlInputState(useImage)
+          generatePreview()
+        })
         safelyAttachListener(copyButton, "click", function () {
           if (!htmlOutput.value) {
             alert("HTML 생성 먼저.")
@@ -2420,6 +2544,9 @@
           baseFontSizeInput,
           titleFontSizeInput,
           containerWidthInput,
+          logSectionRadiusInput,
+          lineHeightInput,
+          letterSpacingInput,  
           bgColorText,
           textColorText,
           highlightColorText,
@@ -2478,8 +2605,9 @@
           updateInputModeGuide(inputModeToggle.checked)
           generatePreview()
         })
-        safelyAttachListener(dialogueBubbleToggle, "change", generatePreview) // <-- 추가
-        safelyAttachListener(narrationLineToggle, "change", generatePreview)   // <-- 추가
+        safelyAttachListener(dialogueBubbleToggle, "change", generatePreview)
+        safelyAttachListener(narrationLineToggle, "change", generatePreview)
+        safelyAttachListener(showBriefHeaderInfoToggle, "change", generatePreview)
         // 입력 모드 변경 시 가이드 업데이트 및 미리보기
         document.addEventListener("keydown", function (event) {
           const a = document.activeElement
